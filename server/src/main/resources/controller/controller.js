@@ -94,6 +94,7 @@ if (typeof document !== 'undefined') {
       const el = $(v);
       if (el) el.hidden = v !== id;
     }
+    if (typeof syncWaitArcade === 'function') syncWaitArcade(id === 'view-wait-write');
   }
 
   function showToast(msg) {
@@ -546,4 +547,89 @@ if (typeof document !== 'undefined') {
   $('btn-next').addEventListener('click', () => send({ t: 'next' }));
   $('btn-end-early').addEventListener('click', () => send({ t: 'end_game' }));
   $('btn-play-again').addEventListener('click', () => send({ t: 'play_again' }));
+
+  // While-you-wait Owl Tapper mini-game + Silly Proverb generator
+  const SILLY_PROVERBS = [
+    'Never trust a raccoon holding a tiny spoon.',
+    'A dramatic toaster only pops when you look away.',
+    'Do not argue with a goose that already has your sandwich.',
+    'Even a sleepy owl knows which branch has the snacks.',
+    'Buying one extra pillow will not fix your life, but it helps.',
+    'A squirrel with a plan is just a fluffy CEO.',
+    'Never test the depth of a puddle with your favorite socks.',
+    'If the Wi-Fi drops, everyone suddenly remembers how to talk.',
+  ];
+  let arcadeTimer = null;
+  let arcadeScore = 0;
+  let arcadeBest = Number(localStorage.getItem('wow_arcade_best') || 0);
+  let arcadeActiveIdx = -1;
+  let arcadeItem = null;
+
+  function renderArcadeBoard() {
+    const grid = $('arcade-grid');
+    if (!grid) return;
+    if (!grid.children.length) {
+      for (let i = 0; i < 9; i++) {
+        const cell = document.createElement('button');
+        cell.type = 'button';
+        cell.className = 'arcade-cell';
+        cell.dataset.idx = String(i);
+        cell.addEventListener('click', () => {
+          if (i !== arcadeActiveIdx || !arcadeItem) return;
+          arcadeScore = Math.max(0, arcadeScore + arcadeItem.pts);
+          if (arcadeScore > arcadeBest) {
+            arcadeBest = arcadeScore;
+            localStorage.setItem('wow_arcade_best', String(arcadeBest));
+          }
+          vibrate(arcadeItem.pts > 0 ? 15 : 40);
+          arcadeActiveIdx = -1;
+          arcadeItem = null;
+          renderArcadeBoard();
+        });
+        grid.appendChild(cell);
+      }
+    }
+    $('arcade-score').textContent = String(arcadeScore);
+    $('arcade-best').textContent = String(arcadeBest);
+    Array.from(grid.children).forEach((cell, idx) => {
+      const hit = idx === arcadeActiveIdx && arcadeItem;
+      cell.textContent = hit ? arcadeItem.emoji : '·';
+      cell.classList.toggle('active-good', !!(hit && arcadeItem.pts > 0));
+      cell.classList.toggle('active-bad', !!(hit && arcadeItem.pts < 0));
+    });
+  }
+
+  function stepArcade() {
+    const roll = Math.random();
+    arcadeItem = roll < 0.18
+      ? { emoji: '💣', pts: -15 }
+      : roll < 0.34
+        ? { emoji: '🌟', pts: 25 }
+        : roll < 0.56
+          ? { emoji: '🦝', pts: 15 }
+          : { emoji: '🦉', pts: 10 };
+    arcadeActiveIdx = Math.floor(Math.random() * 9);
+    renderArcadeBoard();
+  }
+
+  function syncWaitArcade(active) {
+    if (active) {
+      if (!arcadeTimer) {
+        arcadeScore = 0;
+        stepArcade();
+        arcadeTimer = setInterval(stepArcade, 900);
+      }
+    } else if (arcadeTimer) {
+      clearInterval(arcadeTimer);
+      arcadeTimer = null;
+      arcadeActiveIdx = -1;
+      arcadeItem = null;
+    }
+  }
+
+  $('btn-silly-quote')?.addEventListener('click', () => {
+    const q = SILLY_PROVERBS[Math.floor(Math.random() * SILLY_PROVERBS.length)];
+    $('silly-quote').textContent = `“${q}”`;
+    vibrate(12);
+  });
 }

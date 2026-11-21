@@ -344,13 +344,66 @@ textarea { resize: vertical; min-height: 92px; }
 }
 .conn-hint { text-align: center; font-size: 12px; color: var(--muted); margin: 14px 0 0; }
 
-.wait-stage { text-align: center; padding: 26px 8px 14px; }
+.wait-stage { text-align: center; padding: 14px 8px 8px; }
 .quill-orb {
-  width: 78px; height: 78px; margin: 0 auto 14px;
-  border-radius: 50%; display: grid; place-items: center; font-size: 38px;
+  width: 60px; height: 60px; margin: 0 auto 10px;
+  border-radius: 50%; display: grid; place-items: center; font-size: 30px;
   background: radial-gradient(circle, rgba(245, 183, 49, 0.35), rgba(245, 183, 49, 0.05));
   border: 2px solid var(--gold);
   animation: floatY 2s ease-in-out infinite;
+}
+.wait-arcade {
+  margin-top: 8px;
+  padding: 12px;
+  border-radius: 16px;
+  background: rgba(15, 10, 30, 0.58);
+  border: 1px solid rgba(245, 183, 49, 0.35);
+}
+.arcade-head { margin-bottom: 8px; font-size: 13px; }
+.arcade-title { font-weight: 800; color: var(--gold-hi); }
+.arcade-scores { color: var(--muted); font-size: 12px; }
+.arcade-scores b { color: var(--cream); }
+.arcade-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-bottom: 10px;
+}
+.arcade-cell {
+  height: 52px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--cream);
+  font-size: 24px;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 0.08s, background 0.12s, border-color 0.12s;
+}
+.arcade-cell:active { transform: scale(0.94); }
+.arcade-cell.active-good {
+  background: rgba(245, 183, 49, 0.22);
+  border-color: var(--gold);
+  box-shadow: 0 0 12px rgba(245, 183, 49, 0.28);
+}
+.arcade-cell.active-bad {
+  background: rgba(232, 72, 85, 0.24);
+  border-color: var(--opt-a);
+}
+.silly-oracle {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 9px;
+  text-align: center;
+}
+.silly-quote {
+  margin: 0 0 8px;
+  font-style: italic;
+  font-size: 13px;
+  color: var(--cream);
+  line-height: 1.35;
 }
 @keyframes floatY { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-7px); } }
 
