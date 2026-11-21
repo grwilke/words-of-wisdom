@@ -37,6 +37,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.cubeworks.wordsofwisdom.TvJoinInfo
 import com.wordsofwisdom.core.PlayerView
 import com.wordsofwisdom.core.TvSnapshot
 import kotlinx.coroutines.delay
@@ -44,6 +45,7 @@ import kotlinx.coroutines.delay
 @Composable
 fun PodiumScreen(
     state: TvSnapshot,
+    joinInfo: TvJoinInfo? = null,
     musicMuted: Boolean,
     voiceMuted: Boolean,
     onPlayAgain: () -> Unit,
@@ -70,6 +72,8 @@ fun PodiumScreen(
         onToggleMute = onToggleMute,
         voiceMuted = voiceMuted,
         onToggleVoice = onToggleVoice,
+        joinInfo = joinInfo,
+        showMiniQr = true,
         reactions = state.recentReactions,
         celebratory = true,
         showConfetti = true,

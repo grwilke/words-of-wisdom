@@ -470,6 +470,13 @@ if (typeof document !== 'undefined') {
   connect();
   setInterval(updateTimers, 250);
 
+  // Immediately reconnect when the user unlocks their phone or switches back to the browser tab
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible' && (!socket || socket.readyState !== WebSocket.OPEN)) {
+      connect();
+    }
+  });
+
   $('join-form').addEventListener('submit', (e) => {
     e.preventDefault();
     const name = $('player-name').value.trim();

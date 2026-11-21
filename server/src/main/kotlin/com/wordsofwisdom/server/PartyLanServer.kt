@@ -6,7 +6,9 @@ import com.wordsofwisdom.core.WisdomGameEngine
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
+import io.ktor.server.application.Application
 import io.ktor.server.application.install
+import io.ktor.server.application.serverConfig
 import io.ktor.server.cio.CIO
 import io.ktor.server.cio.CIOApplicationEngine
 import io.ktor.server.engine.EmbeddedServer
@@ -16,6 +18,7 @@ import io.ktor.server.response.header
 import io.ktor.server.response.respondBytes
 import io.ktor.server.response.respondText
 import io.ktor.server.routing.get
+import io.ktor.server.routing.options
 import io.ktor.server.routing.routing
 import io.ktor.server.websocket.DefaultWebSocketServerSession
 import io.ktor.server.websocket.WebSockets
@@ -26,8 +29,11 @@ import io.ktor.websocket.CloseReason
 import io.ktor.websocket.Frame
 import io.ktor.websocket.close
 import io.ktor.websocket.readText
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.NonCancellable
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
@@ -38,6 +44,7 @@ import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
+import kotlinx.coroutines.withTimeoutOrNull
 import java.util.concurrent.Executors
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.atomic.AtomicLong
@@ -46,8 +53,12 @@ import kotlin.time.Duration.Companion.seconds
 /**
  * Embedded LAN HTTP + WebSocket server running directly on the TV.
  *
- * Serves the zero-dependency mobile web controller (`/`, `/style.css`, `/controller.js`) and
- * bridges each phone's `/ws` connection onto a single serialized game thread owning [engine].
+ * Hardened for Android TV:
+ * - `reuseAddress = true` so quick app restarts cleanly rebind port 8777
+ * - `developmentMode = false` + `CoroutineExceptionHandler` so Ktor never crashes Android
+ * - Async non-blocking WebSocket sends on [sendScope] with timeout so a sleeping/closed phone
+ *   socket can never stall [gameDispatcher] or other players
+ * - Private Network Access headers so Chrome's Local Network Access probe succeeds immediately
  */
 class PartyLanServer(
     private val engine: WisdomGameEngine,
@@ -56,7 +67,8 @@ class PartyLanServer(
     private val gameDispatcher = Executors.newSingleThreadExecutor { r ->
         Thread(r, "wisdom-party-engine").apply { isDaemon = true }
     }.asCoroutineDispatcher()
-    private val scope = CoroutineScope(gameDispatcher)
+    private val scope = CoroutineScope(gameDispatcher + CoroutineExceptionHandler { _, _ -> })
+    private val sendScope = CoroutineScope(SupervisorJob() + Dispatchers.IO + CoroutineExceptionHandler { _, _ -> })
 
     private val sessions = HashMap<String, DefaultWebSocketServerSession>()
     private val openConnections = AtomicInteger(0)
@@ -96,6 +108,7 @@ class PartyLanServer(
     fun stop() {
         runCatching { server?.stop(gracePeriodMillis = 0, timeoutMillis = 1_500) }
         server = null
+        sendScope.cancel()
         scope.cancel()
         gameDispatcher.close()
     }
@@ -125,43 +138,66 @@ class PartyLanServer(
     }
 
     private fun launchKtor(port: Int): EmbeddedServer<CIOApplicationEngine, CIOApplicationEngine.Configuration> {
-        val srv = embeddedServer(CIO, configure = {
+        val cfg = serverConfig {
+            developmentMode = false
+            watchPaths = emptyList()
+            parentCoroutineContext = CoroutineExceptionHandler { _, _ -> }
+            module { installRoutes() }
+        }
+        val srv = embeddedServer(CIO, cfg) {
             connector {
                 host = "0.0.0.0"
                 this.port = port
             }
-        }) {
-            install(WebSockets) {
-                pingPeriod = 15.seconds
-                timeout = 40.seconds
-                maxFrameSize = 8_192L
+            reuseAddress = (port != 0)
+        }
+        try {
+            srv.start(wait = false)
+            return srv
+        } catch (e: Exception) {
+            runCatching { srv.stop(0, 0) }
+            throw e
+        }
+    }
+
+    private fun Application.installRoutes() {
+        install(WebSockets) {
+            pingPeriod = 15.seconds
+            timeout = 40.seconds
+            maxFrameSize = 8_192L
+        }
+        routing {
+            options("/{...}") {
+                call.response.header(HttpHeaders.AccessControlAllowOrigin, "*")
+                call.response.header("Access-Control-Allow-Private-Network", "true")
+                call.respondText("", status = HttpStatusCode.NoContent)
             }
-            routing {
-                get("/") {
-                    call.response.header(HttpHeaders.CacheControl, "no-store")
-                    call.respondBytes(indexBytes, ContentType.Text.Html)
-                }
-                get("/style.css") {
-                    call.response.header(HttpHeaders.CacheControl, "no-store")
-                    call.respondBytes(cssBytes, ContentType.Text.CSS)
-                }
-                get("/controller.js") {
-                    call.response.header(HttpHeaders.CacheControl, "no-store")
-                    call.respondBytes(jsBytes, ContentType.Application.JavaScript)
-                }
-                get("/health") {
-                    call.respondText("ok", ContentType.Text.Plain)
-                }
-                webSocket("/ws") {
-                    handleWebSocket(this)
-                }
-                get("/{...}") {
-                    call.respondText("Not Found", status = HttpStatusCode.NotFound)
-                }
+            get("/") {
+                call.response.header(HttpHeaders.CacheControl, "no-store")
+                call.response.header(HttpHeaders.AccessControlAllowOrigin, "*")
+                call.response.header("Access-Control-Allow-Private-Network", "true")
+                call.respondBytes(indexBytes, ContentType.Text.Html)
+            }
+            get("/style.css") {
+                call.response.header(HttpHeaders.CacheControl, "no-store")
+                call.respondBytes(cssBytes, ContentType.Text.CSS)
+            }
+            get("/controller.js") {
+                call.response.header(HttpHeaders.CacheControl, "no-store")
+                call.respondBytes(jsBytes, ContentType.Application.JavaScript)
+            }
+            get("/health") {
+                call.response.header(HttpHeaders.AccessControlAllowOrigin, "*")
+                call.response.header("Access-Control-Allow-Private-Network", "true")
+                call.respondText("ok", ContentType.Text.Plain)
+            }
+            webSocket("/ws") {
+                handleWebSocket(this)
+            }
+            get("/{...}") {
+                call.respondText("Not Found", status = HttpStatusCode.NotFound)
             }
         }
-        srv.start(wait = false)
-        return srv
     }
 
     private suspend fun handleWebSocket(ws: DefaultWebSocketServerSession) {
@@ -207,12 +243,19 @@ class PartyLanServer(
         }
     }
 
-    private suspend fun step(action: () -> List<OutgoingMessage>) {
+    private fun step(action: () -> List<OutgoingMessage>) {
         val outgoing = action()
         _state.value = engine.tvSnapshot()
         for (msg in outgoing) {
             val session = sessions[msg.connectionId] ?: continue
-            runCatching { session.send(Frame.Text(msg.payloadJson)) }
+            sendScope.launch {
+                val sent = withTimeoutOrNull(SEND_TIMEOUT_MS) {
+                    runCatching { session.send(Frame.Text(msg.payloadJson)) }.isSuccess
+                } ?: false
+                if (!sent) {
+                    runCatching { session.close(CloseReason(CloseReason.Codes.GOING_AWAY, "Send timeout")) }
+                }
+            }
         }
     }
 
@@ -226,5 +269,6 @@ class PartyLanServer(
         const val DEFAULT_PORT = 8777
         const val MAX_SOCKETS = 32
         const val MAX_MSGS_PER_SECOND = 25
+        private const val SEND_TIMEOUT_MS = 3_000L
     }
 }

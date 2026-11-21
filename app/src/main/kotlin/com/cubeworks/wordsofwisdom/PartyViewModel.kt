@@ -141,11 +141,18 @@ class PartyViewModel(application: Application) : AndroidViewModel(application) {
         _confirmingEnd.value = false
     }
 
-    fun onPauseAudio() = sound.pause()
-    fun onResumeAudio() = sound.resume()
+    fun onAppForeground() = sound.onAppForeground()
+    fun onAppBackground() = sound.onAppBackground()
+
+    fun onAppFinishing() {
+        sound.onAppBackground()
+        sound.release()
+        server.stop()
+    }
 
     override fun onCleared() {
         super.onCleared()
+        sound.onAppBackground()
         sound.release()
         server.stop()
     }

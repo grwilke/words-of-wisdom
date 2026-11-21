@@ -33,10 +33,11 @@ data class TvJoinInfo(
 
 object NetworkUtils {
     /**
-     * Optional HTTPS bridge on GitHub Pages that triggers Android 17 Chrome's Local Network
-     * Access permission prompt cleanly before redirecting straight to the TV's local IP.
+     * HTTPS bridge on GitHub Pages (trailing slash avoids a 301 redirect that can strip #hash on
+     * mobile QR scanners) that triggers Android 17 Chrome's Local Network Access prompt cleanly
+     * before redirecting straight to the TV's local IP.
      */
-    const val JOIN_BRIDGE_URL = "https://grwilke.github.io/words-of-wisdom/join"
+    const val JOIN_BRIDGE_URL = "https://grwilke.github.io/words-of-wisdom/join/"
 
     fun currentLanAddress(context: Context): Inet4Address? =
         chooseBestIpv4(activeNetworkAddresses(context)) ?: chooseBestIpv4(interfaceAddresses())

@@ -18,12 +18,14 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.cubeworks.wordsofwisdom.TvJoinInfo
 import com.wordsofwisdom.core.TvSnapshot
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun TieBreakerScreen(
     state: TvSnapshot,
+    joinInfo: TvJoinInfo? = null,
     musicMuted: Boolean,
     voiceMuted: Boolean,
     onToggleMute: () -> Unit,
@@ -34,11 +36,13 @@ fun TieBreakerScreen(
 
     TvSafeScaffold(
         roomCode = state.roomCode,
-        roundLabel = "⚡ SUDDEN DEATH TIE-BREAKER",
+        roundLabel = "⚡ SUDDEN DEATH",
         musicMuted = musicMuted,
         onToggleMute = onToggleMute,
         voiceMuted = voiceMuted,
         onToggleVoice = onToggleVoice,
+        joinInfo = joinInfo,
+        showMiniQr = true,
         reactions = state.recentReactions,
         celebratory = true,
         modifier = modifier,

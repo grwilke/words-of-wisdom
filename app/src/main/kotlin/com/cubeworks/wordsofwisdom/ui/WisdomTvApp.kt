@@ -61,6 +61,7 @@ fun WisdomTvApp(
                 )
                 GamePhase.WRITING -> WritingScreen(
                     state = state,
+                    joinInfo = joinInfo,
                     musicMuted = musicMuted,
                     voiceMuted = voiceMuted,
                     onToggleMute = onToggleMute,
@@ -68,6 +69,7 @@ fun WisdomTvApp(
                 )
                 GamePhase.GUESSING -> GuessingScreen(
                     state = state,
+                    joinInfo = joinInfo,
                     musicMuted = musicMuted,
                     voiceMuted = voiceMuted,
                     onToggleMute = onToggleMute,
@@ -75,6 +77,7 @@ fun WisdomTvApp(
                 )
                 GamePhase.REVEAL -> RevealScreen(
                     state = state,
+                    joinInfo = joinInfo,
                     musicMuted = musicMuted,
                     voiceMuted = voiceMuted,
                     onNext = onRemoteOk,
@@ -83,6 +86,7 @@ fun WisdomTvApp(
                 )
                 GamePhase.TIE_BREAKER -> TieBreakerScreen(
                     state = state,
+                    joinInfo = joinInfo,
                     musicMuted = musicMuted,
                     voiceMuted = voiceMuted,
                     onToggleMute = onToggleMute,
@@ -90,6 +94,7 @@ fun WisdomTvApp(
                 )
                 GamePhase.PODIUM -> PodiumScreen(
                     state = state,
+                    joinInfo = joinInfo,
                     musicMuted = musicMuted,
                     voiceMuted = voiceMuted,
                     onPlayAgain = onRemoteOk,

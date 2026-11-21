@@ -1,11 +1,14 @@
 const OCTET = '(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)';
 const PORT = '([1-9]\\d{0,4})';
-const ADDRESS = new RegExp(`^#${OCTET}\\.${OCTET}\\.${OCTET}\\.${OCTET}:${PORT}$`);
+const ADDRESS = new RegExp(`^#?${OCTET}\\.${OCTET}\\.${OCTET}\\.${OCTET}:${PORT}$`);
 
 const isPrivate = (a, b) => a === 10 || (a === 172 && b >= 16 && b <= 31) || (a === 192 && b === 168);
 
-export function tvAddress(hash) {
-  const m = ADDRESS.exec(hash || '');
+export function tvAddress(hash, search = '') {
+  const raw = (hash && hash.length > 1)
+    ? hash
+    : (new URLSearchParams(search || '').get('tv') || '');
+  const m = ADDRESS.exec(raw);
   if (!m) return null;
   const [a, b, c, d, port] = m.slice(1).map(Number);
   if (!isPrivate(a, b) || port > 65535) return null;
@@ -18,7 +21,7 @@ export function asksFirst(ua) {
 
 async function probeTv(url) {
   const ctrl = new AbortController();
-  const t = setTimeout(() => ctrl.abort(), 35_000);
+  const t = setTimeout(() => ctrl.abort(), 10_000);
   try {
     await fetch(url, { mode: 'no-cors', cache: 'no-store', targetAddressSpace: 'local', signal: ctrl.signal });
     return true;
@@ -33,10 +36,16 @@ if (typeof document !== 'undefined') {
   const show = (view, url) => {
     document.querySelectorAll('[data-view]').forEach((s) => { s.hidden = s.dataset.view !== view; });
     const a = document.getElementById('anyway');
+    const quick = document.getElementById('direct-open');
     if (url && a) a.href = url;
+    if (url && quick) {
+      quick.href = url;
+      quick.textContent = `Open TV directly (${url.replace(/^http:\/\//, '').replace(/\/$/, '')})`;
+      quick.hidden = false;
+    }
   };
   const go = async () => {
-    const addr = tvAddress(location.hash);
+    const addr = tvAddress(location.hash, location.search);
     if (!addr) { show('no-tv'); return; }
     const url = `http://${addr}/`;
     if (!asksFirst(navigator.userAgent)) { location.replace(url); return; }

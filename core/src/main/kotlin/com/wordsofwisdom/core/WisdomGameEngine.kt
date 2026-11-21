@@ -433,6 +433,33 @@ class WisdomGameEngine(
         val cleanName = sanitizeName(msg.name)
             ?: return listOf(OutgoingMessage(connId, WireProtocol.encodeError("bad_name", "Please enter a name.")))
 
+        // Smart seat recovery: if a player closed their browser (losing localStorage or using a
+        // fresh tab) and rejoins with the exact same name as a disconnected player, restore their seat!
+        val disconnectedSameName = players.firstOrNull {
+            !it.isBot && !it.connected && it.name.equals(cleanName, ignoreCase = true)
+        }
+        if (disconnectedSameName != null) {
+            disconnectedSameName.connectionId?.let { oldConn -> if (oldConn != connId) connToPlayerId.remove(oldConn) }
+            disconnectedSameName.connectionId = connId
+            disconnectedSameName.connected = true
+            disconnectedSameName.disconnectedAtMs = null
+            connToPlayerId[connId] = disconnectedSameName.id
+            if (disconnectedSameName.id == hostPlayerId) hostDisconnectedAtMs = null
+
+            val rejoined = OutgoingMessage(
+                connId,
+                WireProtocol.encodeJoined(
+                    JoinedMessage(
+                        playerId = disconnectedSameName.id,
+                        token = disconnectedSameName.token,
+                        roomCode = roomCode,
+                        reconnected = true,
+                    ),
+                ),
+            )
+            return listOf(rejoined) + broadcastAll(now)
+        }
+
         val uniqueName = disambiguateName(cleanName)
         val pid = "p${nextPlayerNum++}"
         val token = generateToken(rng)

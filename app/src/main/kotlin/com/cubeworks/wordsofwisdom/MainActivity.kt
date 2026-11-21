@@ -54,14 +54,33 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    override fun onStart() {
+        super.onStart()
+        vm.onAppForeground()
+    }
+
     override fun onResume() {
         super.onResume()
-        vm.onResumeAudio()
+        vm.onAppForeground()
     }
 
     override fun onPause() {
+        vm.onAppBackground()
         super.onPause()
-        vm.onPauseAudio()
+    }
+
+    override fun onStop() {
+        vm.onAppBackground()
+        super.onStop()
+    }
+
+    override fun onDestroy() {
+        if (isFinishing) {
+            vm.onAppFinishing()
+        } else {
+            vm.onAppBackground()
+        }
+        super.onDestroy()
     }
 
     override fun dispatchKeyEvent(event: KeyEvent): Boolean {

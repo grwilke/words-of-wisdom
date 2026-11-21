@@ -40,6 +40,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.cubeworks.wordsofwisdom.TvJoinInfo
 import com.wordsofwisdom.core.ChoiceOption
 import com.wordsofwisdom.core.PlayerView
 import com.wordsofwisdom.core.TvSnapshot
@@ -55,6 +56,7 @@ import kotlinx.coroutines.delay
 @Composable
 fun RevealScreen(
     state: TvSnapshot,
+    joinInfo: TvJoinInfo? = null,
     musicMuted: Boolean,
     voiceMuted: Boolean,
     onNext: () -> Unit,
@@ -80,11 +82,13 @@ fun RevealScreen(
 
     TvSafeScaffold(
         roomCode = state.roomCode,
-        roundLabel = "TURN ${state.turnNumber} OF ${state.totalTurns} · THE GRAND REVEAL",
+        roundLabel = "TURN ${state.turnNumber}/${state.totalTurns} · REVEAL",
         musicMuted = musicMuted,
         onToggleMute = onToggleMute,
         voiceMuted = voiceMuted,
         onToggleVoice = onToggleVoice,
+        joinInfo = joinInfo,
+        showMiniQr = true,
         reactions = state.recentReactions,
         celebratory = revealAnswer && anyCorrect,
         showConfetti = revealAnswer && anyCorrect,

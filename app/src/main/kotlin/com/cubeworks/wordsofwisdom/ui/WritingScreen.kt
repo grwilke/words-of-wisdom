@@ -43,6 +43,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.cubeworks.wordsofwisdom.TvJoinInfo
 import com.wordsofwisdom.core.SprintWriterStatus
 import com.wordsofwisdom.core.TvSnapshot
 
@@ -50,6 +51,7 @@ import com.wordsofwisdom.core.TvSnapshot
 @Composable
 fun WritingScreen(
     state: TvSnapshot,
+    joinInfo: TvJoinInfo? = null,
     musicMuted: Boolean,
     voiceMuted: Boolean,
     onToggleMute: () -> Unit,
@@ -57,7 +59,7 @@ fun WritingScreen(
     modifier: Modifier = Modifier,
 ) {
     if (state.isSimultaneousWriting) {
-        PartySprintWritingScreen(state, musicMuted, voiceMuted, onToggleMute, onToggleVoice, modifier)
+        PartySprintWritingScreen(state, joinInfo, musicMuted, voiceMuted, onToggleMute, onToggleVoice, modifier)
         return
     }
 
@@ -85,11 +87,13 @@ fun WritingScreen(
 
     TvSafeScaffold(
         roomCode = state.roomCode,
-        roundLabel = "TURN ${state.turnNumber} OF ${state.totalTurns} · SAGE AT THE QUILL",
+        roundLabel = "TURN ${state.turnNumber}/${state.totalTurns} · WRITING",
         musicMuted = musicMuted,
         onToggleMute = onToggleMute,
         voiceMuted = voiceMuted,
         onToggleVoice = onToggleVoice,
+        joinInfo = joinInfo,
+        showMiniQr = true,
         reactions = state.recentReactions,
         modifier = modifier,
     ) {
@@ -225,6 +229,7 @@ fun WritingScreen(
 @Composable
 private fun PartySprintWritingScreen(
     state: TvSnapshot,
+    joinInfo: TvJoinInfo? = null,
     musicMuted: Boolean,
     voiceMuted: Boolean,
     onToggleMute: () -> Unit,
@@ -236,11 +241,13 @@ private fun PartySprintWritingScreen(
 
     TvSafeScaffold(
         roomCode = state.roomCode,
-        roundLabel = "⚡ PARTY SPRINT · ROUND ${state.cycleNumber} OF ${state.totalCycles}",
+        roundLabel = "⚡ SPRINT · ROUND ${state.cycleNumber}/${state.totalCycles}",
         musicMuted = musicMuted,
         onToggleMute = onToggleMute,
         voiceMuted = voiceMuted,
         onToggleVoice = onToggleVoice,
+        joinInfo = joinInfo,
+        showMiniQr = true,
         reactions = state.recentReactions,
         celebratory = state.roundMultiplier > 1,
         modifier = modifier,

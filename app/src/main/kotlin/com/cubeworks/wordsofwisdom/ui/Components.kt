@@ -68,6 +68,8 @@ fun TvSafeScaffold(
     onToggleMute: () -> Unit,
     voiceMuted: Boolean = false,
     onToggleVoice: () -> Unit = {},
+    joinInfo: TvJoinInfo? = null,
+    showMiniQr: Boolean = false,
     reactions: List<LiveReaction> = emptyList(),
     celebratory: Boolean = false,
     showConfetti: Boolean = false,
@@ -81,44 +83,107 @@ fun TvSafeScaffold(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = 44.dp, vertical = 26.dp),
+                .padding(horizontal = 44.dp, vertical = 22.dp),
         ) {
-            // Compact Top Bar
+            // Compact Top Bar with optional always-scannable Mini QR for mid-game rejoin
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween,
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
             ) {
-                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                Row(
+                    modifier = Modifier.weight(1f),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(10.dp),
+                ) {
                     Text(
                         text = "🦉 Words of Wisdom",
                         color = ParlorColors.GoldBright,
-                        fontSize = 20.sp,
+                        fontSize = 19.sp,
                         fontWeight = FontWeight.ExtraBold,
                         fontFamily = FontFamily.Serif,
+                        maxLines = 1,
                     )
                     if (roundLabel != null) {
                         StatusPill(text = roundLabel, accent = ParlorColors.Gold)
                     }
                 }
 
-                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                    StatusPill(text = "ROOM $roomCode", accent = ParlorColors.MutedLavender)
+                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    if (showMiniQr && joinInfo != null) {
+                        MiniJoinQrPill(joinInfo = joinInfo, roomCode = roomCode)
+                    } else {
+                        StatusPill(text = "ROOM $roomCode", accent = ParlorColors.MutedLavender)
+                    }
                     TvActionPill(
                         label = if (voiceMuted) "🔇 Voice" else "🗣️ Voice",
                         onClick = onToggleVoice,
                         gold = false,
+                        compact = showMiniQr,
                     )
                     TvActionPill(
                         label = if (musicMuted) "🔇 Music" else "🎵 Music",
                         onClick = onToggleMute,
                         gold = false,
+                        compact = showMiniQr,
                     )
                 }
             }
 
-            Spacer(Modifier.height(14.dp))
+            Spacer(Modifier.height(10.dp))
             content()
+        }
+    }
+}
+
+/** Always-visible couch-scannable mini QR pill so players can rejoin any time mid-game. */
+@Composable
+fun MiniJoinQrPill(
+    joinInfo: TvJoinInfo,
+    roomCode: String,
+    modifier: Modifier = Modifier,
+) {
+    Surface(
+        modifier = modifier,
+        shape = RoundedCornerShape(12.dp),
+        color = ParlorColors.VelvetCard.copy(alpha = 0.95f),
+        border = BorderStroke(1.5.dp, ParlorColors.Gold.copy(alpha = 0.75f)),
+    ) {
+        Row(
+            modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+        ) {
+            Surface(
+                shape = RoundedCornerShape(7.dp),
+                color = Color.White,
+                modifier = Modifier.size(50.dp),
+            ) {
+                QrCodeCanvas(
+                    qr = joinInfo.qr,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(4.dp),
+                )
+            }
+            Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                Text(
+                    text = "REJOIN · $roomCode",
+                    color = ParlorColors.GoldBright,
+                    fontSize = 11.sp,
+                    fontWeight = FontWeight.ExtraBold,
+                    letterSpacing = 0.8.sp,
+                    maxLines = 1,
+                )
+                Text(
+                    text = joinInfo.displayAddress.removePrefix("http://"),
+                    color = ParlorColors.Cream,
+                    fontSize = 11.sp,
+                    fontWeight = FontWeight.Bold,
+                    fontFamily = FontFamily.Monospace,
+                    maxLines = 1,
+                )
+            }
         }
     }
 }
@@ -138,10 +203,12 @@ fun StatusPill(
         Text(
             text = text,
             color = if (accent == ParlorColors.MutedLavender) ParlorColors.Cream else accent,
-            fontSize = 14.sp,
+            fontSize = 13.sp,
             fontWeight = FontWeight.Bold,
-            letterSpacing = 0.6.sp,
-            modifier = Modifier.padding(horizontal = 14.dp, vertical = 6.dp),
+            letterSpacing = 0.5.sp,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            modifier = Modifier.padding(horizontal = 12.dp, vertical = 5.dp),
         )
     }
 }
@@ -153,6 +220,7 @@ fun TvActionPill(
     onClick: () -> Unit,
     gold: Boolean = true,
     enabled: Boolean = true,
+    compact: Boolean = false,
     modifier: Modifier = Modifier,
 ) {
     var focused by remember { mutableStateOf(false) }
@@ -187,9 +255,13 @@ fun TvActionPill(
         Text(
             text = label,
             color = fg,
-            fontSize = 16.sp,
+            fontSize = if (compact) 14.sp else 16.sp,
             fontWeight = FontWeight.ExtraBold,
-            modifier = Modifier.padding(horizontal = 18.dp, vertical = 10.dp),
+            maxLines = 1,
+            modifier = Modifier.padding(
+                horizontal = if (compact) 12.dp else 18.dp,
+                vertical = if (compact) 8.dp else 10.dp,
+            ),
         )
     }
 }

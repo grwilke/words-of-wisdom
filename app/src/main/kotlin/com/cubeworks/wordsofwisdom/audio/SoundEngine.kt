@@ -25,6 +25,7 @@ class SoundEngine(private val context: Context) {
         PODIUM(R.raw.bgm_podium),
     }
 
+    @Volatile private var appForeground: Boolean = false
     private var musicMuted: Boolean = false
     private var voiceMuted: Boolean = false
     private var sfxMuted: Boolean = false
@@ -107,7 +108,7 @@ class SoundEngine(private val context: Context) {
     }
 
     fun speakMetaphor(sageName: String?, metaphor: String) {
-        if (voiceMuted || !ttsReady || metaphor.isBlank()) return
+        if (!appForeground || voiceMuted || !ttsReady || metaphor.isBlank()) return
         val line = if (!sageName.isNullOrBlank()) "$sageName says... $metaphor" else metaphor
         runCatching {
             val params = Bundle().apply {
@@ -140,28 +141,44 @@ class SoundEngine(private val context: Context) {
             GamePhase.WRITING, GamePhase.GUESSING, GamePhase.REVEAL, GamePhase.TIE_BREAKER -> MusicMood.PLAY
             GamePhase.PODIUM -> MusicMood.PODIUM
         }
-        if (target == currentMood && mediaPlayer != null) return
+        if (!appForeground) {
+            currentMood = target
+            stopAndReleaseMusic()
+            return
+        }
+        if (target == currentMood && mediaPlayer != null) {
+            runCatching { if (mediaPlayer?.isPlaying == false) mediaPlayer?.start() }
+            return
+        }
         switchMusic(target)
+    }
+
+    private fun stopAndReleaseMusic() {
+        val player = mediaPlayer ?: return
+        mediaPlayer = null
+        runCatching { if (player.isPlaying) player.pause() }
+        runCatching { player.stop() }
+        runCatching { player.release() }
     }
 
     private fun switchMusic(mood: MusicMood) {
         currentMood = mood
-        runCatching {
-            mediaPlayer?.stop()
-            mediaPlayer?.release()
-        }
+        stopAndReleaseMusic()
+        if (!appForeground) return
         mediaPlayer = runCatching {
             MediaPlayer.create(context, mood.resId)?.apply {
                 isLooping = true
                 val vol = if (musicMuted) 0f else BGM_VOLUME
                 setVolume(vol, vol)
-                start()
+                if (appForeground) {
+                    start()
+                }
             }
         }.getOrNull()
     }
 
     fun playCue(cue: TvCue) {
-        if (sfxMuted) return
+        if (!appForeground || sfxMuted) return
         val pool = soundPool ?: return
         val id = sfxIds[cue] ?: return
         val vol = when (cue) {
@@ -173,26 +190,37 @@ class SoundEngine(private val context: Context) {
         runCatching { pool.play(id, vol, vol, 1, 0, 1.0f) }
     }
 
-    fun pause() {
-        stopSpeaking()
-        runCatching { if (mediaPlayer?.isPlaying == true) mediaPlayer?.pause() }
+    fun onAppForeground() {
+        if (appForeground && mediaPlayer?.isPlaying == true) return
+        appForeground = true
+        runCatching { soundPool?.autoResume() }
+        val mood = currentMood ?: MusicMood.LOBBY
+        if (mediaPlayer == null) {
+            switchMusic(mood)
+        } else {
+            runCatching {
+                applyBgmVolume(if (musicMuted) 0f else BGM_VOLUME)
+                if (mediaPlayer?.isPlaying == false) mediaPlayer?.start()
+            }
+        }
     }
 
-    fun resume() {
-        runCatching { if (mediaPlayer != null && mediaPlayer?.isPlaying == false) mediaPlayer?.start() }
+    fun onAppBackground() {
+        appForeground = false
+        stopSpeaking()
+        runCatching { soundPool?.autoPause() }
+        stopAndReleaseMusic()
     }
 
     fun release() {
+        appForeground = false
         runCatching {
             tts?.stop()
             tts?.shutdown()
         }
         tts = null
-        runCatching {
-            mediaPlayer?.stop()
-            mediaPlayer?.release()
-        }
-        mediaPlayer = null
+        stopAndReleaseMusic()
+        runCatching { soundPool?.autoPause() }
         runCatching { soundPool?.release() }
     }
 
