@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.WordsOfWisdom" parent="android:Theme.Material.NoActionBar">
+        <item name="android:windowBackground">#120E24</item>
+        <item name="android:colorPrimary">#F5B731</item>
+        <item name="android:colorAccent">#F5B731</item>
+    </style>
+</resources>

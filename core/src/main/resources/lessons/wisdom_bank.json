@@ -1,0 +1,2166 @@
+{
+  "version": 1,
+  "count": 120,
+  "lessons": [
+    {
+      "id": "connection_01",
+      "theme": "Connection",
+      "lesson": "Nobody can be happy alone",
+      "decoys": [
+        "True peace begins when you enjoy your own quiet company",
+        "Good friends show up fastest when the skies turn gray",
+        "Distance slowly reveals who genuinely belongs in your life",
+        "Listening closely is the rarest gift you can offer someone",
+        "Shared memories outlast every treasure money can buy"
+      ],
+      "sparks": [
+        "a lone scarecrow",
+        "a solo violin",
+        "an empty dinner table"
+      ],
+      "botMetaphor": "A single scarecrow in the field only smiles when he sees the crows"
+    },
+    {
+      "id": "connection_02",
+      "theme": "Connection",
+      "lesson": "True friends show up when times get hard",
+      "decoys": [
+        "Nobody can be happy alone",
+        "Forgiving an old friend lifts a heavy weight off your chest",
+        "A small circle of loyal allies beats a crowded room of strangers",
+        "You become just like the five people sitting closest to you",
+        "Honest criticism from a companion beats flattery from a crowd"
+      ],
+      "sparks": [
+        "umbrellas in rain",
+        "campfires at night",
+        "boats in a storm"
+      ],
+      "botMetaphor": "Fair-weather umbrellas fold up the second the real storm hits the porch"
+    },
+    {
+      "id": "connection_03",
+      "theme": "Connection",
+      "lesson": "You become like the company you keep",
+      "decoys": [
+        "Good listeners learn far more than loud talkers ever do",
+        "Kindness toward strangers quietly circles back to your doorstep",
+        "Even the strongest bridge needs two solid banks to stand",
+        "Old friendships survive long silences without losing warmth",
+        "Choosing your circle carefully protects your future self"
+      ],
+      "sparks": [
+        "pebbles in ink",
+        "apples in a basket",
+        "birds flying together"
+      ],
+      "botMetaphor": "A white pebble resting in blackberry jam eventually turns deep purple"
+    },
+    {
+      "id": "connection_04",
+      "theme": "Connection",
+      "lesson": "Listening teaches more than talking ever will",
+      "decoys": [
+        "Speaking the truth gently opens doors that shouting slams shut",
+        "Words spoken in anger cannot be gathered back like spilled feathers",
+        "Silence between close friends feels warmer than nervous chatter",
+        "Every person carries a story you know nothing about",
+        "Asking curious questions turns strangers into allies"
+      ],
+      "sparks": [
+        "teacups in rain",
+        "quiet owls",
+        "tuned radios"
+      ],
+      "botMetaphor": "A closed teacup catches no rain while a wide bowl fills to the brim"
+    },
+    {
+      "id": "connection_05",
+      "theme": "Connection",
+      "lesson": "A shared burden feels half as heavy",
+      "decoys": [
+        "Asking for help is a sign of strength rather than weakness",
+        "Trying to please everyone leaves nobody truly satisfied",
+        "Small daily favors build the sturdiest bridges between neighbors",
+        "Gratitude turns an ordinary meal into a royal feast",
+        "Working beside someone reveals their character faster than lunch"
+      ],
+      "sparks": [
+        "ants with a crumb",
+        "two oxen yoked",
+        "rowing a canoe"
+      ],
+      "botMetaphor": "Four ants strolling under one giant crumb turn a boulder into lunch"
+    },
+    {
+      "id": "connection_06",
+      "theme": "Connection",
+      "lesson": "Distance reveals who truly cares about you",
+      "decoys": [
+        "Staying too close to comfort keeps you from seeing the world",
+        "Time heals old wounds only if you stop picking at them",
+        "True friends show up when times get hard",
+        "Letting go of one-sided bonds makes room for warmer ones",
+        "Home is built by the people inside it rather than the walls"
+      ],
+      "sparks": [
+        "a bakery moving",
+        "tides going out",
+        "migrating birds"
+      ],
+      "botMetaphor": "When the bakery moves across town, you learn who actually craves your bread"
+    },
+    {
+      "id": "connection_07",
+      "theme": "Connection",
+      "lesson": "Trying to please everyone leaves you exhausted",
+      "decoys": [
+        "Saying no kindly protects the promises you already made",
+        "Nobody can be happy alone",
+        "Comparing your journey to your neighbor steals your joy",
+        "Staying authentic attracts the people meant for you",
+        "Even the sweetest peach cannot win over someone who hates fruit"
+      ],
+      "sparks": [
+        "a spinning compass",
+        "a chameleon on plaid",
+        "a waiter with twelve trays"
+      ],
+      "botMetaphor": "A compass spinning to point toward every hiker in the woods loses north"
+    },
+    {
+      "id": "connection_08",
+      "theme": "Connection",
+      "lesson": "Words spoken in anger are impossible to take back",
+      "decoys": [
+        "Forgiving someone sets your own heart free before theirs",
+        "Pausing for one deep breath prevents a week of regret",
+        "Listening teaches more than talking ever will",
+        "Honesty without warmth lands like a brick instead of a gift",
+        "Small misunderstandings grow into walls when nobody knocks"
+      ],
+      "sparks": [
+        "toothpaste squeezed out",
+        "nails in a wooden fence",
+        "feathers in the wind"
+      ],
+      "botMetaphor": "Once you squeeze the whole tube of toothpaste onto the counter, no spoon puts it back"
+    },
+    {
+      "id": "connection_09",
+      "theme": "Connection",
+      "lesson": "Every stranger is fighting a hidden battle",
+      "decoys": [
+        "First impressions rarely tell the second chapter of a person",
+        "Patience with irritable people often melts their armor",
+        "You can judge character by how someone treats people with no power",
+        "Kindness costs nothing yet stays remembered for decades",
+        "Walking a mile in worn boots softens harsh opinions"
+      ],
+      "sparks": [
+        "a swan paddling",
+        "icebergs at sea",
+        "closed suitcases"
+      ],
+      "botMetaphor": "Even the calmest swan gliding across the pond kicks furiously beneath the surface"
+    },
+    {
+      "id": "connection_10",
+      "theme": "Connection",
+      "lesson": "Family is chosen by love as much as blood",
+      "decoys": [
+        "Home feels warmest wherever someone leaves the porch light on",
+        "Old traditions stay alive when each generation adds a spark",
+        "Blood ties still need regular watering to keep growing",
+        "Nobody can be happy alone",
+        "Shared laughter heals rivalries faster than apologies"
+      ],
+      "sparks": [
+        "a grafted tree branch",
+        "a patchwork quilt",
+        "birds sharing a nest"
+      ],
+      "botMetaphor": "A grafted cherry branch blooms just as bright as the roots beneath it"
+    },
+    {
+      "id": "connection_11",
+      "theme": "Connection",
+      "lesson": "Asking for help is a sign of strength",
+      "decoys": [
+        "A shared burden feels half as heavy",
+        "Learning from someone else's map saves miles of blistered feet",
+        "Pride builds tall walls that keep rescuers outside",
+        "True independence still knows when to accept a spare oar",
+        "Admitting what you do not know starts real wisdom"
+      ],
+      "sparks": [
+        "tugboats and ships",
+        "a climber's rope",
+        "borrowing a lantern"
+      ],
+      "botMetaphor": "Only a stubborn captain refuses a tugboat while drifting straight into the reef"
+    },
+    {
+      "id": "connection_12",
+      "theme": "Connection",
+      "lesson": "Love grows deeper through tiny daily habits",
+      "decoys": [
+        "Grand gestures fade fast when everyday respect is missing",
+        "Patience keeps small sparks from burning out too soon",
+        "Showing up consistently matters more than dazzling once a year",
+        "Listening teaches more than talking ever will",
+        "Forgiveness keeps little pebbles from turning into boulders"
+      ],
+      "sparks": [
+        "trowels of mortar",
+        "watering a bonsai",
+        "tending hearth embers"
+      ],
+      "botMetaphor": "A brick cathedral rises from humble trowels of mortar, never from one grand speech"
+    },
+    {
+      "id": "patience_01",
+      "theme": "Patience",
+      "lesson": "Good things take time to grow",
+      "decoys": [
+        "Rushing through work forces you to build everything twice",
+        "Starting small today beats waiting for a mythical perfect Monday",
+        "Quiet consistency outperforms bursts of frantic energy",
+        "The sweetest fruit hangs highest on the orchard branch",
+        "Every master once stumbled through their clumsy first week"
+      ],
+      "sparks": [
+        "pulling a sprout",
+        "baking sourdough",
+        "aging violins"
+      ],
+      "botMetaphor": "Yanking on a carrot top every afternoon only guarantees a very short salad"
+    },
+    {
+      "id": "patience_02",
+      "theme": "Patience",
+      "lesson": "Rushing a job usually means doing it twice",
+      "decoys": [
+        "Good things take time to grow",
+        "Measuring carefully before cutting saves both timber and temper",
+        "Shortcuts through the swamp often take longer than the paved road",
+        "Slow steady steps finish marathons while sprinters gasp at mile two",
+        "Rest is part of the craft rather than the enemy of progress"
+      ],
+      "sparks": [
+        "wet paint in wind",
+        "half-baked bread",
+        "tangled shoelaces"
+      ],
+      "botMetaphor": "A painter who slaps on wet varnish in a hurricane winds up sanding off pine needles"
+    },
+    {
+      "id": "patience_03",
+      "theme": "Patience",
+      "lesson": "Storms always pass eventually",
+      "decoys": [
+        "Hard seasons teach skills that sunny afternoons never demand",
+        "Worrying about tomorrow ruins the sunshine sitting in your lap today",
+        "Night always feels coldest right before the horizon turns pink",
+        "Waiting calmly beats panicking inside a leaky rowboat",
+        "Time softens sharp grief into bearable memory"
+      ],
+      "sparks": [
+        "clouds renting the sky",
+        "winter melting to spring",
+        "waves calming at dusk"
+      ],
+      "botMetaphor": "No cloud in history has ever signed a permanent lease on the sky"
+    },
+    {
+      "id": "patience_04",
+      "theme": "Patience",
+      "lesson": "Small daily steps beat giant rare leaps",
+      "decoys": [
+        "Good things take time to grow",
+        "Showing up on boring Tuesdays builds extraordinary results",
+        "Perfectionism stalls more dreams than laziness ever did",
+        "Direction matters far more than raw running speed",
+        "One quiet hour of practice beats ten hours of daydreaming"
+      ],
+      "sparks": [
+        "water carving stone",
+        "a tortoise climbing stairs",
+        "stacking pennies"
+      ],
+      "botMetaphor": "A dripping faucet hollows granite faster than a single thunderclap ever could"
+    },
+    {
+      "id": "patience_05",
+      "theme": "Patience",
+      "lesson": "Timing matters as much as effort",
+      "decoys": [
+        "Waiting for the right moment is not the same as procrastinating",
+        "Luck favors the sailor who already mended their sails",
+        "Opportunities knock softly and rarely ring the doorbell twice",
+        "Rushing a job usually means doing it twice",
+        "Knowing when to pause saves you from charging down a blind alley"
+      ],
+      "sparks": [
+        "planting in snow",
+        "surfing a wave",
+        "flipping a pancake"
+      ],
+      "botMetaphor": "Planting watermelon seeds during a January blizzard wastes a perfectly good shovel"
+    },
+    {
+      "id": "patience_06",
+      "theme": "Patience",
+      "lesson": "Worrying today never fixes tomorrow",
+      "decoys": [
+        "Storms always pass eventually",
+        "Focusing on what your hands can reach calms a racing mind",
+        "Most monsters we rehearse at midnight never show up at noon",
+        "Planning calmly beats rehearsing disaster on repeat",
+        "Enjoying the present minute is harder than chasing the next one"
+      ],
+      "sparks": [
+        "a rocking chair",
+        "paying interest twice",
+        "carrying an umbrella indoors"
+      ],
+      "botMetaphor": "Rocking furiously in a wooden porch chair burns sweat without leaving the veranda"
+    },
+    {
+      "id": "patience_07",
+      "theme": "Patience",
+      "lesson": "Rest is necessary for lasting energy",
+      "decoys": [
+        "Small daily steps beat giant rare leaps",
+        "Pushing past exhaustion trades tomorrow's clarity for today's haste",
+        "A quiet mind spots answers that a frantic schedule misses",
+        "Good things take time to grow",
+        "Pacing yourself lets you enjoy the view along the climb"
+      ],
+      "sparks": [
+        "sharpening an axe",
+        "unstringing a bow",
+        "fallow farm fields"
+      ],
+      "botMetaphor": "Even the sharpest lumberjack axe turns dull if it never visits the whetstone"
+    },
+    {
+      "id": "patience_08",
+      "theme": "Patience",
+      "lesson": "Wait until anger cools before deciding",
+      "decoys": [
+        "Words spoken in anger are impossible to take back",
+        "Sleeping on a tough dilemma shrinks giant dragons into lizards",
+        "Calm minds negotiate better outcomes than clenched fists",
+        "Timing matters as much as effort",
+        "Silence during a heated argument is often the wisest move"
+      ],
+      "sparks": [
+        "a boiling kettle",
+        "muddy pond water settling",
+        "cooling iron"
+      ],
+      "botMetaphor": "Never buy groceries while starving or sign contracts while the kettle screams"
+    },
+    {
+      "id": "patience_09",
+      "theme": "Patience",
+      "lesson": "Shortcuts often end up taking longer",
+      "decoys": [
+        "Rushing a job usually means doing it twice",
+        "Solid foundations stay invisible until the first earthquake arrives",
+        "Cheap bargains frequently cost double by the end of the year",
+        "Easy promises hide the steepest hidden fees",
+        "Learning the basics properly unlocks every trick later on"
+      ],
+      "sparks": [
+        "hopping a fence",
+        "untying knots fast",
+        "cutting across a marsh"
+      ],
+      "botMetaphor": "Hopping the orchard fence to skip the gate usually introduces you to the guard dog"
+    },
+    {
+      "id": "patience_10",
+      "theme": "Patience",
+      "lesson": "Time reveals what haste tries to hide",
+      "decoys": [
+        "First impressions rarely capture a person's whole character",
+        "Good things take time to grow",
+        "Patience lets the truth walk through the front door on its own",
+        "Real friendships outlive seasonal enthusiasm",
+        "Watching actions over months beats trusting speeches in one night"
+      ],
+      "sparks": [
+        "melting snow",
+        "low tide on a beach",
+        "developing a photograph"
+      ],
+      "botMetaphor": "Only after the snow melts do you spot every rake forgotten on the lawn"
+    },
+    {
+      "id": "patience_11",
+      "theme": "Patience",
+      "lesson": "You cannot hurry someone else's healing",
+      "decoys": [
+        "Storms always pass eventually",
+        "Sitting quietly beside a hurting friend helps more than fixing them",
+        "Everyone walks out of winter on a different calendar",
+        "Good things take time to grow",
+        "Forgiveness arrives on its own schedule rather than by command"
+      ],
+      "sparks": [
+        "opening a cocoon",
+        "tugging a bandage",
+        "forcing a flower bud"
+      ],
+      "botMetaphor": "Prying open a cocoon with tweezers ruins the wings before they ever dry"
+    },
+    {
+      "id": "patience_12",
+      "theme": "Patience",
+      "lesson": "Plant seeds today for shade tomorrow",
+      "decoys": [
+        "Small daily steps beat giant rare leaps",
+        "Generosity echoes further down the road than we can see",
+        "Preparing calmly during summer keeps winter from feeling cruel",
+        "Good things take time to grow",
+        "Legacy lives in what stays blooming after you leave the room"
+      ],
+      "sparks": [
+        "planting an oak",
+        "digging a well",
+        "saving lanterns for winter"
+      ],
+      "botMetaphor": "Grandmothers tuck acorns into hillside soil for picnics they will never attend"
+    },
+    {
+      "id": "courage_01",
+      "theme": "Courage",
+      "lesson": "Fear shrinks the moment you face it",
+      "decoys": [
+        "Bravery means walking forward even while your knees knock",
+        "Staying safe in the harbor wastes a ship built for oceans",
+        "Regret hurts far longer than temporary embarrassment",
+        "One bold step breaks a year of overthinking",
+        "Running away from hard conversations makes them louder later"
+      ],
+      "sparks": [
+        "a bathrobe monster",
+        "a long shadow at dusk",
+        "jumping into cold water"
+      ],
+      "botMetaphor": "The giant bedroom monster turns back into a bathrobe the instant you flick the lamp"
+    },
+    {
+      "id": "courage_02",
+      "theme": "Courage",
+      "lesson": "You miss every chance you refuse to take",
+      "decoys": [
+        "Fear shrinks the moment you face it",
+        "Failing loudly teaches more than watching safely from the bleachers",
+        "Waiting for guaranteed certainty means watching the train pull away",
+        "Small experiments lower the price of bold dreams",
+        "Luck usually meets the people who actually knocked on the door"
+      ],
+      "sparks": [
+        "unthrown dice",
+        "a folded kite",
+        "an unmailed letter"
+      ],
+      "botMetaphor": "A fisherman who keeps his hook inside his pocket never argues about the one that got away"
+    },
+    {
+      "id": "courage_03",
+      "theme": "Courage",
+      "lesson": "Comfort zones rarely produce new discoveries",
+      "decoys": [
+        "Change feels frightening right before it starts feeling liberating",
+        "You miss every chance you refuse to take",
+        "Leaving familiar habits reveals muscles you never knew you owned",
+        "Curiosity carries you further than fear ever could",
+        "Every expert started by feeling awkward in a brand new room"
+      ],
+      "sparks": [
+        "a ship in harbor",
+        "a goldfish in a bowl",
+        "unworn hiking boots"
+      ],
+      "botMetaphor": "A ship anchored forever in the cove stays shiny while never glimpsing a single island"
+    },
+    {
+      "id": "courage_04",
+      "theme": "Courage",
+      "lesson": "Regret lasts longer than brief embarrassment",
+      "decoys": [
+        "Fear shrinks the moment you face it",
+        "Other people forget your awkward slip ten minutes after it happens",
+        "Saying what you mean beats rehearsing clever speeches in the shower",
+        "You miss every chance you refuse to take",
+        "Laughing at your own stumble steals the sting from every mistake"
+      ],
+      "sparks": [
+        "a blush vs a fossil",
+        "an untouched diving board",
+        "a silent microphone"
+      ],
+      "botMetaphor": "A red cheek fades before dessert, while an unasked dance haunts every wedding song"
+    },
+    {
+      "id": "courage_05",
+      "theme": "Courage",
+      "lesson": "Standing alone for right takes real grit",
+      "decoys": [
+        "Following the crowd blindly leads straight off comfortable cliffs",
+        "Quiet integrity matters most when nobody is holding a camera",
+        "Speaking gently works better than picking noisy fights",
+        "True leaders absorb heat instead of passing blame downward",
+        "Courage shows up in small daily honesty more than dramatic battles"
+      ],
+      "sparks": [
+        "a salmon upstream",
+        "a lighthouse in fog",
+        "one candle in a cave"
+      ],
+      "botMetaphor": "A single salmon swimming upstream looks foolish to every twig drifting with the current"
+    },
+    {
+      "id": "courage_06",
+      "theme": "Courage",
+      "lesson": "Starting is the hardest part of any quest",
+      "decoys": [
+        "Small daily steps beat giant rare leaps",
+        "Imperfect action today beats a flawless blueprint next year",
+        "Momentum carries you once friction finally lets go",
+        "You miss every chance you refuse to take",
+        "Finishing what you began earns twice the pride of starting"
+      ],
+      "sparks": [
+        "a locomotive starting",
+        "a blank canvas",
+        "stepping off the porch"
+      ],
+      "botMetaphor": "A freight locomotive burns half its coal just rolling the wheels their first inch"
+    },
+    {
+      "id": "courage_07",
+      "theme": "Courage",
+      "lesson": "Bravery means acting while still afraid",
+      "decoys": [
+        "Fear shrinks the moment you face it",
+        "Recklessness ignores danger while wisdom packs a parachute",
+        "Confidence grows after you jump rather than before",
+        "Standing alone for right takes real grit",
+        "Calm preparation shrinks panic when trouble knocks"
+      ],
+      "sparks": [
+        "butterflies marching",
+        "a trembling knight",
+        "a sparrow in gale winds"
+      ],
+      "botMetaphor": "A tightrope walker does not wait for butterflies to vanish; she teaches them to march in line"
+    },
+    {
+      "id": "courage_08",
+      "theme": "Courage",
+      "lesson": "Failure is a teacher, not a verdict",
+      "decoys": [
+        "Every master once collected a drawer full of crooked sketches",
+        "Falling down only turns into defeat when you decide to live on the floor",
+        "Blaming the tools keeps you from fixing your grip",
+        "You miss every chance you refuse to take",
+        "Honest mistakes pave the shortest road to real skill"
+      ],
+      "sparks": [
+        "the first pancake",
+        "a scraped knee",
+        "a crumpled blueprint"
+      ],
+      "botMetaphor": "A burnt first pancake simply tells the chef that the skillet is finally hot enough"
+    },
+    {
+      "id": "courage_09",
+      "theme": "Courage",
+      "lesson": "Big doors swing on very small hinges",
+      "decoys": [
+        "One polite introduction can change the arc of a decade",
+        "Small daily steps beat giant rare leaps",
+        "Attention to minor details separates sturdy work from fragile junk",
+        "Starting is the hardest part of any quest",
+        "Saying yes to one strange invitation opens hidden corridors"
+      ],
+      "sparks": [
+        "a tiny brass key",
+        "a pebble starting a slide",
+        "one match lighting a hall"
+      ],
+      "botMetaphor": "A tiny brass key in your coat pocket unlocks a vault taller than your house"
+    },
+    {
+      "id": "courage_10",
+      "theme": "Courage",
+      "lesson": "Saying no protects what truly matters",
+      "decoys": [
+        "Trying to please everyone leaves you exhausted",
+        "Busy calendars often disguise empty priorities",
+        "Clear boundaries build healthier friendships than silent resentment",
+        "Chasing two rabbits at once sends both hopping into the bushes",
+        "Protecting your focus multiplies the quality of every hour"
+      ],
+      "sparks": [
+        "pruning rosebuds",
+        "a bouncer at a velvet rope",
+        "packing a light backpack"
+      ],
+      "botMetaphor": "A gardener snips stray rosebuds so the main bloom drinks the whole summer sun"
+    },
+    {
+      "id": "courage_11",
+      "theme": "Courage",
+      "lesson": "Doubt kills more dreams than failure ever has",
+      "decoys": [
+        "You miss every chance you refuse to take",
+        "Failure is a teacher, not a verdict",
+        "Comparing your rough draft to someone else's showcase drains hope",
+        "Fear shrinks the moment you face it",
+        "Trusting your voice gets louder each time you test it"
+      ],
+      "sparks": [
+        "kites in a closet",
+        "an unplayed piano",
+        "unopened paint jars"
+      ],
+      "botMetaphor": "Half the kites in the closet never tore in the wind; they simply never left the shelf"
+    },
+    {
+      "id": "courage_12",
+      "theme": "Courage",
+      "lesson": "Smooth seas never made a skilled sailor",
+      "decoys": [
+        "Storms always pass eventually",
+        "Comfort zones rarely produce new discoveries",
+        "Hard puzzles sharpen wits that easy trivia leaves sleepy",
+        "Failure is a teacher, not a verdict",
+        "Overcoming one tough hill makes the next mountain look friendlier"
+      ],
+      "sparks": [
+        "a kite against wind",
+        "forged steel in fire",
+        "roots gripped in gale"
+      ],
+      "botMetaphor": "A kite only climbs above the treetops when the breeze pushes firmly against its nose"
+    },
+    {
+      "id": "humility_01",
+      "theme": "Humility",
+      "lesson": "Pride comes right before a hard fall",
+      "decoys": [
+        "Admitting mistakes quickly earns more respect than defending them",
+        "Boasting loudly usually hides an empty suitcase underneath",
+        "Even the tallest cedar still depends on muddy unseen roots",
+        "Modesty lets your craftsmanship introduce itself first",
+        "Success tests your character far harder than struggle does"
+      ],
+      "sparks": [
+        "a strutting peacock",
+        "a tall snowman in April",
+        "an overinflated balloon"
+      ],
+      "botMetaphor": "A peacock strutting with eyes fixed on his own feathers never notices the open cellar door"
+    },
+    {
+      "id": "humility_02",
+      "theme": "Humility",
+      "lesson": "The wisest people know how little they know",
+      "decoys": [
+        "Curiosity keeps your mind young long after diplomas yellow",
+        "Listening teaches more than talking ever will",
+        "Changing your mind when shown proof shows real strength",
+        "Empty wagons rattle loudest along the cobblestone road",
+        "Every person you meet knows something you have not learned yet"
+      ],
+      "sparks": [
+        "campfire shadows",
+        "an ocean from a teacup",
+        "a full stalk of wheat bowing"
+      ],
+      "botMetaphor": "The bigger your campfire burns in the dark forest, the wider the ring of shadows around it"
+    },
+    {
+      "id": "humility_03",
+      "theme": "Humility",
+      "lesson": "Admitting a mistake earns deeper respect",
+      "decoys": [
+        "Pride comes right before a hard fall",
+        "Excuses take twice as much energy as an honest apology",
+        "Nobody trusts a pilot who claims the compass is always lying",
+        "Failure is a teacher, not a verdict",
+        "Owning your slip turns critics into teammates"
+      ],
+      "sparks": [
+        "patching a roof",
+        "turning back on a wrong trail",
+        "erasing a smudged note"
+      ],
+      "botMetaphor": "Patching a leaky roof right away beats insisting your living room needed an indoor pond"
+    },
+    {
+      "id": "humility_04",
+      "theme": "Humility",
+      "lesson": "Empty vessels make the loudest noise",
+      "decoys": [
+        "The wisest people know how little they know",
+        "Quiet confidence needs no megaphone to command a room",
+        "Actions speak louder than polished promises",
+        "Listening teaches more than talking ever will",
+        "True skill looks effortless until you try holding the brush yourself"
+      ],
+      "sparks": [
+        "a hollow tin can",
+        "a barking teacup dog",
+        "thunder without rain"
+      ],
+      "botMetaphor": "A tin can rolling hollow down an alley drowns out a gold coin resting silently in velvet"
+    },
+    {
+      "id": "humility_05",
+      "theme": "Humility",
+      "lesson": "Everyone you meet can teach you something",
+      "decoys": [
+        "The wisest people know how little they know",
+        "Respecting beginners keeps experts from growing blind",
+        "Every stranger is fighting a hidden battle",
+        "Curiosity unlocks rooms that arrogance walks straight past",
+        "Listening closely uncovers treasure in ordinary chatter"
+      ],
+      "sparks": [
+        "a mouse and an eagle",
+        "a pocket mirror",
+        "a worn cookbook"
+      ],
+      "botMetaphor": "Even a tiny field mouse knows secret tunnels beneath the barn that the eagle overhead misses"
+    },
+    {
+      "id": "humility_06",
+      "theme": "Humility",
+      "lesson": "Success tests character more than hardship does",
+      "decoys": [
+        "Pride comes right before a hard fall",
+        "Power reveals who you already were when nobody was watching",
+        "Staying grateful at the summit keeps you grounded",
+        "True friends show up when times get hard",
+        "Money magnifies habits rather than magically fixing them"
+      ],
+      "sparks": [
+        "carrying a full goblet",
+        "standing on a tall ladder",
+        "a sudden spotlight"
+      ],
+      "botMetaphor": "Anyone can wear wool mittens in snow, but carrying a full golden goblet without spilling takes poise"
+    },
+    {
+      "id": "humility_07",
+      "theme": "Humility",
+      "lesson": "Changing your mind with new facts is wisdom",
+      "decoys": [
+        "Admitting a mistake earns deeper respect",
+        "Stubbornness wears a crown made entirely of cardboard",
+        "The wisest people know how little they know",
+        "Listening teaches more than talking ever will",
+        "Outgrowing yesterday's opinion proves your brain is still awake"
+      ],
+      "sparks": [
+        "redrawing a map",
+        "updating a compass",
+        "switching umbrellas"
+      ],
+      "botMetaphor": "A sharp captain redraws the chart when an island pops up instead of ramming the beach"
+    },
+    {
+      "id": "humility_08",
+      "theme": "Humility",
+      "lesson": "Credit shared widely multiplies a team's spirit",
+      "decoys": [
+        "True leaders take blame privately and give praise publicly",
+        "A shared burden feels half as heavy",
+        "Jealousy shrinks the room while applause stretches the ceiling",
+        "Good leaders build more leaders instead of tiny mirrors",
+        "Generosity returns in ways spreadsheets never predict"
+      ],
+      "sparks": [
+        "passing a torch",
+        "a choir harmonizing",
+        "a shared harvest"
+      ],
+      "botMetaphor": "Passing the trophy down the bench turns one soloist into an unstoppable marching band"
+    },
+    {
+      "id": "humility_09",
+      "theme": "Humility",
+      "lesson": "Never look down on anyone unless helping them up",
+      "decoys": [
+        "Kindness to strangers costs nothing and echoes far",
+        "Pride comes right before a hard fall",
+        "Fortune spins like a weathervane faster than anyone expects",
+        "Every stranger is fighting a hidden battle",
+        "True greatness lifts everyone standing near it"
+      ],
+      "sparks": [
+        "tossing a rope",
+        "a tall lantern",
+        "a ladder shared"
+      ],
+      "botMetaphor": "Standing on a taller hill only gives you a clearer view of where to toss the rope"
+    },
+    {
+      "id": "humility_10",
+      "theme": "Humility",
+      "lesson": "Laughing at yourself keeps ego in check",
+      "decoys": [
+        "Regret lasts longer than brief embarrassment",
+        "Taking your work seriously works best when you take yourself lightly",
+        "Pride comes right before a hard fall",
+        "Humor disarms tense rooms faster than lectures",
+        "Perfectionism makes life brittle while playfulness keeps it bouncy"
+      ],
+      "sparks": [
+        "deflating a parade balloon",
+        "slipping on a banana peel",
+        "a court jester"
+      ],
+      "botMetaphor": "Letting a puff of air out of your own parade balloon keeps it from popping on the lamp post"
+    },
+    {
+      "id": "humility_11",
+      "theme": "Humility",
+      "lesson": "True greatness shows up in tiny chores",
+      "decoys": [
+        "Empty vessels make the loudest noise",
+        "How you handle small promises predicts how you guard big ones",
+        "Character is what your hands do when the curtains are closed",
+        "Quality hides inside the corners most people skip",
+        "Patience with dull tasks builds extraordinary mastery"
+      ],
+      "sparks": [
+        "washing a cutting board",
+        "polishing unseen gears",
+        "sweeping backstage"
+      ],
+      "botMetaphor": "A master chef washes the cutting board just as lovingly as she plates the soufflé"
+    },
+    {
+      "id": "humility_12",
+      "theme": "Humility",
+      "lesson": "Even the tallest tree started as a seed",
+      "decoys": [
+        "Never mock clumsy beginnings before the story unfolds",
+        "Good things take time to grow",
+        "Pride comes right before a hard fall",
+        "Respecting humble roots keeps success from going sour",
+        "Small daily steps beat giant rare leaps"
+      ],
+      "sparks": [
+        "a redwood in a squirrel's cheek",
+        "an oak inside an acorn",
+        "a river from a puddle"
+      ],
+      "botMetaphor": "Every towering redwood in the canyon once fit comfortably inside a squirrel's cheek"
+    },
+    {
+      "id": "truth_01",
+      "theme": "Truth",
+      "lesson": "Not everything shiny is pure gold",
+      "decoys": [
+        "Appearances often hide the cracked engine underneath the hood",
+        "Actions speak louder than polished speeches",
+        "Real value proves itself quietly over long seasons",
+        "Easy bargains usually conceal expensive surprises",
+        "Slow judgment avoids being dazzled by clever packaging"
+      ],
+      "sparks": [
+        "painted tin coins",
+        "fools gold",
+        "frosted cardboard cake"
+      ],
+      "botMetaphor": "A painted tin coin glitters just as loudly in the gutter until the first rain washes it gray"
+    },
+    {
+      "id": "truth_02",
+      "theme": "Truth",
+      "lesson": "Actions speak far louder than promises",
+      "decoys": [
+        "Empty vessels make the loudest noise",
+        "Trust takes years to build and seconds to shatter",
+        "Watch what people do when convenience runs out",
+        "Honesty without kindness still leaves bruises",
+        "Small consistent deeds outweigh grand yearly speeches"
+      ],
+      "sparks": [
+        "bread vs a menu",
+        "footprints vs a map",
+        "rain vs a forecast"
+      ],
+      "botMetaphor": "One warm loaf handed across the fence feeds more hunger than a dozen printed menus"
+    },
+    {
+      "id": "truth_03",
+      "theme": "Truth",
+      "lesson": "One lie always demands ten more lies",
+      "decoys": [
+        "Telling the truth spares you from memorizing a complicated script",
+        "Secrets grow heavier the longer you carry them in your coat",
+        "Honesty builds sturdy bridges even when the planks sting",
+        "Admitting a mistake earns deeper respect",
+        "Deception eventually trips over its own shoelaces"
+      ],
+      "sparks": [
+        "patching wallpaper",
+        "juggling extra plates",
+        "a snowball rolling downhill"
+      ],
+      "botMetaphor": "Covering one ink blot with fresh wallpaper forces you to redecorate the entire hallway"
+    },
+    {
+      "id": "truth_04",
+      "theme": "Truth",
+      "lesson": "Half-truths can mislead as much as lies",
+      "decoys": [
+        "One lie always demands ten more lies",
+        "Context changes the meaning of almost any quote",
+        "Not everything shiny is pure gold",
+        "Listening to both sides prevents foolish verdicts",
+        "Selective facts paint convenient illusions"
+      ],
+      "sparks": [
+        "cropped postcards",
+        "half a bridge",
+        "a broken clock"
+      ],
+      "botMetaphor": "Showing someone a postcard of sunny palm trees while hiding the hurricane behind the camera tricks the traveler"
+    },
+    {
+      "id": "truth_05",
+      "theme": "Truth",
+      "lesson": "We see the world through our own lens",
+      "decoys": [
+        "Two witnesses on opposite corners remember two different parades",
+        "Changing your perspective turns dead ends into doorways",
+        "Assumptions fill blanks with our own fears and wishes",
+        "Everyone you meet can teach you something",
+        "Questioning your first hunch prevents avoidable blunders"
+      ],
+      "sparks": [
+        "tinted spectacles",
+        "a funhouse mirror",
+        "coloring a windowpane"
+      ],
+      "botMetaphor": "Put rose-tinted spectacles on a carpenter and even plain pine boards start looking like cedar"
+    },
+    {
+      "id": "truth_06",
+      "theme": "Truth",
+      "lesson": "Honesty without kindness feels like cruelty",
+      "decoys": [
+        "Speaking the truth gently helps people actually hear it",
+        "Words spoken in anger are impossible to take back",
+        "Flattery feels sweeter in the moment than honest advice",
+        "Tact builds a doorway where bluntness swings a hammer",
+        "True friends tell you when spinach sits on your tooth"
+      ],
+      "sparks": [
+        "throwing a coat",
+        "a dull scalpel",
+        "salt on a scratch"
+      ],
+      "botMetaphor": "Handing someone a winter coat works wonders, unless you toss it soaking wet at their face"
+    },
+    {
+      "id": "truth_07",
+      "theme": "Truth",
+      "lesson": "Listen to both sides before judging",
+      "decoys": [
+        "Half-truths can mislead as much as lies",
+        "Gossip shrinks every time somebody asks for evidence",
+        "Jumping to conclusions is poor exercise for the mind",
+        "We see the world through our own lens",
+        "Calm curiosity beats instant outrage"
+      ],
+      "sparks": [
+        "two sides of a coin",
+        "hearing one violin",
+        "tasting only pie crust"
+      ],
+      "botMetaphor": "Tasting only the crust of a berry pie tells you nothing about whether the filling is sweet or sour"
+    },
+    {
+      "id": "truth_08",
+      "theme": "Truth",
+      "lesson": "A rumor travels faster than the truth",
+      "decoys": [
+        "Words spoken in anger are impossible to take back",
+        "Listen to both sides before judging",
+        "Repeating unverified gossip makes you an unpaid delivery truck",
+        "Time reveals what haste tries to hide",
+        "Quiet facts outlast noisy headlines in the long run"
+      ],
+      "sparks": [
+        "wildfire vs boots",
+        "dandelion seeds in gale",
+        "a spilled jar of marbles"
+      ],
+      "botMetaphor": "Wildfire sprints across dry grass while the fire wagon is still strapping on its boots"
+    },
+    {
+      "id": "truth_09",
+      "theme": "Truth",
+      "lesson": "You cannot fool yourself for very long",
+      "decoys": [
+        "Facing uncomfortable realities early saves costly repairs later",
+        "One lie always demands ten more lies",
+        "Honesty with yourself is the hardest and most useful habit",
+        "Ignoring small cracks lets the dam burst in spring",
+        "Excuses comfort you briefly while keeping the cage locked"
+      ],
+      "sparks": [
+        "tape over a warning light",
+        "hiding bills in a drawer",
+        "painting over rust"
+      ],
+      "botMetaphor": "Taping a smiley sticker over the dashboard warning lamp never refills the motor oil"
+    },
+    {
+      "id": "truth_10",
+      "theme": "Truth",
+      "lesson": "Flattery often hides a selfish motive",
+      "decoys": [
+        "Not everything shiny is pure gold",
+        "Honest criticism from an ally beats sweet praise from a stranger",
+        "Actions speak far louder than promises",
+        "Beware gifts wrapped in urgent deadlines",
+        "True friends care more about your growth than your applause"
+      ],
+      "sparks": [
+        "a fox and a crow",
+        "sugar on a trap",
+        "too-eager sales pitch"
+      ],
+      "botMetaphor": "When the fox compliments the crow's singing voice, he is really admiring her lunch"
+    },
+    {
+      "id": "truth_11",
+      "theme": "Truth",
+      "lesson": "Character shows when nobody is watching",
+      "decoys": [
+        "Actions speak far louder than promises",
+        "Small daily habits shape who you become in a crisis",
+        "Reputation is what neighbors whisper while integrity is what you live",
+        "Standing alone for right takes real grit",
+        "True greatness shows up in tiny chores"
+      ],
+      "sparks": [
+        "a stray shopping cart",
+        "backstage manners",
+        "a dark hallway"
+      ],
+      "botMetaphor": "Returning the stray shopping cart during a drizzle reveals far more than any trophy shelf"
+    },
+    {
+      "id": "truth_12",
+      "theme": "Truth",
+      "lesson": "Doubting everything blinds you just like gullibility",
+      "decoys": [
+        "Trust cautiously, yet leave a window cracked for goodness",
+        "We see the world through our own lens",
+        "Not everything shiny is pure gold",
+        "Cynicism pretends to be wisdom while starving your joy",
+        "Testing ideas gently beats rejecting them out of habit"
+      ],
+      "sparks": [
+        "locked shutters",
+        "a locked mailbox",
+        "refusing every bridge"
+      ],
+      "botMetaphor": "Locking your shutters against thieves also keeps out every sunrise and fresh breeze"
+    },
+    {
+      "id": "growth_01",
+      "theme": "Growth",
+      "lesson": "Change is the only constant in life",
+      "decoys": [
+        "Clinging tightly to yesterday bruises your hands against tomorrow",
+        "Letting go of old chapters creates shelf space for better books",
+        "Adaptable reeds survive hurricanes that snap rigid oaks",
+        "Comfort zones rarely produce new discoveries",
+        "Every ending secretly plants the doorway to a fresh start"
+      ],
+      "sparks": [
+        "a flowing river",
+        "turning seasons",
+        "shifting sand dunes"
+      ],
+      "botMetaphor": "You never dip your bare toes into the exact same river water twice"
+    },
+    {
+      "id": "growth_02",
+      "theme": "Growth",
+      "lesson": "Flexibility outlasts rigid stubbornness",
+      "decoys": [
+        "Change is the only constant in life",
+        "Changing your mind with new facts is wisdom",
+        "Compromise keeps sturdy partnerships from snapping in half",
+        "Strength looks soft when it knows how to absorb a shock",
+        "Fighting reality wastes energy better spent steering the boat"
+      ],
+      "sparks": [
+        "bamboo in a gale",
+        "a bending fishing rod",
+        "water around boulders"
+      ],
+      "botMetaphor": "When the typhoon roars across the valley, slender bamboo bows low and stands again at dawn"
+    },
+    {
+      "id": "growth_03",
+      "theme": "Growth",
+      "lesson": "You cannot pour from an empty cup",
+      "decoys": [
+        "Rest is necessary for lasting energy",
+        "Caring for yourself enables you to care generously for others",
+        "Saying no protects what truly matters",
+        "Burnout sneaks in disguised as dedication",
+        "Pacing your kindness keeps it sustainable for decades"
+      ],
+      "sparks": [
+        "a dry garden hose",
+        "an uncharged flashlight",
+        "an empty teapot"
+      ],
+      "botMetaphor": "A dried-up garden hose cannot rescue thirsty daisies no matter how hard you turn the brass valve"
+    },
+    {
+      "id": "growth_04",
+      "theme": "Growth",
+      "lesson": "Old habits fade only when replaced",
+      "decoys": [
+        "Small daily steps beat giant rare leaps",
+        "Environment shapes your choices more than raw willpower",
+        "Change is the only constant in life",
+        "Starting fresh works best when the new routine feels easy",
+        "You become like the company you keep"
+      ],
+      "sparks": [
+        "weeding and sowing",
+        "re-routing a creek",
+        "swapping a melody"
+      ],
+      "botMetaphor": "Pulling weeds out of a flowerbed leaves bare dirt unless you sow clover in the gap"
+    },
+    {
+      "id": "growth_05",
+      "theme": "Growth",
+      "lesson": "Letting go makes room for better things",
+      "decoys": [
+        "Clinging to past mistakes prevents you from writing new chapters",
+        "Forgiveness unloads heavy bricks from your own backpack",
+        "Change is the only constant in life",
+        "Outgrowing a shell feels tight right before you stretch wider",
+        "Saying goodbye gracefully honors what the season gave you"
+      ],
+      "sparks": [
+        "a trapeze artist",
+        "autumn leaves falling",
+        "cleaning an attic"
+      ],
+      "botMetaphor": "A trapeze artist never catches the next flying bar while both fists stay glued to the old one"
+    },
+    {
+      "id": "growth_06",
+      "theme": "Growth",
+      "lesson": "Experience is what you earn when plans fail",
+      "decoys": [
+        "Failure is a teacher, not a verdict",
+        "Smooth seas never made a skilled sailor",
+        "Learning from other people's scars costs less than earning your own",
+        "Mistakes only turn tragic when you refuse to read the lesson",
+        "Wisdom comes with receipts from awkward detours"
+      ],
+      "sparks": [
+        "patching a bike tire",
+        "scuffed leather boots",
+        "a sailor's knots"
+      ],
+      "botMetaphor": "Nobody learns how to patch a bicycle tire while coasting smoothly down a paved hill"
+    },
+    {
+      "id": "growth_07",
+      "theme": "Growth",
+      "lesson": "Where attention goes, energy naturally flows",
+      "decoys": [
+        "Protecting your focus multiplies everything you create",
+        "Chasing shiny distractions leaves five half-built treehouses",
+        "Gratitude amplifies what already works well",
+        "Worrying today never fixes tomorrow",
+        "Small daily steps beat giant rare leaps"
+      ],
+      "sparks": [
+        "aiming a sprinkler",
+        "a magnifying glass",
+        "feeding a hearth fire"
+      ],
+      "botMetaphor": "Whichever patch of backyard soil you aim the sprinkler toward turns bright emerald by Friday"
+    },
+    {
+      "id": "growth_08",
+      "theme": "Growth",
+      "lesson": "Every expert was once a clumsy beginner",
+      "decoys": [
+        "Failure is a teacher, not a verdict",
+        "Comparing your first week to someone's tenth year steals heart",
+        "Good things take time to grow",
+        "Patience with awkward starts unlocks lifelong joy",
+        "Curiosity matters more than early talent"
+      ],
+      "sparks": [
+        "crooked piano scales",
+        "training wheels",
+        "wobbly baby deer"
+      ],
+      "botMetaphor": "Before the concert pianist dazzled Carnegie Hall, she tortured her neighbors with crooked scales"
+    },
+    {
+      "id": "growth_09",
+      "theme": "Growth",
+      "lesson": "Outgrowing old spaces is natural, not cruel",
+      "decoys": [
+        "Letting go makes room for better things",
+        "Change is the only constant in life",
+        "Distance reveals who truly cares about you",
+        "Staying tiny to keep old rooms comfortable hurts everyone",
+        "Moving forward honors the roots that raised you"
+      ],
+      "sparks": [
+        "a hermit crab's shell",
+        "too-small sneakers",
+        "a seedling in a cup"
+      ],
+      "botMetaphor": "A hermit crab does not hate its former shell; its legs simply stopped fitting inside the porch"
+    },
+    {
+      "id": "growth_10",
+      "theme": "Growth",
+      "lesson": "Curiosity keeps the mind forever young",
+      "decoys": [
+        "The wisest people know how little they know",
+        "Asking good questions opens richer doors than reciting answers",
+        "Boredom vanishes the second you look closer at ordinary things",
+        "Everyone you meet can teach you something",
+        "Learning never retires unless you hand in your library card"
+      ],
+      "sparks": [
+        "a spring-fed pond",
+        "turning fresh pages",
+        "opening attic windows"
+      ],
+      "botMetaphor": "A pond fed by a bubbling mountain spring stays crystal clear while stagnant puddles grow moss"
+    },
+    {
+      "id": "growth_11",
+      "theme": "Growth",
+      "lesson": "You cannot heal in the place that hurt you",
+      "decoys": [
+        "Changing your surroundings can reset your whole outlook",
+        "Letting go makes room for better things",
+        "You become like the company you keep",
+        "Walking away from toxic rooms is wisdom rather than defeat",
+        "Fresh air clears thoughts that stale hallways keep looping"
+      ],
+      "sparks": [
+        "a sunburned beach towel",
+        "moving a potted fern",
+        "stepping away from smoke"
+      ],
+      "botMetaphor": "A sunburned traveler does not recover by laying out a fresh towel on the exact same dune"
+    },
+    {
+      "id": "growth_12",
+      "theme": "Growth",
+      "lesson": "Progress matters more than perfection",
+      "decoys": [
+        "Starting is the hardest part of any quest",
+        "Perfectionism disguises fear as high standards",
+        "Small daily steps beat giant rare leaps",
+        "Done and improving beats polished and imaginary",
+        "Failure is a teacher, not a verdict"
+      ],
+      "sparks": [
+        "a handmade bridge",
+        "a rough clay mug",
+        "a finished race"
+      ],
+      "botMetaphor": "A slightly lopsided handmade bridge still carries travelers across the creek while a flawless blueprint stays dry in a drawer"
+    },
+    {
+      "id": "gratitude_01",
+      "theme": "Gratitude",
+      "lesson": "Comparison is the thief of joy",
+      "decoys": [
+        "Enough feels richer than chasing an endless finish line",
+        "You only see other people's highlight reel, never their messy kitchen",
+        "Gratitude turns modest blessings into abundance",
+        "Running your own race lets you actually breathe",
+        "Jealousy poisons the feast already sitting on your table"
+      ],
+      "sparks": [
+        "peeking at another bakery",
+        "measuring lawns",
+        "envying someone's umbrella"
+      ],
+      "botMetaphor": "A baker with warm cinnamon rolls turns sour the second he peeks at his neighbor's wedding cake"
+    },
+    {
+      "id": "gratitude_02",
+      "theme": "Gratitude",
+      "lesson": "Wealth means needing less, not hoarding more",
+      "decoys": [
+        "Money buys convenience, never genuine peace of mind",
+        "Comparison is the thief of joy",
+        "Chasing possessions eventually lets your possessions own you",
+        "Enough is a choice rather than a number on a ledger",
+        "Simple pleasures outlast expensive novelty"
+      ],
+      "sparks": [
+        "a light backpack",
+        "a sparrow vs a dragon",
+        "a cozy hearth"
+      ],
+      "botMetaphor": "A hiker with a light pack and cold creek water strolls past a merchant dragging three heavy trunks uphill"
+    },
+    {
+      "id": "gratitude_03",
+      "theme": "Gratitude",
+      "lesson": "You rarely miss water until the well runs dry",
+      "decoys": [
+        "Taking everyday blessings for granted dulls their magic",
+        "Health feels invisible until a tiny splinter slows you down",
+        "Appreciating people while they are here beats praising them later",
+        "Gratitude wakes up ordinary Tuesday mornings",
+        "Loss teaches the true price of things we treated as free"
+      ],
+      "sparks": [
+        "a quiet fridge",
+        "a reliable streetlight",
+        "breathing through a clear nose"
+      ],
+      "botMetaphor": "Nobody applauds the kitchen refrigerator for humming softly until the morning the milk turns warm"
+    },
+    {
+      "id": "gratitude_04",
+      "theme": "Gratitude",
+      "lesson": "The grass looks greener because you ignore its weeds",
+      "decoys": [
+        "Comparison is the thief of joy",
+        "Watering your own yard beats staring over the wooden fence",
+        "Not everything shiny is pure gold",
+        "Every glamorous lifestyle carries hidden chores behind the curtain",
+        "Contentment grows where you choose to tend it"
+      ],
+      "sparks": [
+        "distant meadows",
+        "a glossy brochure",
+        "painted stage props"
+      ],
+      "botMetaphor": "From across the street every meadow seems like velvet until you step barefoot onto the thistles"
+    },
+    {
+      "id": "gratitude_05",
+      "theme": "Gratitude",
+      "lesson": "Enjoy small joys before they become memories",
+      "decoys": [
+        "Worrying today never fixes tomorrow",
+        "Ordinary evenings often turn into the chapters you miss most",
+        "Rushing toward milestones skips the scenery between them",
+        "You rarely miss water until the well runs dry",
+        "Presence is the rarest luxury in a noisy world"
+      ],
+      "sparks": [
+        "summer fireflies",
+        "warm toast",
+        "a fleeting sunset"
+      ],
+      "botMetaphor": "Catching fireflies in July only works while twilight is still warm around your ankles"
+    },
+    {
+      "id": "gratitude_06",
+      "theme": "Gratitude",
+      "lesson": "Greed ruins even a generous harvest",
+      "decoys": [
+        "Wealth means needing less, not hoarding more",
+        "Knowing when to stop protects everything you already won",
+        "Chasing everything at once leaves your hands empty",
+        "Sharing your luck keeps fortune friendly",
+        "Short-term appetite can destroy long-term abundance"
+      ],
+      "sparks": [
+        "a fist stuck in a jar",
+        "popping a golden goose",
+        "overloading a rowboat"
+      ],
+      "botMetaphor": "A monkey who grabs a double fistful of chestnuts inside a narrow jar cannot pull his paw back out"
+    },
+    {
+      "id": "gratitude_07",
+      "theme": "Gratitude",
+      "lesson": "Gratitude turns an ordinary meal into a feast",
+      "decoys": [
+        "Enjoy small joys before they become memories",
+        "Mood colors experience more than price tags ever do",
+        "Comparison is the thief of joy",
+        "Counting what works unlocks calm during tough weeks",
+        "Wealth means needing less, not hoarding more"
+      ],
+      "sparks": [
+        "soup in winter",
+        "seasoning with salt",
+        "sunlight on a kitchen table"
+      ],
+      "botMetaphor": "A bowl of warm tomato soup tastes like royalty when you remember the frost outside the window"
+    },
+    {
+      "id": "gratitude_08",
+      "theme": "Gratitude",
+      "lesson": "Health is a crown only the sick notice",
+      "decoys": [
+        "You rarely miss water until the well runs dry",
+        "Rest is necessary for lasting energy",
+        "Trading wellness for extra coin leaves a lopsided bargain",
+        "Caring for your body today is a gift to your older self",
+        "Simple mornings with steady breath beat grand luxuries"
+      ],
+      "sparks": [
+        "quiet knees",
+        "a tuned cello",
+        "an invisible roof"
+      ],
+      "botMetaphor": "Nobody writes love poems to a pair of quiet knees until climbing three porch steps feels like Everest"
+    },
+    {
+      "id": "gratitude_09",
+      "theme": "Gratitude",
+      "lesson": "Possessions eventually end up owning you",
+      "decoys": [
+        "Wealth means needing less, not hoarding more",
+        "Clutter crowds out calm in both closets and calendars",
+        "Experiences keep glowing long after gadgets gather dust",
+        "Letting go makes room for better things",
+        "Freedom grows whenever you lighten your cargo"
+      ],
+      "sparks": [
+        "polishing twenty teapots",
+        "a gilded cage",
+        "towing too many suitcases"
+      ],
+      "botMetaphor": "Collect twenty ornate silver teapots and suddenly your whole Saturday belongs to polishing rags"
+    },
+    {
+      "id": "gratitude_10",
+      "theme": "Gratitude",
+      "lesson": "Enough is a decision, not a number",
+      "decoys": [
+        "Wealth means needing less, not hoarding more",
+        "Comparison is the thief of joy",
+        "Greed ruins even a generous harvest",
+        "Satisfaction begins the moment you stop moving the goalpost",
+        "Gratitude turns an ordinary meal into a feast"
+      ],
+      "sparks": [
+        "a leaky bucket",
+        "chasing the horizon",
+        "a bottomless pocket"
+      ],
+      "botMetaphor": "A leaky bucket never feels full even if you park it directly beneath Niagara Falls"
+    },
+    {
+      "id": "gratitude_11",
+      "theme": "Gratitude",
+      "lesson": "Memories outlast anything you can wrap",
+      "decoys": [
+        "Possessions eventually end up owning you",
+        "Enjoy small joys before they become memories",
+        "Time spent together beats expensive presents left on shelves",
+        "Nobody can be happy alone",
+        "Shared adventures compound in value every time you retell them"
+      ],
+      "sparks": [
+        "campfire songs vs sweaters",
+        "footprints vs souvenirs",
+        "a family recipe"
+      ],
+      "botMetaphor": "Moths nibble cashmere sweaters, while a midnight campfire song stays crisp fifty winters later"
+    },
+    {
+      "id": "gratitude_12",
+      "theme": "Gratitude",
+      "lesson": "Water your own lawn before admiring your neighbor's",
+      "decoys": [
+        "The grass looks greener because you ignore its weeds",
+        "Comparison is the thief of joy",
+        "Where attention goes, energy naturally flows",
+        "Small daily care transforms ordinary spaces",
+        "Gratitude begins by noticing what sits right in front of you"
+      ],
+      "sparks": [
+        "leaning on a fence",
+        "tending your teapot",
+        "polishing your own bike"
+      ],
+      "botMetaphor": "Leaning on the picket fence to praise someone else's roses will not pull a single dandelion at home"
+    },
+    {
+      "id": "trust_01",
+      "theme": "Trust",
+      "lesson": "Trust takes years to earn and seconds to break",
+      "decoys": [
+        "Actions speak far louder than promises",
+        "Rebuilding broken faith requires patience and steady proof",
+        "Small kept promises lay the bricks of deep loyalty",
+        "One lie always demands ten more lies",
+        "Forgiving someone does not require handing them the house keys again"
+      ],
+      "sparks": [
+        "a porcelain teapot",
+        "a tall card tower",
+        "a glass bridge"
+      ],
+      "botMetaphor": "A porcelain teapot survives a hundred cozy afternoons yet shatters from one careless drop"
+    },
+    {
+      "id": "trust_02",
+      "theme": "Trust",
+      "lesson": "Once burned, you approach fire more carefully",
+      "decoys": [
+        "Experience is what you earn when plans fail",
+        "Caution protects you, though fear should not lock every door",
+        "Trust takes years to earn and seconds to break",
+        "Past scars remind you what to watch without dictating your future",
+        "Healthy boundaries grow naturally from old lessons"
+      ],
+      "sparks": [
+        "a cat near a stove",
+        "testing hot soup",
+        "checking thin ice"
+      ],
+      "botMetaphor": "A cat who accidentally sits on a warm woodstove will not even nap on a cold iron lid afterward"
+    },
+    {
+      "id": "trust_03",
+      "theme": "Trust",
+      "lesson": "Beware anyone who gossips to you about friends",
+      "decoys": [
+        "A rumor travels faster than the truth",
+        "Loyalty shows in how someone defends you when you leave the room",
+        "Flattery often hides a selfish motive",
+        "You become like the company you keep",
+        "Keeping confidences proves you are worth trusting"
+      ],
+      "sparks": [
+        "a slipper-stealing dog",
+        "a leaky megaphone",
+        "a two-headed parrot"
+      ],
+      "botMetaphor": "A dog that fetches your neighbor's slippers onto your porch will soon carry your boots next door"
+    },
+    {
+      "id": "trust_04",
+      "theme": "Trust",
+      "lesson": "Keep your promises, especially the small ones",
+      "decoys": [
+        "Trust takes years to earn and seconds to break",
+        "Actions speak far louder than promises",
+        "True greatness shows up in tiny chores",
+        "Under-promising and over-delivering builds quiet magic",
+        "Reliability is one of the rarest superpowers"
+      ],
+      "sparks": [
+        "skipping porch nails",
+        "a punctual pocket watch",
+        "returning a borrowed pen"
+      ],
+      "botMetaphor": "If the carpenter skips two nails on the porch step, nobody trusts his rafters in a blizzard"
+    },
+    {
+      "id": "trust_05",
+      "theme": "Trust",
+      "lesson": "Forgiving someone does not mean forgetting the lesson",
+      "decoys": [
+        "Once burned, you approach fire more carefully",
+        "Holding a grudge hurts you far more than your rival",
+        "Boundaries and kindness can live inside the same house",
+        "Trust takes years to earn and seconds to break",
+        "Peace arrives when you release bitterness yet keep your eyes open"
+      ],
+      "sparks": [
+        "a wasp and a soda can",
+        "mending a fence",
+        "closing a gate kindly"
+      ],
+      "botMetaphor": "You can wish the wasp a lovely afternoon without inviting it back inside your soda can"
+    },
+    {
+      "id": "trust_06",
+      "theme": "Trust",
+      "lesson": "Clear agreements keep good friendships strong",
+      "decoys": [
+        "Unspoken expectations quietly breed avoidable resentment",
+        "Saying no protects what truly matters",
+        "Honesty upfront prevents messy surprises later",
+        "Money and favors mix best when written plainly on paper",
+        "Respecting limits makes teamwork effortless"
+      ],
+      "sparks": [
+        "stone pasture fences",
+        "clear recipe cards",
+        "marking lanes in a pool"
+      ],
+      "botMetaphor": "Sturdy stone fences along the pasture stop warm neighbors from arguing over stray goats"
+    },
+    {
+      "id": "trust_07",
+      "theme": "Trust",
+      "lesson": "Watch how someone treats people they do not need",
+      "decoys": [
+        "Character shows when nobody is watching",
+        "Flattery often hides a selfish motive",
+        "Actions speak far louder than promises",
+        "Never look down on anyone unless helping them up",
+        "Politeness toward the powerful proves nothing about kindness"
+      ],
+      "sparks": [
+        "the bakery delivery boy",
+        "tipping a waiter",
+        "manners toward strays"
+      ],
+      "botMetaphor": "A royal crown means nothing if the wearer kicks the bakery delivery boy when the cameras blink off"
+    },
+    {
+      "id": "trust_08",
+      "theme": "Trust",
+      "lesson": "Secrets shared with three rarely stay secret",
+      "decoys": [
+        "A rumor travels faster than the truth",
+        "Beware anyone who gossips to you about friends",
+        "Silence guards treasures that casual chatter loses",
+        "Trust takes years to earn and seconds to break",
+        "Only hand fragile stories to people with steady palms"
+      ],
+      "sparks": [
+        "leaky watering cans",
+        "a whisper in a canyon",
+        "writing in wet sand"
+      ],
+      "botMetaphor": "Whispering a recipe into two leaky watering cans ensures the whole street smells your stew"
+    },
+    {
+      "id": "trust_09",
+      "theme": "Trust",
+      "lesson": "Loyalty shows when someone defends your absence",
+      "decoys": [
+        "Beware anyone who gossips to you about friends",
+        "True friends show up when times get hard",
+        "Character shows when nobody is watching",
+        "Quiet advocacy means twice as much as public flattery",
+        "Trust takes years to earn and seconds to break"
+      ],
+      "sparks": [
+        "guarding an empty chair",
+        "a watchman on a wall",
+        "shutting down a rumor"
+      ],
+      "botMetaphor": "The best umbrella shields your picnic basket even after you stepped indoors for napkins"
+    },
+    {
+      "id": "trust_10",
+      "theme": "Trust",
+      "lesson": "Trust your gut when something feels off",
+      "decoys": [
+        "Not everything shiny is pure gold",
+        "Flattery often hides a selfish motive",
+        "Slow down whenever someone pushes you to sign before sundown",
+        "Intuition is often quiet pattern-recognition speaking softly",
+        "Once burned, you approach fire more carefully"
+      ],
+      "sparks": [
+        "quiet orchard birds",
+        "a dog bristling",
+        "smelling smoke early"
+      ],
+      "botMetaphor": "When every songbird in the orchard suddenly goes quiet, check the fence before strolling out"
+    },
+    {
+      "id": "trust_11",
+      "theme": "Trust",
+      "lesson": "Don't burn bridges you might someday cross",
+      "decoys": [
+        "Words spoken in anger are impossible to take back",
+        "Leaving rooms gracefully keeps old doors friendly years later",
+        "Small worlds have a habit of looping paths back together",
+        "Wait until anger cools before deciding",
+        "Polite goodbyes cost nothing and pay lifelong dividends"
+      ],
+      "sparks": [
+        "burning a dock for firewood",
+        "slamming a tavern door",
+        "tossing away a map"
+      ],
+      "botMetaphor": "Chopping up the wooden dock for firewood feels cozy tonight until the ferry returns in April"
+    },
+    {
+      "id": "trust_12",
+      "theme": "Trust",
+      "lesson": "Give trust gradually rather than all at once",
+      "decoys": [
+        "Trust takes years to earn and seconds to break",
+        "Doubting everything blinds you just like gullibility",
+        "Time reveals what haste tries to hide",
+        "Small shared tests reveal reliability safely",
+        "Actions speak far louder than promises"
+      ],
+      "sparks": [
+        "testing frozen ice",
+        "tasting soup first",
+        "handing over one key"
+      ],
+      "botMetaphor": "You test a frozen creek with one careful boot heel before driving the hay wagon across"
+    },
+    {
+      "id": "craft_01",
+      "theme": "Craft",
+      "lesson": "Measure twice so you only cut once",
+      "decoys": [
+        "Rushing a job usually means doing it twice",
+        "Thoughtful preparation saves ten times its weight in repairs",
+        "Shortcuts often end up taking longer",
+        "Good tools still need steady hands behind them",
+        "Slowing down at the start speeds up the finish"
+      ],
+      "sparks": [
+        "checking a blueprint",
+        "re-reading a map",
+        "tasting batter first"
+      ],
+      "botMetaphor": "Double-checking the blueprint prevents the carpenter from inventing an unplanned window"
+    },
+    {
+      "id": "craft_02",
+      "theme": "Craft",
+      "lesson": "Chasing two rabbits leaves you catching neither",
+      "decoys": [
+        "Where attention goes, energy naturally flows",
+        "Doing one craft deeply beats dabbling sloppily in twelve",
+        "Saying no protects what truly matters",
+        "Multitasking often just switches mistakes faster",
+        "Finishing one small project beats starting five grand ones"
+      ],
+      "sparks": [
+        "pancakes on a unicycle",
+        "two fishing poles tangled",
+        "splitting one lantern"
+      ],
+      "botMetaphor": "A juggler who insists on frying pancakes while riding a unicycle ends up wearing syrup"
+    },
+    {
+      "id": "craft_03",
+      "theme": "Craft",
+      "lesson": "Blaming your tools never fixes your craft",
+      "decoys": [
+        "Skill turns humble supplies into magic",
+        "Admitting a mistake earns deeper respect",
+        "Practice improves results faster than shopping for shiny gear",
+        "Failure is a teacher, not a verdict",
+        "Every master once wrestled with stubborn materials"
+      ],
+      "sparks": [
+        "a golden spatula",
+        "a crooked tennis racket",
+        "expensive running shoes"
+      ],
+      "botMetaphor": "Swapping to a gold-plated spatula will not rescue eggs left unattended on high heat"
+    },
+    {
+      "id": "craft_04",
+      "theme": "Craft",
+      "lesson": "Simplicity is the highest form of skill",
+      "decoys": [
+        "Adding extra bells rarely hides a shaky melody",
+        "Clear explanations prove you truly understand a puzzle",
+        "Editing out clutter lets the real message shine",
+        "Progress matters more than perfection",
+        "Less noise makes every remaining detail unforgettable"
+      ],
+      "sparks": [
+        "chipping marble",
+        "three chords in a song",
+        "packing one neat suitcase"
+      ],
+      "botMetaphor": "A master sculptor reveals the marble horse simply by chipping away everything that looks unlike a horse"
+    },
+    {
+      "id": "craft_05",
+      "theme": "Craft",
+      "lesson": "Practice quietly makes hard things look easy",
+      "decoys": [
+        "Small daily steps beat giant rare leaps",
+        "Every expert was once a clumsy beginner",
+        "Good things take time to grow",
+        "Overnight breakthroughs usually take seven quiet years",
+        "Talent opens the door while discipline builds the house"
+      ],
+      "sparks": [
+        "ten thousand rehearsals",
+        "calloused guitar fingers",
+        "hidden clockwork"
+      ],
+      "botMetaphor": "The audience applauds a three-minute ballet leap without seeing ten thousand dusty studio rehearsals"
+    },
+    {
+      "id": "craft_06",
+      "theme": "Craft",
+      "lesson": "A good foundation holds up every storm",
+      "decoys": [
+        "Shortcuts often end up taking longer",
+        "Mastering the basics unlocks every advanced move later",
+        "True greatness shows up in tiny chores",
+        "Measure twice so you only cut once",
+        "Rushing past fundamentals creates cracks on the fifth floor"
+      ],
+      "sparks": [
+        "lighthouse footings",
+        "deep oak roots",
+        "tuning before a concert"
+      ],
+      "botMetaphor": "Nobody takes photos of concrete footings buried in mud, yet the whole lighthouse relies on them"
+    },
+    {
+      "id": "craft_07",
+      "theme": "Craft",
+      "lesson": "Quality stays remembered long after price fades",
+      "decoys": [
+        "Shortcuts often end up taking longer",
+        "Not everything shiny is pure gold",
+        "Doing work you are proud to sign outlives quick profits",
+        "Craftsmanship rewards patience with decades of service",
+        "Cheap fixes often charge rent every single month"
+      ],
+      "sparks": [
+        "stitched leather boots",
+        "cast iron skillets",
+        "a hand-carved chair"
+      ],
+      "botMetaphor": "A pair of stitched leather boots stings your wallet at checkout yet thrills your feet ten winters later"
+    },
+    {
+      "id": "craft_08",
+      "theme": "Craft",
+      "lesson": "Fresh eyes spot mistakes tired minds miss",
+      "decoys": [
+        "Rest is necessary for lasting energy",
+        "Asking a teammate to look over your draft catches blind spots",
+        "Wait until anger cools before deciding",
+        "Distance brings clarity to tangled knots",
+        "Working longer hours rarely beats working with clear focus"
+      ],
+      "sparks": [
+        "a missing puzzle piece",
+        "cooling a painting",
+        "walking around the block"
+      ],
+      "botMetaphor": "Stepping out onto the porch for ten minutes makes the missing puzzle piece wave right at you"
+    },
+    {
+      "id": "craft_09",
+      "theme": "Craft",
+      "lesson": "Teach something to truly understand it",
+      "decoys": [
+        "Simplicity is the highest form of skill",
+        "The wisest people know how little they know",
+        "Sharing knowledge lights another candle without dimming yours",
+        "Curiosity keeps the mind forever young",
+        "Questions from beginners sharpen experts"
+      ],
+      "sparks": [
+        "guiding a guest upstairs",
+        "writing a recipe down",
+        "explaining a board game"
+      ],
+      "botMetaphor": "You only notice the wobbly steps in your own attic stairs the afternoon you guide a guest upstairs"
+    },
+    {
+      "id": "craft_10",
+      "theme": "Craft",
+      "lesson": "Consistency beats occasional bursts of brilliance",
+      "decoys": [
+        "Small daily steps beat giant rare leaps",
+        "Practice quietly makes hard things look easy",
+        "Showing up reliably builds trust and mastery together",
+        "Good things take time to grow",
+        "Discipline carries you on mornings when inspiration sleeps in"
+      ],
+      "sparks": [
+        "daily sourdough",
+        "a steady metronome",
+        "a lighthouse beam"
+      ],
+      "botMetaphor": "A bakery that bakes warm sourdough every dawn outsells a genius who opens twice a summer"
+    },
+    {
+      "id": "craft_11",
+      "theme": "Craft",
+      "lesson": "Fix small leaks before they sink the ship",
+      "decoys": [
+        "Ignoring uncomfortable realities early invites bigger repairs later",
+        "Measure twice so you only cut once",
+        "Preventive care feels boring until it rescues your weekend",
+        "Big doors swing on very small hinges",
+        "Tiny daily maintenance protects everything you built"
+      ],
+      "sparks": [
+        "one loose button",
+        "a tiny crack in a dam",
+        "oiling a squeaky hinge"
+      ],
+      "botMetaphor": "One loose button sewn tonight saves you from chasing your coat down a windy subway platform"
+    },
+    {
+      "id": "craft_12",
+      "theme": "Craft",
+      "lesson": "Good questions are worth more than quick answers",
+      "decoys": [
+        "Curiosity keeps the mind forever young",
+        "Listening teaches more than talking ever will",
+        "Measure twice so you only cut once",
+        "Solving the right puzzle matters more than solving fast",
+        "The wisest people know how little they know"
+      ],
+      "sparks": [
+        "a compass vs sprinting",
+        "a lantern in a cave",
+        "asking the chef"
+      ],
+      "botMetaphor": "A compass pointing in the right direction beats sprinting ninety miles an hour down the wrong canyon"
+    },
+    {
+      "id": "kindness_01",
+      "theme": "Kindness",
+      "lesson": "Small acts of kindness travel further than you think",
+      "decoys": [
+        "Kindness costs nothing yet stays remembered for decades",
+        "Helping someone else often brightens your own mood first",
+        "Every stranger is fighting a hidden battle",
+        "Generosity multiplies whenever you pass it along",
+        "Gentle words disarm hard days faster than logic"
+      ],
+      "sparks": [
+        "ripples on a lake",
+        "dandelion seeds drifting",
+        "a warm porch lamp"
+      ],
+      "botMetaphor": "Dropping one pebble into a quiet lake sends ripples all the way to shores you never visited"
+    },
+    {
+      "id": "kindness_02",
+      "theme": "Kindness",
+      "lesson": "Holding a grudge hurts you most of all",
+      "decoys": [
+        "Forgiving someone sets your own heart free before theirs",
+        "Letting go makes room for better things",
+        "Wait until anger cools before deciding",
+        "Bitterness builds a tiny prison where you also hold the key",
+        "Peace arrives sooner when you stop replaying old arguments"
+      ],
+      "sparks": [
+        "holding a hot coal",
+        "drinking sour vinegar",
+        "carrying a backpack of rocks"
+      ],
+      "botMetaphor": "Gripping a glowing coal to hurl at your enemy leaves only your own palm blistered"
+    },
+    {
+      "id": "kindness_03",
+      "theme": "Kindness",
+      "lesson": "Lighting another candle never dims your own",
+      "decoys": [
+        "Credit shared widely multiplies a team's spirit",
+        "Celebrating someone else's win never steals from your trophy case",
+        "Generosity expands the room for everyone inside it",
+        "Comparison is the thief of joy",
+        "Kindness returns in unexpected ways"
+      ],
+      "sparks": [
+        "sourdough starter",
+        "sharing a campfire",
+        "teaching a song"
+      ],
+      "botMetaphor": "Sharing a spoonful of sourdough starter gives your neighbor fresh loaves without shrinking your own jar"
+    },
+    {
+      "id": "kindness_04",
+      "theme": "Kindness",
+      "lesson": "Kindness is never wasted, even unreturned",
+      "decoys": [
+        "Small acts of kindness travel further than you think",
+        "Doing good shapes your own heart regardless of the applause",
+        "Character shows when nobody is watching",
+        "Generosity works best without invisible strings attached",
+        "Patience with grumpy strangers protects your own calm"
+      ],
+      "sparks": [
+        "a plaza violinist",
+        "perfume on a rose",
+        "rain on a meadow"
+      ],
+      "botMetaphor": "A street violinist still fills the plaza with warm music even if one hurrying commuter never glances up"
+    },
+    {
+      "id": "kindness_05",
+      "theme": "Kindness",
+      "lesson": "Gentle words calm fierce storms",
+      "decoys": [
+        "Words spoken in anger are impossible to take back",
+        "Honesty without kindness feels like cruelty",
+        "Listening teaches more than talking ever will",
+        "Wait until anger cools before deciding",
+        "Kindness disarms pride where shouting only builds thicker armor"
+      ],
+      "sparks": [
+        "cool rain on embers",
+        "oil on squeaky hinges",
+        "a soft lullaby"
+      ],
+      "botMetaphor": "A spoonful of cool rainwater settles a sizzling pan far better than tossing in dry twigs"
+    },
+    {
+      "id": "kindness_06",
+      "theme": "Kindness",
+      "lesson": "What you give out eventually returns to you",
+      "decoys": [
+        "Small acts of kindness travel further than you think",
+        "Treating others fairly builds a safety net of goodwill",
+        "Plant seeds today for shade tomorrow",
+        "Generosity quietly compounds over a lifetime",
+        "Cruelty leaves bills that always find your forwarding address"
+      ],
+      "sparks": [
+        "an Alpine echo",
+        "a boomerang",
+        "tossing seeds uphill"
+      ],
+      "botMetaphor": "Shouting cheerful echoes across an Alpine valley guarantees friendly voices bouncing right back"
+    },
+    {
+      "id": "kindness_07",
+      "theme": "Kindness",
+      "lesson": "Helping others also heals your own heart",
+      "decoys": [
+        "Nobody can be happy alone",
+        "Small acts of kindness travel further than you think",
+        "Stepping outside your own worries shrinks them down to size",
+        "Generosity lifts the giver just as high as the receiver",
+        "Shared joy doubles while shared sorrow splits in half"
+      ],
+      "sparks": [
+        "warming cold fingers",
+        "carrying a lantern for two",
+        "baking for a friend"
+      ],
+      "botMetaphor": "Guiding a lost hiker up the ridge accidentally warms your own cold fingers along the way"
+    },
+    {
+      "id": "kindness_08",
+      "theme": "Kindness",
+      "lesson": "Give without keeping a hidden scorecard",
+      "decoys": [
+        "Kindness is never wasted, even unreturned",
+        "Clear agreements keep good friendships strong",
+        "Flattery often hides a selfish motive",
+        "True generosity frees both hands the moment it gives",
+        "Expecting constant repayment turns favors into resentment"
+      ],
+      "sparks": [
+        "a rented umbrella",
+        "a gift with price tags",
+        "a toll booth"
+      ],
+      "botMetaphor": "A gift tied to an invisible invoice feels more like a rented umbrella than a birthday present"
+    },
+    {
+      "id": "kindness_09",
+      "theme": "Kindness",
+      "lesson": "Patience is one of the quietest forms of love",
+      "decoys": [
+        "Love grows deeper through tiny daily habits",
+        "You cannot hurry someone else's healing",
+        "Listening teaches more than talking ever will",
+        "Gentle words calm fierce storms",
+        "Rushing people you love steals warmth from the moment"
+      ],
+      "sparks": [
+        "tying toddler sneakers",
+        "waiting by a kettle",
+        "walking at a grandparent's pace"
+      ],
+      "botMetaphor": "Holding the hallway door open without sighing while a toddler ties both sneakers speaks volumes"
+    },
+    {
+      "id": "kindness_10",
+      "theme": "Kindness",
+      "lesson": "Celebrate other people's victories genuinely",
+      "decoys": [
+        "Lighting another candle never dims your own",
+        "Comparison is the thief of joy",
+        "Credit shared widely multiplies a team's spirit",
+        "Envy locks you out of the party while joy hands you a slice of cake",
+        "Warm communities grow where applause flows freely"
+      ],
+      "sparks": [
+        "cheering another sailboat",
+        "applauding at a recital",
+        "shared sunshine"
+      ],
+      "botMetaphor": "Cheering when another boat catches the harbor breeze never steals a single gust from your sails"
+    },
+    {
+      "id": "kindness_11",
+      "theme": "Kindness",
+      "lesson": "A warm welcome turns strangers into friends",
+      "decoys": [
+        "Nobody can be happy alone",
+        "Small acts of kindness travel further than you think",
+        "Hospitality lives in warmth rather than fancy silverware",
+        "Every stranger is fighting a hidden battle",
+        "Inclusion makes every gathering twice as lively"
+      ],
+      "sparks": [
+        "an extra teacup",
+        "a glowing porch light",
+        "pulling up a chair"
+      ],
+      "botMetaphor": "Setting one extra ceramic mug beside the kettle shrinks an awkward hallway into a parlor"
+    },
+    {
+      "id": "kindness_12",
+      "theme": "Kindness",
+      "lesson": "Leave every place slightly better than you found it",
+      "decoys": [
+        "Plant seeds today for shade tomorrow",
+        "Character shows when nobody is watching",
+        "Small daily care protects the commons we all share",
+        "True greatness shows up in tiny chores",
+        "Gratitude expresses itself best through stewardship"
+      ],
+      "sparks": [
+        "leaving a tidy campsite",
+        "refilling the coffee pot",
+        "planting a trail marker"
+      ],
+      "botMetaphor": "Tucking one stray seashell and two soda caps into your pocket keeps the whole cove shining for tomorrow's campers"
+    }
+  ]
+}

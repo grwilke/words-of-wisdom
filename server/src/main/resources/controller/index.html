@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="theme-color" content="#120E24">
+  <title>Words of Wisdom — Party Controller</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div class="bg-orb orb-1" aria-hidden="true"></div>
+  <div class="bg-orb orb-2" aria-hidden="true"></div>
+
+  <header class="topbar" id="topbar" hidden>
+    <div class="me-pill">
+      <span class="me-avatar" id="me-avatar">🦉</span>
+      <div class="me-meta">
+        <span class="me-name" id="me-name">Player</span>
+        <span class="me-sub" id="me-sub">Rank #1</span>
+      </div>
+    </div>
+    <div class="score-pill">
+      <span class="score-val" id="me-score">0</span>
+      <span class="score-lbl">PTS</span>
+    </div>
+  </header>
+
+  <main class="stage">
+    <!-- JOIN VIEW -->
+    <section class="card view" id="view-join">
+      <div class="brand">
+        <div class="brand-emblem">✨🦉✨</div>
+        <h1>Words of Wisdom</h1>
+        <p class="subtitle">&amp; Life Lessons — Party Controller</p>
+      </div>
+      <form id="join-form" autocomplete="off">
+        <label class="field-label" for="player-name">Your Name</label>
+        <input id="player-name" name="name" type="text" maxlength="16" placeholder="e.g. Maya" required autofocus>
+        <div class="avatar-picker-wrap">
+          <span class="field-label">Pick Your Sage Avatar</span>
+          <div class="avatar-grid" id="avatar-grid"></div>
+        </div>
+        <p class="form-error" id="join-error" hidden></p>
+        <button class="btn btn-gold btn-lg" type="submit" id="join-btn">Join the Parlor</button>
+      </form>
+      <p class="conn-hint" id="conn-status">Connecting to TV…</p>
+    </section>
+
+    <!-- LOBBY VIEW -->
+    <section class="card view" id="view-lobby" hidden>
+      <div class="phase-chip">ROOM <span id="lobby-room">----</span></div>
+      <h2 id="lobby-heading">Waiting in the Parlor</h2>
+      <p class="muted" id="lobby-sub">Eyes on the TV! Waiting for everyone to join.</p>
+
+      <div class="player-chips" id="lobby-players"></div>
+
+      <div class="host-panel" id="host-panel" hidden>
+        <div class="panel-title">👑 Host Controls</div>
+
+        <div class="setting-row">
+          <span>Game Length</span>
+          <div class="seg-group" data-setting="length">
+            <button type="button" class="seg" data-val="QUICK">Quick</button>
+            <button type="button" class="seg" data-val="CLASSIC">Classic</button>
+            <button type="button" class="seg" data-val="MARATHON">Long</button>
+          </div>
+        </div>
+
+        <div class="setting-row">
+          <span>Choices</span>
+          <div class="seg-group" data-setting="optionCount">
+            <button type="button" class="seg" data-val="4">4 Options</button>
+            <button type="button" class="seg" data-val="5">5 Hard</button>
+          </div>
+        </div>
+
+        <div class="setting-row">
+          <span>Write Timer</span>
+          <div class="seg-group" data-setting="writeSeconds">
+            <button type="button" class="seg" data-val="60">60s</button>
+            <button type="button" class="seg" data-val="75">75s</button>
+            <button type="button" class="seg" data-val="90">90s</button>
+          </div>
+        </div>
+
+        <div class="setting-row">
+          <span>Strict Metaphor Guard</span>
+          <button type="button" class="toggle-btn" id="toggle-strict">ON</button>
+        </div>
+
+        <div class="bot-row">
+          <button type="button" class="btn btn-ghost" id="btn-add-bot">+ Add AI Bot</button>
+          <button type="button" class="btn btn-ghost" id="btn-rm-bot">− Remove Bot</button>
+        </div>
+
+        <p class="hint-line" id="start-hint"></p>
+        <button type="button" class="btn btn-gold btn-lg" id="btn-start">Start Game</button>
+      </div>
+    </section>
+
+    <!-- WRITING VIEW (SAGE) -->
+    <section class="card view" id="view-sage-write" hidden>
+      <div class="row-between">
+        <span class="phase-chip gold">🪶 YOUR TURN AS SAGE</span>
+        <span class="timer-pill" id="write-timer">75s</span>
+      </div>
+
+      <div class="secret-scroll">
+        <div class="scroll-kicker">SECRET LIFE LESSON · <span id="sage-theme">Wisdom</span></div>
+        <div class="scroll-lesson" id="secret-lesson">Nobody can be happy alone</div>
+      </div>
+
+      <p class="muted compact">Rewrite this lesson as a clever English metaphor. Other players will try to match it back!</p>
+
+      <div class="forbidden-bar" id="forbidden-bar" hidden>
+        <span class="forbidden-lbl">Avoid literal words:</span>
+        <span class="forbidden-list" id="forbidden-list"></span>
+      </div>
+
+      <textarea id="metaphor-input" rows="3" maxlength="180" placeholder="e.g. A single scarecrow in the field only smiles when he sees the crows…"></textarea>
+      <div class="row-between input-meta">
+        <span class="guard-msg" id="guard-msg">Write at least 3 words</span>
+        <span class="char-count" id="char-count">0 / 180</span>
+      </div>
+
+      <div class="sparks-box" id="sparks-box">
+        <button type="button" class="spark-toggle" id="spark-toggle">💡 Need an imagery spark?</button>
+        <div class="sparks-list" id="sparks-list" hidden></div>
+      </div>
+
+      <p class="form-error" id="metaphor-error" hidden></p>
+
+      <div class="action-stack">
+        <button type="button" class="btn btn-gold btn-lg" id="btn-submit-metaphor">Cast Metaphor ✨</button>
+        <button type="button" class="btn btn-ghost" id="btn-reroll">🎲 Swap Secret Lesson (1 left)</button>
+      </div>
+    </section>
+
+    <!-- WRITING VIEW (WAITING SEEKER) -->
+    <section class="card view" id="view-wait-write" hidden>
+      <div class="row-between">
+        <span class="phase-chip">ROUND <span id="wait-turn">1/6</span></span>
+        <span class="timer-pill" id="wait-timer">75s</span>
+      </div>
+      <div class="wait-stage">
+        <div class="quill-orb">🪶</div>
+        <h2 id="wait-sage-title">Maya is crafting a metaphor…</h2>
+        <p class="muted" id="wait-sub">Get ready! Watch the TV and prepare to decode the hidden life lesson.</p>
+        <div class="typing-dots" aria-hidden="true"><span></span><span></span><span></span></div>
+      </div>
+    </section>
+
+    <!-- GUESSING VIEW -->
+    <section class="card view" id="view-guess" hidden>
+      <div class="row-between">
+        <span class="phase-chip" id="guess-kicker">DECODE THE METAPHOR</span>
+        <span class="timer-pill" id="guess-timer">35s</span>
+      </div>
+
+      <blockquote class="metaphor-quote" id="guess-metaphor">“…”</blockquote>
+      <div class="quote-author" id="guess-author">— Sage</div>
+
+      <div id="guess-sage-notice" class="sage-watch-box" hidden>
+        <div class="big-emoji">👀</div>
+        <h3>You are the Sage!</h3>
+        <p class="muted">Root for your friends to decode your metaphor — you earn points for every right guess!</p>
+      </div>
+
+      <div id="guess-locked-notice" class="locked-box" hidden>
+        <div class="big-emoji">🔒</div>
+        <h3>Answer Locked!</h3>
+        <p class="muted" id="locked-choice-text">Waiting for the reveal on the TV…</p>
+      </div>
+
+      <div class="options-list" id="options-list"></div>
+    </section>
+
+    <!-- REVEAL VIEW -->
+    <section class="card view" id="view-reveal" hidden>
+      <div class="reveal-banner" id="reveal-banner">
+        <div class="reveal-icon" id="reveal-icon">✨</div>
+        <h2 id="reveal-title">Spot On!</h2>
+        <div class="reveal-points" id="reveal-points">+125 PTS</div>
+        <p class="muted" id="reveal-breakdown"></p>
+      </div>
+
+      <div class="truth-card">
+        <div class="truth-kicker">TRUE LIFE LESSON</div>
+        <div class="truth-text" id="reveal-truth"></div>
+      </div>
+
+      <button type="button" class="btn btn-applause" id="btn-applause" hidden>👏 Bravo, Great Metaphor! (+10)</button>
+      <p class="applause-sent" id="applause-sent" hidden>👏 Applause sent to the Sage!</p>
+
+      <div class="host-footer" id="reveal-host-footer" hidden>
+        <button type="button" class="btn btn-gold btn-lg" id="btn-next">Next Round →</button>
+        <button type="button" class="btn btn-ghost btn-sm" id="btn-end-early">End Game</button>
+      </div>
+    </section>
+
+    <!-- PODIUM VIEW -->
+    <section class="card view" id="view-podium" hidden>
+      <div class="phase-chip gold">🏆 GRAND FINALE</div>
+      <h2 id="podium-headline">Check the TV for the Winner!</h2>
+      <div class="final-standings" id="final-standings"></div>
+      <div class="host-footer" id="podium-host-footer" hidden>
+        <button type="button" class="btn btn-gold btn-lg" id="btn-play-again">Play Again 🎉</button>
+      </div>
+    </section>
+  </main>
+
+  <div class="toast" id="toast" hidden></div>
+  <script type="module" src="/controller.js"></script>
+</body>
+</html>
