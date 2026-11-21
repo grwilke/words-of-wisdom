@@ -1,4 +1,4 @@
-// Words of Wisdom — Zero-dependency phone controller (ES module).
+// Words of Wisdom — Zero-dependency phone controller v1.1.0 (ES module).
 // Exports pure helpers for Node.js unit testing and boots UI when document exists.
 
 export const AVATARS = [
@@ -15,6 +15,8 @@ export const AVATARS = [
   { id: 'bee', emoji: '🐝' },
   { id: 'flamingo', emoji: '🦩' },
 ];
+
+export const REACTIONS = ['🔥', '😂', '🤔', '👏', '🤯', '🦉'];
 
 export function stemWord(word) {
   const w = word.toLowerCase().replace(/[^a-z]/g, '');
@@ -76,6 +78,8 @@ if (typeof document !== 'undefined') {
   let socket = null;
   let state = null;
   let selectedAvatar = AVATARS[0].id;
+  let wildcardAccepted = false;
+  let doubleDownArmed = false;
   let countdownAnchorMs = 0;
   let countdownAt = Date.now();
   let lastTurnKey = '';
@@ -128,6 +132,23 @@ if (typeof document !== 'undefined') {
     });
     const savedName = localStorage.getItem(STORAGE_NAME);
     if (savedName) $('player-name').value = savedName;
+  }
+
+  function initReactionBars() {
+    document.querySelectorAll('[data-react-bar]').forEach((bar) => {
+      bar.innerHTML = '';
+      REACTIONS.forEach((emoji) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'react-btn';
+        btn.textContent = emoji;
+        btn.addEventListener('click', () => {
+          vibrate(15);
+          send({ t: 'react', emoji });
+        });
+        bar.appendChild(btn);
+      });
+    });
   }
 
   function connect() {
@@ -183,21 +204,47 @@ if (typeof document !== 'undefined') {
     });
   }
 
+  function syncWildcardUi(wc) {
+    const card = $('wildcard-card');
+    if (!wc) {
+      card.hidden = true;
+      return;
+    }
+    card.hidden = false;
+    $('wildcard-emoji').textContent = wc.emoji;
+    $('wildcard-title').textContent = `${wc.title} (+40 Style Bonus)`;
+    $('wildcard-prompt').textContent = wc.prompt;
+    card.classList.toggle('accepted', wildcardAccepted);
+    $('wildcard-badge').textContent = wildcardAccepted ? 'ON +40' : 'OPTIONAL';
+  }
+
+  function syncDoubleDownUi() {
+    const btn = $('btn-double-down');
+    btn.classList.toggle('armed', doubleDownArmed);
+    $('double-down-label').textContent = doubleDownArmed
+      ? 'GOLDEN OWL ARMED! Tap your answer for 2× PTS!'
+      : 'Activate Golden Owl 2× Bet (1 left · −50 if wrong)';
+  }
+
   function renderState(s) {
     $('topbar').hidden = false;
     $('me-avatar').textContent = s.you.avatar.emoji;
     $('me-name').textContent = s.you.name + (s.you.isHost ? ' 👑' : '');
-    $('me-sub').textContent = s.you.streak >= 2 ? `Rank #${s.you.rank} · 🔥${s.you.streak}` : `Rank #${s.you.rank}`;
+    const badges = [`Rank #${s.you.rank}`];
+    if (s.you.streak >= 2) badges.push(`🔥${s.you.streak}`);
+    if (s.doubleDownAvailable) badges.push('🦉2×');
+    $('me-sub').textContent = badges.join(' · ');
     $('me-score').textContent = String(s.you.score);
 
-    const turnKey = `${s.phase}:${s.turnNumber}:${s.secretLesson || ''}`;
-    const isNewTurn = turnKey !== lastTurnKey;
-    if (isNewTurn) {
+    const turnKey = `${s.phase}:${s.cycleNumber}:${s.turnNumber}:${s.secretLesson || ''}`;
+    if (turnKey !== lastTurnKey) {
       lastTurnKey = turnKey;
-      if (s.phase === 'WRITING' && s.isSage) {
+      doubleDownArmed = false;
+      if (s.phase === 'WRITING' && s.secretLesson) {
         $('metaphor-input').value = '';
         $('metaphor-error').hidden = true;
         $('sparks-list').hidden = true;
+        wildcardAccepted = false;
       }
     }
 
@@ -210,6 +257,8 @@ if (typeof document !== 'undefined') {
       const hostPanel = $('host-panel');
       hostPanel.hidden = !s.you.isHost;
       if (s.you.isHost) {
+        syncSeg('mode', s.config.mode);
+        syncSeg('pack', s.config.pack);
         syncSeg('length', s.config.length);
         syncSeg('optionCount', String(s.config.optionCount));
         syncSeg('writeSeconds', String(s.config.writeSeconds));
@@ -223,10 +272,24 @@ if (typeof document !== 'undefined') {
     }
 
     if (s.phase === 'WRITING') {
-      if (s.isSage) {
+      const canWriteNow = !!s.secretLesson && !s.hasSubmittedSprintMetaphor;
+      if (canWriteNow) {
         showView('view-sage-write');
+        const multTag = s.roundMultiplier === 2 ? ' · 🔥 2× PTS' : '';
+        $('sage-write-kicker').textContent = s.isSimultaneousWriting
+          ? `⚡ PARTY SPRINT · WRITE NOW${multTag}`
+          : `🪶 YOUR TURN AS SAGE${multTag}`;
         $('sage-theme').textContent = s.currentTheme || 'Wisdom';
         $('secret-lesson').textContent = s.secretLesson || '';
+
+        // Competing decoy preview!
+        const decoys = s.decoyPreview || [];
+        $('decoy-watch-box').hidden = decoys.length === 0;
+        $('decoy-watch-list').innerHTML = decoys.map((d) => `<li>${escapeHtml(d)}</li>`).join('');
+
+        // Wildcard World offer
+        syncWildcardUi(s.offeredWildcard);
+
         const fBar = $('forbidden-bar');
         const roots = s.forbiddenRoots || [];
         fBar.hidden = !s.config.strictMetaphorGuard || roots.length === 0;
@@ -238,8 +301,17 @@ if (typeof document !== 'undefined') {
         updateDraftFeedback();
       } else {
         showView('view-wait-write');
-        $('wait-turn').textContent = `${s.turnNumber}/${s.totalTurns}`;
-        $('wait-sage-title').textContent = `${s.sageAvatar?.emoji || '🪶'} ${s.sageName || 'Sage'} is crafting a metaphor…`;
+        if (s.isSimultaneousWriting && s.hasSubmittedSprintMetaphor) {
+          $('wait-chip').textContent = '✨ SCROLL SEALED';
+          $('wait-orb').textContent = '📜';
+          $('wait-sage-title').textContent = 'Your metaphor is locked in!';
+          $('wait-sub').textContent = 'Waiting for the remaining writers to finish… toss reactions onto the TV!';
+        } else {
+          $('wait-chip').textContent = `ROUND ${s.turnNumber}/${s.totalTurns}`;
+          $('wait-orb').textContent = '🪶';
+          $('wait-sage-title').textContent = `${s.sageAvatar?.emoji || '🪶'} ${s.sageName || 'Sage'} is crafting a metaphor…`;
+          $('wait-sub').textContent = 'Get ready! Watch the TV and prepare to decode the hidden life lesson.';
+        }
       }
       updateTimers();
       return;
@@ -249,6 +321,14 @@ if (typeof document !== 'undefined') {
       showView('view-guess');
       const isTb = s.phase === 'TIE_BREAKER';
       $('guess-kicker').textContent = isTb ? '⚡ SUDDEN DEATH TIE-BREAKER' : `ROUND ${s.turnNumber}/${s.totalTurns} · DECODE THE METAPHOR`;
+
+      const bonusPills = [];
+      if (!isTb && s.roundMultiplier === 2) bonusPills.push('<span class="bonus-pill fire">🔥 2× FINAL ROUND</span>');
+      if (s.activeWildcard) bonusPills.push(`<span class="bonus-pill">${s.activeWildcard.emoji} Wildcard: ${escapeHtml(s.activeWildcard.title)}</span>`);
+      const bonusRow = $('guess-bonuses');
+      bonusRow.hidden = bonusPills.length === 0;
+      bonusRow.innerHTML = bonusPills.join('');
+
       $('guess-metaphor').textContent = `“${s.metaphorText || ''}”`;
       $('guess-author').textContent = isTb ? '— Golden Duel Bonus Metaphor' : `— ${s.sageAvatar?.emoji || ''} ${s.sageName || 'Sage'}`;
 
@@ -266,8 +346,13 @@ if (typeof document !== 'undefined') {
       $('guess-locked-notice').hidden = !locked;
       if (locked) {
         const chosen = (s.options || []).find((o) => o.id === s.myChoiceId);
-        $('locked-choice-text').textContent = chosen ? `You picked ${chosen.id}: “${chosen.text}”` : 'Choice locked!';
+        const dd = s.myDoubleDownActive ? ' (🦉 2× ALL IN!)' : '';
+        $('locked-choice-text').textContent = chosen ? `You picked ${chosen.id}${dd}: “${chosen.text}”` : 'Choice locked!';
       }
+
+      const canDoubleDown = !isTb && !cannotVote && !locked && !!s.doubleDownAvailable;
+      $('btn-double-down').hidden = !canDoubleDown;
+      if (canDoubleDown) syncDoubleDownUi();
 
       const list = $('options-list');
       list.hidden = cannotVote || locked;
@@ -279,12 +364,15 @@ if (typeof document !== 'undefined') {
           btn.className = `option-btn opt-${opt.id}`;
           btn.innerHTML = `<span class="opt-badge">${escapeHtml(opt.id)}</span><span>${escapeHtml(opt.text)}</span>`;
           btn.addEventListener('click', () => {
-            vibrate(30);
-            send({ t: 'vote', optionId: opt.id });
+            vibrate(doubleDownArmed ? [35, 30, 50] : 30);
+            send({ t: 'vote', optionId: opt.id, doubleDown: doubleDownArmed });
+            doubleDownArmed = false;
           });
           list.appendChild(btn);
         });
       }
+
+      $('guess-react-dock').hidden = !(cannotVote || locked);
       updateTimers();
       return;
     }
@@ -297,19 +385,22 @@ if (typeof document !== 'undefined') {
         $('reveal-icon').textContent = earned > 0 ? '🪶' : '🌫️';
         $('reveal-title').textContent = earned >= 180 ? 'Master Sage!' : (earned > 0 ? 'Clever Metaphor!' : 'Too Mysterious!');
       } else if (d && d.wasCorrect) {
-        $('reveal-icon').textContent = '🎉';
-        $('reveal-title').textContent = 'Wisdom Decoded!';
+        $('reveal-icon').textContent = d.usedDoubleDown ? '🦉' : '🎉';
+        $('reveal-title').textContent = d.usedDoubleDown ? 'GOLDEN OWL 2× HIT!' : 'Wisdom Decoded!';
       } else {
-        $('reveal-icon').textContent = '🎭';
-        $('reveal-title').textContent = 'Fooled by a Decoy!';
+        $('reveal-icon').textContent = d?.usedDoubleDown ? '💥' : '🎭';
+        $('reveal-title').textContent = d?.usedDoubleDown ? 'Golden Owl Bust!' : 'Fooled by a Decoy!';
       }
-      $('reveal-points').textContent = earned > 0 ? `+${earned} PTS` : '+0 PTS';
+      $('reveal-points').textContent = earned > 0 ? `+${earned} PTS` : (earned < 0 ? `${earned} PTS` : '+0 PTS');
       const parts = [];
       if (d?.basePoints) parts.push(`Base +${d.basePoints}`);
       if (d?.speedBonus) parts.push(`Speed +${d.speedBonus}`);
       if (d?.streakBonus) parts.push(`Streak +${d.streakBonus}`);
       if (d?.clarityBonus) parts.push(`Clarity +${d.clarityBonus}`);
-      if (d?.applauseBonus) parts.push(`Bravo +${d.applauseBonus}`);
+      if (d?.wildcardBonus) parts.push(`Wildcard +${d.wildcardBonus}`);
+      if (d?.applauseBonus) parts.push(`Poet's Star +${d.applauseBonus}`);
+      if (d?.usedDoubleDown) parts.push(d.wasCorrect ? '🦉 2× Bet!' : '🦉 −50 Bust');
+      if (d?.multiplier && d.multiplier > 1) parts.push(`🔥 ${d.multiplier}× Final Round`);
       $('reveal-breakdown').textContent = parts.join(' · ') || 'Next round awaits!';
       $('reveal-truth').textContent = s.originalLesson || '';
 
@@ -375,6 +466,7 @@ if (typeof document !== 'undefined') {
 
   // Event bindings
   initAvatarPicker();
+  initReactionBars();
   connect();
   setInterval(updateTimers, 250);
 
@@ -393,7 +485,7 @@ if (typeof document !== 'undefined') {
       const setting = grp.dataset.setting;
       const val = btn.dataset.val;
       const payload = { t: 'config' };
-      payload[setting] = setting === 'length' ? val : Number(val);
+      payload[setting] = ['length', 'mode', 'pack'].includes(setting) ? val : Number(val);
       send(payload);
     });
   });
@@ -406,13 +498,26 @@ if (typeof document !== 'undefined') {
   $('btn-rm-bot').addEventListener('click', () => send({ t: 'remove_bot' }));
   $('btn-start').addEventListener('click', () => send({ t: 'start' }));
 
+  $('wildcard-card').addEventListener('click', () => {
+    wildcardAccepted = !wildcardAccepted;
+    vibrate(20);
+    syncWildcardUi(state?.offeredWildcard);
+  });
+
+  $('btn-double-down').addEventListener('click', () => {
+    doubleDownArmed = !doubleDownArmed;
+    vibrate(25);
+    syncDoubleDownUi();
+  });
+
   $('metaphor-input').addEventListener('input', () => {
     $('metaphor-error').hidden = true;
     updateDraftFeedback();
     const now = Date.now();
     if (now - typingThrottle > 350) {
       typingThrottle = now;
-      send({ t: 'typing', chars: $('metaphor-input').value.trim().length });
+      const val = $('metaphor-input').value;
+      send({ t: 'typing', chars: val.trim().length, text: val });
     }
   });
 
@@ -423,7 +528,7 @@ if (typeof document !== 'undefined') {
 
   $('btn-submit-metaphor').addEventListener('click', () => {
     const text = $('metaphor-input').value.trim();
-    send({ t: 'submit_metaphor', text });
+    send({ t: 'submit_metaphor', text, wildcardAccepted });
   });
 
   $('btn-reroll').addEventListener('click', () => send({ t: 'reroll' }));

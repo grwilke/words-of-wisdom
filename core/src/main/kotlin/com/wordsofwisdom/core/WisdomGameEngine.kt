@@ -3,16 +3,19 @@ package com.wordsofwisdom.core
 import kotlin.random.Random
 
 /**
- * Deterministic, pure-Kotlin state machine for Words of Wisdom (& Life Lessons).
+ * Deterministic, pure-Kotlin state machine for Words of Wisdom: Life Lessons (v1.1.0).
  *
- * Single-threaded / externally serialized. All time-driven behavior reads [clock]
- * monotonically and advances inside [tick], making every transition 100% unit-testable.
+ * Supports both Simultaneous "Party Sprint" writing (zero couch downtime) and Classic
+ * Turn-by-Turn mode, Sage decoy preview, Golden Owl 2x Double-Down bets, 2x Final Cycle,
+ * Wildcard Metaphor Worlds (+40), Poet's Star applause (+25), live emoji reactions,
+ * Practice AI Bots, mid-game late joiners, token reconnect, host migration, and Sudden-Death Tie-Breakers.
  */
 class WisdomGameEngine(
     private val bank: LessonBank = LessonBank.loadDefault(),
     private val clock: () -> Long = { System.currentTimeMillis() },
     private val rng: Random = Random.Default,
     val roomCode: String = generateRoomCode(rng),
+    initialConfig: GameConfig = GameConfig(),
 ) {
 
     private class PlayerRecord(
@@ -26,6 +29,8 @@ class WisdomGameEngine(
         var connectionId: String? = null,
         var connected: Boolean = true,
         var disconnectedAtMs: Long? = null,
+        var doubleDownAvailable: Boolean = true,
+        var lastReactionAtMs: Long = Long.MIN_VALUE,
         var score: Int = 0,
         var streak: Int = 0,
         var bestStreak: Int = 0,
@@ -36,10 +41,32 @@ class WisdomGameEngine(
         var totalGuesses: Int = 0,
     )
 
+    private class PendingScroll(
+        val sageId: String,
+        var lesson: WisdomLesson,
+        var prebuiltOptions: List<ChoiceOption>,
+        var decoyPreview: List<String>,
+        val offeredWildcard: WildcardWorld,
+        var rerollsLeft: Int = 1,
+        var typingChars: Int = 0,
+        var lastDraft: String? = null,
+        var submittedMetaphor: String? = null,
+        var wildcardAccepted: Boolean = false,
+    )
+
+    private data class SubmittedShowcase(
+        val sageId: String,
+        val lesson: WisdomLesson,
+        val options: List<ChoiceOption>,
+        val metaphor: String,
+        val activeWildcard: WildcardWorld?,
+    )
+
     private data class VoteRecord(
         val optionId: String,
         val votedAtMs: Long,
         val remainingMs: Long,
+        val doubleDown: Boolean,
     )
 
     private data class PhaseLens(
@@ -65,22 +92,34 @@ class WisdomGameEngine(
     private val connToPlayerId = HashMap<String, String?>()
     private val usedLessonIds = HashSet<String>()
     private val highlights = mutableListOf<MetaphorHighlight>()
+    private val recentReactions = ArrayDeque<LiveReaction>()
 
     private var nextPlayerNum: Int = 1
+    private var nextReactionSeq: Long = 1L
     private var hostPlayerId: String? = null
     private var hostDisconnectedAtMs: Long? = null
 
-    private var config: GameConfig = GameConfig()
+    private var config: GameConfig = initialConfig
     private var phase: GamePhase = GamePhase.LOBBY
-    private var turnOrder: List<String> = emptyList()
-    private var turnIndex: Int = 0 // 0-based active index into turnOrder
 
-    // Active round state
+    // Cycle & Turn Scheduling
+    private var totalCycles: Int = 1
+    private var currentCycle: Int = 1 // 1-based
+    private var totalTurns: Int = 0
+    private var completedShowcases: Int = 0
+
+    // Classic Turn-by-Turn schedule
+    private var classicTurnOrder: List<String> = emptyList()
+    private var classicTurnIndex: Int = 0
+
+    // Unified Writing / Sprint state (1 entry in CLASSIC_TURNS, N entries in PARTY_SPRINT)
+    private val pendingScrolls = LinkedHashMap<String, PendingScroll>()
+    private val showcaseQueue = ArrayDeque<SubmittedShowcase>()
+
+    // Active showcase / turn state
     private var sageId: String? = null
     private var currentLesson: WisdomLesson? = null
-    private var rerollsLeft: Int = 1
-    private var sageTypingChars: Int = 0
-    private var lastDraftText: String? = null
+    private var activeWildcard: WildcardWorld? = null
     private var metaphorText: String? = null
     private var options: List<ChoiceOption> = emptyList()
     private var correctOptionId: String? = null
@@ -151,6 +190,7 @@ class WisdomGameEngine(
             is InboundMessage.SubmitMetaphor -> handleSubmitMetaphor(connId, msg, now)
             is InboundMessage.Vote -> handleVote(connId, msg, now)
             is InboundMessage.Applause -> handleApplause(connId, now)
+            is InboundMessage.React -> handleReact(connId, msg, now)
             is InboundMessage.Next -> handleNext(connId, now)
             is InboundMessage.EndGame -> handleEndGame(connId, now)
             is InboundMessage.PlayAgain -> handlePlayAgain(connId, now)
@@ -161,12 +201,8 @@ class WisdomGameEngine(
         val now = clock()
         var phoneChanged = false
 
-        // 1. Host migration after 10s disconnect
-        if (checkHostMigration(now)) {
-            phoneChanged = true
-        }
+        if (checkHostMigration(now)) phoneChanged = true
 
-        // 2. Remove long-disconnected players in LOBBY (after 60s)
         if (phase == GamePhase.LOBBY) {
             val removed = players.removeAll { p ->
                 !p.isBot && !p.connected && p.disconnectedAtMs != null && (now - p.disconnectedAtMs!! >= LOBBY_PRUNE_MS)
@@ -177,39 +213,31 @@ class WisdomGameEngine(
             }
         }
 
-        // 3. Process due bot actions (and simulated bot typing in WRITING)
-        if (processBots(now)) {
-            phoneChanged = true
-        }
+        if (processBots(now)) phoneChanged = true
 
-        // 4. Staggered reveal audio beat (650ms after entering REVEAL)
         if (phase == GamePhase.REVEAL && now >= revealOutcomeCueAtMs && revealOutcomeCue != null) {
             emitCue(revealOutcomeCue!!)
             revealOutcomeCue = null
             revealOutcomeCueAtMs = Long.MAX_VALUE
         }
 
-        // 5. Early lock-in pause after all connected seekers voted -> REVEAL
         if (phase == GamePhase.GUESSING && now >= allVotedRevealAtMs) {
             allVotedRevealAtMs = Long.MAX_VALUE
             enterReveal(now)
             phoneChanged = true
         }
 
-        // 6. Tie-breaker win resolution pause -> PODIUM
         if (phase == GamePhase.TIE_BREAKER && now >= tieBreakerResolveAtMs) {
             tieBreakerResolveAtMs = Long.MAX_VALUE
             finalizeTieBreakerToPodium(now)
             phoneChanged = true
         }
 
-        // 7. Phase deadline timeouts
         if (now >= phaseDeadlineMs) {
             onPhaseTimeout(now)
             phoneChanged = true
         }
 
-        // 8. Final 5-second countdown tick cue (TV-only, no phone spam!)
         if ((phase == GamePhase.WRITING || phase == GamePhase.GUESSING || phase == GamePhase.TIE_BREAKER) &&
             phaseDeadlineMs != Long.MAX_VALUE
         ) {
@@ -259,6 +287,21 @@ class WisdomGameEngine(
         return broadcastAll(clock())
     }
 
+    fun remoteToggleMode(): List<OutgoingMessage> {
+        if (phase != GamePhase.LOBBY) return emptyList()
+        val next = if (config.mode == GameMode.PARTY_SPRINT) GameMode.CLASSIC_TURNS else GameMode.PARTY_SPRINT
+        config = config.copy(mode = next)
+        return broadcastAll(clock())
+    }
+
+    fun remoteCyclePack(): List<OutgoingMessage> {
+        if (phase != GamePhase.LOBBY) return emptyList()
+        val packs = PromptPack.entries
+        val next = packs[(packs.indexOf(config.pack) + 1) % packs.size]
+        config = config.copy(pack = next)
+        return broadcastAll(clock())
+    }
+
     fun remoteEndGame(): List<OutgoingMessage> {
         if (phase == GamePhase.LOBBY || phase == GamePhase.PODIUM) return emptyList()
         val now = clock()
@@ -270,12 +313,46 @@ class WisdomGameEngine(
 
     fun internalCorrectOptionIdForTest(): String? = correctOptionId
 
+    private fun currentRoundMultiplier(): Int =
+        if (config.enableFinalDoublePoints && totalCycles >= 2 && currentCycle == totalCycles) 2 else 1
+
+    private fun isSimultaneousWritingNow(): Boolean =
+        phase == GamePhase.WRITING && config.mode == GameMode.PARTY_SPRINT
+
     fun tvSnapshot(): TvSnapshot {
         val now = clock()
         val lens = PhaseLens.forPhase(phase)
         val ranked = rankedPlayerViews()
-        val sageRec = sageId?.let(::findPlayer)
+        val isSprintWriting = isSimultaneousWritingNow()
+        val sageRec = if (isSprintWriting) null else sageId?.let(::findPlayer)
         val remMs = remainingMsAt(now)
+        val sprintStatuses = if (isSprintWriting) {
+            pendingScrolls.values.mapNotNull { scroll ->
+                val p = findPlayer(scroll.sageId) ?: return@mapNotNull null
+                SprintWriterStatus(
+                    playerId = p.id,
+                    name = p.name,
+                    avatar = p.avatar,
+                    typingChars = scroll.typingChars,
+                    submitted = scroll.submittedMetaphor != null,
+                    wildcardTitle = if (scroll.wildcardAccepted) "${scroll.offeredWildcard.emoji} ${scroll.offeredWildcard.title}" else null,
+                )
+            }
+        } else {
+            emptyList()
+        }
+
+        val activeScrollTyping = if (phase == GamePhase.WRITING && !isSprintWriting) {
+            sageId?.let { pendingScrolls[it]?.typingChars } ?: 0
+        } else {
+            0
+        }
+
+        val displayTurn = when {
+            phase == GamePhase.LOBBY -> 0
+            isSprintWriting -> (completedShowcases + 1).coerceAtMost(totalTurns.coerceAtLeast(1))
+            else -> (completedShowcases + 1).coerceAtMost(totalTurns.coerceAtLeast(1))
+        }
 
         return TvSnapshot(
             roomCode = roomCode,
@@ -283,14 +360,20 @@ class WisdomGameEngine(
             config = config,
             availableThemes = bank.themes,
             players = ranked,
-            turnNumber = if (phase == GamePhase.LOBBY) 0 else (turnIndex + 1).coerceAtMost(turnOrder.size.coerceAtLeast(1)),
-            totalTurns = turnOrder.size,
-            sageId = if (phase == GamePhase.LOBBY || phase == GamePhase.PODIUM || phase == GamePhase.TIE_BREAKER) null else sageId,
-            sageName = if (phase == GamePhase.LOBBY || phase == GamePhase.PODIUM || phase == GamePhase.TIE_BREAKER) null else sageRec?.name,
-            sageAvatar = if (phase == GamePhase.LOBBY || phase == GamePhase.PODIUM || phase == GamePhase.TIE_BREAKER) null else sageRec?.avatar,
-            currentTheme = if (lens.showMetaphor || lens.showWritingSecretsToSage) currentLesson?.theme else null,
+            turnNumber = displayTurn,
+            totalTurns = totalTurns,
+            cycleNumber = currentCycle,
+            totalCycles = totalCycles,
+            roundMultiplier = if (phase == GamePhase.LOBBY || phase == GamePhase.PODIUM) 1 else currentRoundMultiplier(),
+            isSimultaneousWriting = isSprintWriting,
+            sprintWriters = sprintStatuses,
+            sageId = if (phase == GamePhase.LOBBY || phase == GamePhase.PODIUM || phase == GamePhase.TIE_BREAKER || isSprintWriting) null else sageId,
+            sageName = if (phase == GamePhase.LOBBY || phase == GamePhase.PODIUM || phase == GamePhase.TIE_BREAKER || isSprintWriting) null else sageRec?.name,
+            sageAvatar = if (phase == GamePhase.LOBBY || phase == GamePhase.PODIUM || phase == GamePhase.TIE_BREAKER || isSprintWriting) null else sageRec?.avatar,
+            currentTheme = if (isSprintWriting) null else if (lens.showMetaphor || lens.showWritingSecretsToSage) currentLesson?.theme else null,
+            activeWildcard = if (lens.showMetaphor) activeWildcard else null,
             metaphorText = if (lens.showMetaphor) metaphorText else null,
-            sageTypingChars = if (phase == GamePhase.WRITING) sageTypingChars else 0,
+            sageTypingChars = activeScrollTyping,
             options = projectedOptions(lens),
             remainingMs = remMs,
             totalPhaseMs = phaseDurationMs,
@@ -298,6 +381,7 @@ class WisdomGameEngine(
             originalLesson = if (lens.revealAnswers) currentLesson?.lesson else null,
             roundDeltas = if (lens.showDeltas) roundDeltas else emptyList(),
             applauseCount = if (phase == GamePhase.REVEAL) applaudedPlayerIds.size else 0,
+            recentReactions = recentReactions.toList(),
             statusBanner = statusBanner,
             tieBreakerContenderIds = if (phase == GamePhase.TIE_BREAKER) tieBreakerContenderIds else emptyList(),
             tieBreakerWinnerId = tieBreakerWinnerId,
@@ -320,7 +404,6 @@ class WisdomGameEngine(
     // ---- Message Handlers ----
 
     private fun handleJoin(connId: String, msg: InboundMessage.Join, now: Long): List<OutgoingMessage> {
-        // 1. Token-based reconnection
         val tok = msg.token?.trim()?.takeIf { it.isNotEmpty() }
         if (tok != null) {
             val existing = players.firstOrNull { !it.isBot && it.token == tok }
@@ -344,7 +427,6 @@ class WisdomGameEngine(
             }
         }
 
-        // 2. Fresh join
         if (players.size >= MAX_PLAYERS) {
             return listOf(OutgoingMessage(connId, WireProtocol.encodeError("full", "Parlor is full (max $MAX_PLAYERS players).")))
         }
@@ -367,6 +449,7 @@ class WisdomGameEngine(
             joinOrder = players.size,
             connectionId = connId,
             connected = true,
+            doubleDownAvailable = true,
         )
         players.add(rec)
         connToPlayerId[connId] = pid
@@ -400,6 +483,8 @@ class WisdomGameEngine(
         val newThemes = msg.selectedThemes?.filter { it in validThemes }?.distinct() ?: config.selectedThemes
 
         config = config.copy(
+            mode = msg.mode ?: config.mode,
+            pack = msg.pack ?: config.pack,
             length = msg.length ?: config.length,
             writeSeconds = newWrite,
             guessSeconds = newGuess,
@@ -407,6 +492,7 @@ class WisdomGameEngine(
             optionCount = newOpts,
             strictMetaphorGuard = msg.strictMetaphorGuard ?: config.strictMetaphorGuard,
             enableTieBreaker = msg.enableTieBreaker ?: config.enableTieBreaker,
+            enableFinalDoublePoints = msg.enableFinalDoublePoints ?: config.enableFinalDoublePoints,
             selectedThemes = newThemes,
         )
         return broadcastAll(now)
@@ -445,38 +531,48 @@ class WisdomGameEngine(
 
     private fun handleReroll(connId: String, now: Long): List<OutgoingMessage> {
         val player = playerForConn(connId) ?: return emptyList()
-        if (phase != GamePhase.WRITING || player.id != sageId || rerollsLeft <= 0) return emptyList()
+        if (phase != GamePhase.WRITING) return emptyList()
+        val scroll = pendingScrolls[player.id] ?: return emptyList()
+        if (scroll.submittedMetaphor != null || scroll.rerollsLeft <= 0) return emptyList()
 
-        rerollsLeft--
-        val prevId = currentLesson?.id
-        val exclude = if (prevId != null) usedLessonIds + prevId else usedLessonIds
-        val fresh = bank.drawLesson(config.selectedThemes, exclude, rng)
-        currentLesson = fresh
+        scroll.rerollsLeft--
+        val prevId = scroll.lesson.id
+        val fresh = bank.drawLesson(config.selectedThemes, usedLessonIds + prevId, rng, config.pack)
         usedLessonIds.add(fresh.id)
-        sageTypingChars = 0
-        lastDraftText = null
-        statusBanner = "${player.name} swapped for a fresh life lesson!"
+        val builtOpts = bank.buildOptions(fresh, config.optionCount, rng)
+        scroll.lesson = fresh
+        scroll.prebuiltOptions = builtOpts
+        scroll.decoyPreview = builtOpts.filterNot { it.isCorrect }.take(2).map { it.text }
+        scroll.typingChars = 0
+        scroll.lastDraft = null
+
+        if (!isSimultaneousWritingNow()) {
+            currentLesson = fresh
+            statusBanner = "${player.name} swapped for a fresh life lesson!"
+        }
         return broadcastAll(now)
     }
 
     private fun handleTyping(connId: String, msg: InboundMessage.Typing, now: Long): List<OutgoingMessage> {
         val player = playerForConn(connId) ?: return emptyList()
-        if (phase != GamePhase.WRITING || player.id != sageId) return emptyList()
+        if (phase != GamePhase.WRITING) return emptyList()
+        val scroll = pendingScrolls[player.id] ?: return emptyList()
+        if (scroll.submittedMetaphor != null) return emptyList()
 
-        sageTypingChars = msg.chars.coerceIn(0, MetaphorValidator.MAX_LENGTH)
+        scroll.typingChars = msg.chars.coerceIn(0, MetaphorValidator.MAX_LENGTH)
         if (msg.text != null) {
-            lastDraftText = msg.text.take(MetaphorValidator.MAX_LENGTH)
+            scroll.lastDraft = msg.text.take(MetaphorValidator.MAX_LENGTH)
         }
-        // TV reads sageTypingChars directly from tvSnapshot(); avoid unnecessary phone broadcast spam.
         return emptyList()
     }
 
     private fun handleSubmitMetaphor(connId: String, msg: InboundMessage.SubmitMetaphor, now: Long): List<OutgoingMessage> {
         val player = playerForConn(connId) ?: return emptyList()
-        if (phase != GamePhase.WRITING || player.id != sageId) return emptyList()
+        if (phase != GamePhase.WRITING) return emptyList()
+        val scroll = pendingScrolls[player.id] ?: return emptyList()
+        if (scroll.submittedMetaphor != null) return emptyList()
 
-        val lesson = currentLesson ?: return emptyList()
-        val check = MetaphorValidator.validate(msg.text, lesson.lesson, config.strictMetaphorGuard)
+        val check = MetaphorValidator.validate(msg.text, scroll.lesson.lesson, config.strictMetaphorGuard)
         if (!check.valid) {
             return listOf(
                 OutgoingMessage(
@@ -491,14 +587,30 @@ class WisdomGameEngine(
             )
         }
 
-        enterGuessing(msg.text.trim(), now)
+        scroll.submittedMetaphor = msg.text.trim()
+        scroll.wildcardAccepted = msg.wildcardAccepted
+        scroll.typingChars = scroll.submittedMetaphor!!.length
+
+        if (isSimultaneousWritingNow()) {
+            emitCue(TvCue.VOTE_LOCKED)
+            checkAllSprintWritersDone(now)
+        } else {
+            val showcase = SubmittedShowcase(
+                sageId = scroll.sageId,
+                lesson = scroll.lesson,
+                options = scroll.prebuiltOptions,
+                metaphor = scroll.submittedMetaphor!!,
+                activeWildcard = if (scroll.wildcardAccepted) scroll.offeredWildcard else null,
+            )
+            enterGuessingShowcase(showcase, now)
+        }
         return broadcastAll(now)
     }
 
     private fun handleVote(connId: String, msg: InboundMessage.Vote, now: Long): List<OutgoingMessage> {
         val player = playerForConn(connId) ?: return emptyList()
         return when (phase) {
-            GamePhase.GUESSING -> recordGuessVote(player, msg.optionId, now)
+            GamePhase.GUESSING -> recordGuessVote(player, msg.optionId, msg.doubleDown, now)
             GamePhase.TIE_BREAKER -> recordTieBreakerVote(player, msg.optionId, now)
             else -> emptyList()
         }
@@ -509,9 +621,31 @@ class WisdomGameEngine(
         if (phase != GamePhase.REVEAL || player.id == sageId) return emptyList()
         if (!applaudedPlayerIds.add(player.id)) return emptyList()
 
-        applyApplauseToSage(player)
+        applyPoetStarToSage()
         emitCue(TvCue.APPLAUSE_POP)
         return broadcastAll(now)
+    }
+
+    private fun handleReact(connId: String, msg: InboundMessage.React, now: Long): List<OutgoingMessage> {
+        val player = playerForConn(connId) ?: return emptyList()
+        val emoji = msg.emoji.trim()
+        if (emoji !in ALLOWED_REACTIONS) return emptyList()
+        if (player.lastReactionAtMs != Long.MIN_VALUE && now - player.lastReactionAtMs < REACTION_COOLDOWN_MS) return emptyList()
+        player.lastReactionAtMs = now
+
+        recentReactions.addLast(
+            LiveReaction(
+                seq = nextReactionSeq++,
+                playerId = player.id,
+                senderName = player.name,
+                emoji = emoji,
+            ),
+        )
+        while (recentReactions.size > MAX_RECENT_REACTIONS) {
+            recentReactions.removeFirst()
+        }
+        emitCue(TvCue.REACTION_POP)
+        return emptyList() // TV-only floating reaction; zero phone broadcast churn
     }
 
     private fun handleNext(connId: String, now: Long): List<OutgoingMessage> {
@@ -547,49 +681,151 @@ class WisdomGameEngine(
             p.applauseReceived = 0
             p.correctGuesses = 0
             p.totalGuesses = 0
+            p.doubleDownAvailable = true
         }
         highlights.clear()
         awards = emptyList()
+        recentReactions.clear()
         tieBreakerContenderIds = emptyList()
         tieBreakerWinnerId = null
         tieBreakerResolveAtMs = Long.MAX_VALUE
+        showcaseQueue.clear()
+        pendingScrolls.clear()
 
-        val cycles = when (config.length) {
+        totalCycles = when (config.length) {
             GameLength.QUICK -> 1
             GameLength.CLASSIC -> if (players.size <= 4) 2 else 1
             GameLength.MARATHON -> if (players.size <= 4) 3 else 2
         }
-        val order = ArrayList<String>(players.size * cycles)
-        repeat(cycles) {
-            for (p in players) order.add(p.id)
+        currentCycle = 1
+        completedShowcases = 0
+        totalTurns = players.size * totalCycles
+
+        if (config.mode == GameMode.PARTY_SPRINT) {
+            startSprintWritingCycle(now)
+        } else {
+            val order = ArrayList<String>(totalTurns)
+            repeat(totalCycles) {
+                for (p in players) order.add(p.id)
+            }
+            classicTurnOrder = order
+            classicTurnIndex = 0
+            startClassicTurn(now)
         }
-        turnOrder = order
-        turnIndex = 0
-        startTurn(now)
     }
 
-    private fun startTurn(now: Long) {
-        if (turnIndex >= turnOrder.size) {
+    private fun createPendingScroll(sageId: String): PendingScroll {
+        val lesson = bank.drawLesson(config.selectedThemes, usedLessonIds, rng, config.pack)
+        usedLessonIds.add(lesson.id)
+        val builtOptions = bank.buildOptions(lesson, config.optionCount, rng)
+        val preview = builtOptions.filterNot { it.isCorrect }.take(2).map { it.text }
+        val wildcard = WildcardCatalog.ALL[rng.nextInt(WildcardCatalog.ALL.size)]
+        return PendingScroll(
+            sageId = sageId,
+            lesson = lesson,
+            prebuiltOptions = builtOptions,
+            decoyPreview = preview,
+            offeredWildcard = wildcard,
+        )
+    }
+
+    private fun startSprintWritingCycle(now: Long) {
+        phase = GamePhase.WRITING
+        pendingScrolls.clear()
+        showcaseQueue.clear()
+        sageId = null
+        currentLesson = null
+        activeWildcard = null
+        metaphorText = null
+        options = emptyList()
+        correctOptionId = null
+        votes.clear()
+        applaudedPlayerIds.clear()
+        roundDeltas = emptyList()
+        allVotedRevealAtMs = Long.MAX_VALUE
+        revealOutcomeCueAtMs = Long.MAX_VALUE
+        revealOutcomeCue = null
+        botRevealApplauseDone = false
+        lastCountdownTickSec = -1
+
+        phaseStartedAtMs = now
+        phaseDurationMs = config.writeSeconds * 1000L
+        phaseDeadlineMs = now + phaseDurationMs
+        botScheduledActionMs.clear()
+
+        val activeWriters = players.filter { it.isBot || it.connected }
+        for (p in activeWriters) {
+            pendingScrolls[p.id] = createPendingScroll(p.id)
+            if (p.isBot) {
+                val persona = p.botPersona ?: BotBrain.PERSONAS.first()
+                botScheduledActionMs[p.id] = now + BotBrain.planWriteDelayMs(persona, phaseDurationMs, rng)
+            }
+        }
+
+        val multTag = if (currentRoundMultiplier() == 2) "🔥 FINAL ROUND (2× POINTS)! " else ""
+        statusBanner = "${multTag}Everyone grab your phone — craft your metaphor at once!"
+        emitCue(TvCue.ROUND_STARTED)
+    }
+
+    private fun checkAllSprintWritersDone(now: Long) {
+        val expected = pendingScrolls.values.filter { sc ->
+            val p = findPlayer(sc.sageId)
+            p != null && (p.isBot || p.connected)
+        }
+        if (expected.isNotEmpty() && expected.all { it.submittedMetaphor != null }) {
+            beginSprintShowcases(now)
+        }
+    }
+
+    private fun beginSprintShowcases(now: Long) {
+        showcaseQueue.clear()
+        for (sc in pendingScrolls.values) {
+            val metaphor = sc.submittedMetaphor ?: sc.lastDraft?.trim()?.takeIf {
+                MetaphorValidator.validate(it, sc.lesson.lesson, config.strictMetaphorGuard).valid
+            }
+            if (metaphor != null) {
+                showcaseQueue.addLast(
+                    SubmittedShowcase(
+                        sageId = sc.sageId,
+                        lesson = sc.lesson,
+                        options = sc.prebuiltOptions,
+                        metaphor = metaphor,
+                        activeWildcard = if (sc.wildcardAccepted) sc.offeredWildcard else null,
+                    ),
+                )
+            }
+        }
+        pendingScrolls.clear()
+        if (showcaseQueue.isEmpty()) {
+            advanceCycleOrFinish(now)
+        } else {
+            totalTurns = completedShowcases + showcaseQueue.size + ((totalCycles - currentCycle) * players.size)
+            enterGuessingShowcase(showcaseQueue.removeFirst(), now)
+        }
+    }
+
+    private fun startClassicTurn(now: Long) {
+        if (classicTurnIndex >= classicTurnOrder.size) {
             checkTieBreakerOrPodium(now)
             return
         }
-        val nextSageId = turnOrder[turnIndex]
+        currentCycle = (classicTurnIndex / players.size.coerceAtLeast(1)) + 1
+        val nextSageId = classicTurnOrder[classicTurnIndex]
         val sage = findPlayer(nextSageId)
         if (sage == null) {
-            turnIndex++
-            startTurn(now)
+            classicTurnIndex++
+            startClassicTurn(now)
             return
         }
 
-        val lesson = bank.drawLesson(config.selectedThemes, usedLessonIds, rng)
-        usedLessonIds.add(lesson.id)
+        val scroll = createPendingScroll(sage.id)
+        pendingScrolls.clear()
+        pendingScrolls[sage.id] = scroll
 
         phase = GamePhase.WRITING
         sageId = sage.id
-        currentLesson = lesson
-        rerollsLeft = 1
-        sageTypingChars = 0
-        lastDraftText = null
+        currentLesson = scroll.lesson
+        activeWildcard = null
         metaphorText = null
         options = emptyList()
         correctOptionId = null
@@ -609,29 +845,32 @@ class WisdomGameEngine(
         botScheduledActionMs.clear()
         if (sage.isBot) {
             val persona = sage.botPersona ?: BotBrain.PERSONAS.first()
-            val delay = BotBrain.planWriteDelayMs(persona, phaseDurationMs, rng)
-            botScheduledActionMs[sage.id] = now + delay
+            botScheduledActionMs[sage.id] = now + BotBrain.planWriteDelayMs(persona, phaseDurationMs, rng)
         }
 
-        statusBanner = listOf(
+        val multTag = if (currentRoundMultiplier() == 2) "🔥 2× FINAL ROUND · " else ""
+        statusBanner = multTag + listOf(
             "${sage.name} is translating secret wisdom into metaphor…",
             "Shhh — ${sage.name} took the Golden Quill!",
             "${sage.name} is crafting a riddle. Prepare to decode!",
-        )[turnIndex.mod(3)]
+        )[classicTurnIndex.mod(3)]
 
         emitCue(TvCue.ROUND_STARTED)
     }
 
-    private fun enterGuessing(submittedMetaphor: String, now: Long) {
-        val lesson = currentLesson ?: return
-        val builtOptions = bank.buildOptions(lesson, config.optionCount, rng)
-        val correctId = builtOptions.first { it.isCorrect }.id
+    private fun enterGuessingShowcase(showcase: SubmittedShowcase, now: Long) {
+        val correctId = showcase.options.first { it.isCorrect }.id
 
         phase = GamePhase.GUESSING
-        metaphorText = submittedMetaphor
-        options = builtOptions
+        sageId = showcase.sageId
+        currentLesson = showcase.lesson
+        activeWildcard = showcase.activeWildcard
+        metaphorText = showcase.metaphor
+        options = showcase.options
         correctOptionId = correctId
         votes.clear()
+        applaudedPlayerIds.clear()
+        roundDeltas = emptyList()
         allVotedRevealAtMs = Long.MAX_VALUE
         lastCountdownTickSec = -1
 
@@ -643,24 +882,30 @@ class WisdomGameEngine(
         for (p in players) {
             if (p.isBot && p.id != sageId) {
                 val persona = p.botPersona ?: BotBrain.PERSONAS.first()
-                val delay = BotBrain.planVoteDelayMs(persona, phaseDurationMs, rng)
-                botScheduledActionMs[p.id] = now + delay
+                botScheduledActionMs[p.id] = now + BotBrain.planVoteDelayMs(persona, phaseDurationMs, rng)
             }
         }
 
-        val sageName = sageId?.let { findPlayer(it)?.name } ?: "Sage"
-        statusBanner = "Which original life lesson inspired $sageName's metaphor?"
+        val sageName = findPlayer(showcase.sageId)?.name ?: "Sage"
+        val multTag = if (currentRoundMultiplier() == 2) "🔥 2× POINTS · " else ""
+        statusBanner = "${multTag}Which original life lesson inspired $sageName's metaphor?"
         emitCue(TvCue.METAPHOR_SUBMITTED)
     }
 
-    private fun recordGuessVote(player: PlayerRecord, optionId: String, now: Long): List<OutgoingMessage> {
+    private fun recordGuessVote(
+        player: PlayerRecord,
+        optionId: String,
+        doubleDown: Boolean,
+        now: Long,
+    ): List<OutgoingMessage> {
         if (player.id == sageId) return emptyList()
         if (player.id in votes) return emptyList()
         val normalized = optionId.trim().uppercase()
         if (options.none { it.id == normalized }) return emptyList()
 
-        votes[player.id] = VoteRecord(normalized, now, remainingMsAt(now))
-        emitCue(TvCue.VOTE_LOCKED)
+        val useDouble = doubleDown && player.doubleDownAvailable
+        votes[player.id] = VoteRecord(normalized, now, remainingMsAt(now), useDouble)
+        emitCue(if (useDouble) TvCue.DOUBLE_DOWN_LOCKED else TvCue.VOTE_LOCKED)
         checkAllSeekersVoted(now)
         return broadcastAll(now)
     }
@@ -679,6 +924,7 @@ class WisdomGameEngine(
         val lesson = currentLesson ?: return
         val correctId = correctOptionId ?: return
         val sage = sageId?.let(::findPlayer)
+        val mult = currentRoundMultiplier()
 
         val seekers = players.filter { it.id != sageId }
         val deltas = ArrayList<RoundScoreDelta>(players.size)
@@ -687,6 +933,9 @@ class WisdomGameEngine(
         for (seeker in seekers) {
             val vote = votes[seeker.id]
             seeker.totalGuesses++
+            val usedDouble = vote?.doubleDown == true
+            if (usedDouble) seeker.doubleDownAvailable = false
+
             val isRight = vote != null && vote.optionId == correctId
             if (isRight) {
                 correctCount++
@@ -696,30 +945,40 @@ class WisdomGameEngine(
                     totalGuessMs = phaseDurationMs,
                     previousStreak = seeker.streak,
                 )
+                val finalMult = mult * (if (usedDouble) 2 else 1)
+                val earned = res.totalPoints * finalMult
                 seeker.streak++
                 if (seeker.streak > seeker.bestStreak) seeker.bestStreak = seeker.streak
                 seeker.correctGuesses++
-                seeker.guessPoints += res.totalPoints
-                seeker.score += res.totalPoints
+                seeker.guessPoints += earned
+                seeker.score += earned
                 deltas.add(
                     RoundScoreDelta(
                         playerId = seeker.id,
-                        pointsEarned = res.totalPoints,
+                        pointsEarned = earned,
                         basePoints = res.basePoints,
                         speedBonus = res.speedBonus,
                         streakBonus = res.streakBonus,
+                        usedDoubleDown = usedDouble,
+                        multiplier = mult,
                         wasCorrect = true,
-                        roleLabel = "Seeker",
+                        roleLabel = if (usedDouble) "🦉 2× Seeker" else "Seeker",
                     ),
                 )
             } else {
                 seeker.streak = 0
+                val deltaPts = if (usedDouble) ScoringEngine.DOUBLE_DOWN_PENALTY else 0
+                if (deltaPts != 0) {
+                    seeker.score = (seeker.score + deltaPts).coerceAtLeast(0)
+                }
                 deltas.add(
                     RoundScoreDelta(
                         playerId = seeker.id,
-                        pointsEarned = 0,
+                        pointsEarned = deltaPts,
+                        usedDoubleDown = usedDouble,
+                        multiplier = mult,
                         wasCorrect = false,
-                        roleLabel = "Seeker",
+                        roleLabel = if (usedDouble) "🦉 Bust" else "Seeker",
                     ),
                 )
             }
@@ -727,14 +986,18 @@ class WisdomGameEngine(
 
         if (sage != null) {
             val sageRes = ScoringEngine.scoreSage(correctCount = correctCount, seekerCount = seekers.size)
-            sage.sagePoints += sageRes.totalPoints
-            sage.score += sageRes.totalPoints
+            val wcBonus = ScoringEngine.wildcardStyleBonus(activeWildcard != null, correctCount)
+            val earned = (sageRes.totalPoints + wcBonus) * mult
+            sage.sagePoints += earned
+            sage.score += earned
             deltas.add(
                 RoundScoreDelta(
                     playerId = sage.id,
-                    pointsEarned = sageRes.totalPoints,
+                    pointsEarned = earned,
                     basePoints = sageRes.basePoints,
                     clarityBonus = sageRes.clarityBonus,
+                    wildcardBonus = wcBonus,
+                    multiplier = mult,
                     wasCorrect = correctCount > 0,
                     roleLabel = if (sageRes.clarityBonus > 0) "Master Sage" else "Sage",
                 ),
@@ -748,6 +1011,7 @@ class WisdomGameEngine(
                     metaphor = metaphorText.orEmpty(),
                     originalLesson = lesson.lesson,
                     theme = lesson.theme,
+                    wildcardTitle = activeWildcard?.let { "${it.emoji} ${it.title}" },
                     correctGuessers = correctCount,
                     totalSeekers = seekers.size,
                     applauseCount = 0,
@@ -774,13 +1038,13 @@ class WisdomGameEngine(
 
         emitCue(TvCue.REVEAL_DRAMATIC)
         revealOutcomeCue = if (correctCount > 0) TvCue.CORRECT_BURST else TvCue.EVERYONE_MISSED
-        revealOutcomeCueAtMs = now + 650L
+        revealOutcomeCueAtMs = now + 1_800L // Matches Beat 2 illumination on TV!
     }
 
-    private fun applyApplauseToSage(applauder: PlayerRecord) {
+    private fun applyPoetStarToSage() {
         val sage = sageId?.let(::findPlayer) ?: return
-        val beforeBonus = ScoringEngine.applauseBonus(applaudedPlayerIds.size - 1)
-        val afterBonus = ScoringEngine.applauseBonus(applaudedPlayerIds.size)
+        val beforeBonus = ScoringEngine.poetStarBonus(applaudedPlayerIds.size - 1)
+        val afterBonus = ScoringEngine.poetStarBonus(applaudedPlayerIds.size)
         val increment = afterBonus - beforeBonus
 
         sage.applauseReceived++
@@ -805,9 +1069,27 @@ class WisdomGameEngine(
     }
 
     private fun advanceAfterReveal(now: Long) {
-        turnIndex++
-        if (turnIndex < turnOrder.size) {
-            startTurn(now)
+        completedShowcases++
+        if (config.mode == GameMode.PARTY_SPRINT) {
+            if (showcaseQueue.isNotEmpty()) {
+                enterGuessingShowcase(showcaseQueue.removeFirst(), now)
+            } else {
+                advanceCycleOrFinish(now)
+            }
+        } else {
+            classicTurnIndex++
+            if (classicTurnIndex < classicTurnOrder.size) {
+                startClassicTurn(now)
+            } else {
+                checkTieBreakerOrPodium(now)
+            }
+        }
+    }
+
+    private fun advanceCycleOrFinish(now: Long) {
+        if (currentCycle < totalCycles) {
+            currentCycle++
+            startSprintWritingCycle(now)
         } else {
             checkTieBreakerOrPodium(now)
         }
@@ -824,7 +1106,7 @@ class WisdomGameEngine(
     }
 
     private fun enterTieBreaker(contenders: List<PlayerRecord>, now: Long) {
-        val lesson = bank.drawLesson(config.selectedThemes, usedLessonIds, rng)
+        val lesson = bank.drawLesson(config.selectedThemes, usedLessonIds, rng, config.pack)
         usedLessonIds.add(lesson.id)
         val builtOptions = bank.buildOptions(lesson, config.optionCount, rng)
         val correctId = builtOptions.first { it.isCorrect }.id
@@ -832,6 +1114,7 @@ class WisdomGameEngine(
         phase = GamePhase.TIE_BREAKER
         sageId = null
         currentLesson = lesson
+        activeWildcard = null
         metaphorText = lesson.botMetaphor
         options = builtOptions
         correctOptionId = correctId
@@ -863,18 +1146,15 @@ class WisdomGameEngine(
         val normalized = optionId.trim().uppercase()
         if (options.none { it.id == normalized }) return emptyList()
 
-        votes[player.id] = VoteRecord(normalized, now, remainingMsAt(now))
+        votes[player.id] = VoteRecord(normalized, now, remainingMsAt(now), doubleDown = false)
         emitCue(TvCue.VOTE_LOCKED)
 
         if (normalized == correctOptionId) {
             tieBreakerWinnerId = player.id
             statusBanner = "${player.name} wins Sudden Death!"
             tieBreakerResolveAtMs = now + TIE_BREAKER_PAUSE_MS
-        } else {
-            val allVoted = tieBreakerContenderIds.all { it in votes }
-            if (allVoted) {
-                tieBreakerResolveAtMs = now + TIE_BREAKER_PAUSE_MS
-            }
+        } else if (tieBreakerContenderIds.all { it in votes }) {
+            tieBreakerResolveAtMs = now + TIE_BREAKER_PAUSE_MS
         }
         return broadcastAll(now)
     }
@@ -913,7 +1193,6 @@ class WisdomGameEngine(
 
         val ranked = rankedPlayerViews()
         awards = computePodiumAwards(ranked)
-        // Sort highlights so the best-loved & clearest metaphors shine first in the carousel
         highlights.sortWith(
             compareByDescending<MetaphorHighlight> { it.applauseCount * 2 + it.correctGuessers }
                 .thenByDescending { it.correctGuessers },
@@ -925,10 +1204,17 @@ class WisdomGameEngine(
 
     private fun resetToLobby(now: Long) {
         phase = GamePhase.LOBBY
-        turnOrder = emptyList()
-        turnIndex = 0
+        classicTurnOrder = emptyList()
+        classicTurnIndex = 0
+        completedShowcases = 0
+        totalTurns = 0
+        currentCycle = 1
+        totalCycles = 1
+        pendingScrolls.clear()
+        showcaseQueue.clear()
         sageId = null
         currentLesson = null
+        activeWildcard = null
         metaphorText = null
         options = emptyList()
         correctOptionId = null
@@ -956,6 +1242,7 @@ class WisdomGameEngine(
             p.applauseReceived = 0
             p.correctGuesses = 0
             p.totalGuesses = 0
+            p.doubleDownAvailable = true
         }
     }
 
@@ -965,21 +1252,35 @@ class WisdomGameEngine(
         phaseDeadlineMs = Long.MAX_VALUE
         when (phase) {
             GamePhase.WRITING -> {
-                val lesson = currentLesson
-                val draft = lastDraftText?.trim()
-                if (lesson != null && !draft.isNullOrEmpty() &&
-                    MetaphorValidator.validate(draft, lesson.lesson, config.strictMetaphorGuard).valid
-                ) {
-                    statusBanner = "Time's up — casting the Sage's draft!"
-                    enterGuessing(draft, now)
+                if (isSimultaneousWritingNow()) {
+                    beginSprintShowcases(now)
                 } else {
-                    val sageName = sageId?.let { findPlayer(it)?.name } ?: "The Sage"
-                    turnIndex++
-                    if (turnIndex < turnOrder.size) {
-                        startTurn(now)
-                        statusBanner = "$sageName entered deep meditation — moving to the next Sage!"
+                    val scroll = sageId?.let { pendingScrolls[it] }
+                    val draft = scroll?.lastDraft?.trim()
+                    if (scroll != null && !draft.isNullOrEmpty() &&
+                        MetaphorValidator.validate(draft, scroll.lesson.lesson, config.strictMetaphorGuard).valid
+                    ) {
+                        statusBanner = "Time's up — casting the Sage's draft!"
+                        enterGuessingShowcase(
+                            SubmittedShowcase(
+                                sageId = scroll.sageId,
+                                lesson = scroll.lesson,
+                                options = scroll.prebuiltOptions,
+                                metaphor = draft,
+                                activeWildcard = if (scroll.wildcardAccepted) scroll.offeredWildcard else null,
+                            ),
+                            now,
+                        )
                     } else {
-                        checkTieBreakerOrPodium(now)
+                        val sageName = sageId?.let { findPlayer(it)?.name } ?: "The Sage"
+                        classicTurnIndex++
+                        completedShowcases++
+                        if (classicTurnIndex < classicTurnOrder.size) {
+                            startClassicTurn(now)
+                            statusBanner = "$sageName entered deep meditation — moving to the next Sage!"
+                        } else {
+                            checkTieBreakerOrPodium(now)
+                        }
                     }
                 }
             }
@@ -994,18 +1295,36 @@ class WisdomGameEngine(
         var changed = false
         when (phase) {
             GamePhase.WRITING -> {
-                val sid = sageId ?: return false
-                val sage = findPlayer(sid) ?: return false
-                if (!sage.isBot) return false
-                val dueAt = botScheduledActionMs[sid] ?: return false
-                val lesson = currentLesson ?: return false
-                if (now >= dueAt) {
-                    botScheduledActionMs.remove(sid)
-                    enterGuessing(lesson.botMetaphor, now)
+                val dueBots = botScheduledActionMs.entries.filter { now >= it.value }.map { it.key }
+                for (bid in dueBots) {
+                    botScheduledActionMs.remove(bid)
+                    val scroll = pendingScrolls[bid] ?: continue
+                    if (scroll.submittedMetaphor != null) continue
+                    scroll.submittedMetaphor = scroll.lesson.botMetaphor
+                    scroll.typingChars = scroll.lesson.botMetaphor.length
                     changed = true
-                } else {
+                    if (!isSimultaneousWritingNow()) {
+                        enterGuessingShowcase(
+                            SubmittedShowcase(
+                                sageId = scroll.sageId,
+                                lesson = scroll.lesson,
+                                options = scroll.prebuiltOptions,
+                                metaphor = scroll.lesson.botMetaphor,
+                                activeWildcard = null,
+                            ),
+                            now,
+                        )
+                        return true
+                    }
+                }
+                // Update simulated typing chars for bots still writing
+                for ((bid, dueAt) in botScheduledActionMs) {
+                    val scroll = pendingScrolls[bid] ?: continue
                     val planned = (dueAt - phaseStartedAtMs).coerceAtLeast(1L)
-                    sageTypingChars = BotBrain.simulatedTypedChars(now - phaseStartedAtMs, planned, lesson.botMetaphor.length)
+                    scroll.typingChars = BotBrain.simulatedTypedChars(now - phaseStartedAtMs, planned, scroll.lesson.botMetaphor.length)
+                }
+                if (changed && isSimultaneousWritingNow()) {
+                    checkAllSprintWritersDone(now)
                 }
             }
             GamePhase.GUESSING -> {
@@ -1018,7 +1337,7 @@ class WisdomGameEngine(
                     if (bot.id == sageId || bot.id in votes) continue
                     val persona = bot.botPersona ?: BotBrain.PERSONAS.first()
                     val pick = BotBrain.chooseOptionId(persona, options, correctId, metaLen, rng)
-                    votes[bot.id] = VoteRecord(pick, now, remainingMsAt(now))
+                    votes[bot.id] = VoteRecord(pick, now, remainingMsAt(now), doubleDown = false)
                     emitCue(TvCue.VOTE_LOCKED)
                     changed = true
                 }
@@ -1035,7 +1354,7 @@ class WisdomGameEngine(
                     if (bot.id !in tieBreakerContenderIds || bot.id in votes) continue
                     val persona = bot.botPersona ?: BotBrain.PERSONAS.first()
                     val pick = BotBrain.chooseOptionId(persona, options, correctId, metaLen, rng)
-                    votes[bot.id] = VoteRecord(pick, now, remainingMsAt(now))
+                    votes[bot.id] = VoteRecord(pick, now, remainingMsAt(now), doubleDown = false)
                     emitCue(TvCue.VOTE_LOCKED)
                     if (pick == correctId) {
                         tieBreakerWinnerId = bot.id
@@ -1048,8 +1367,7 @@ class WisdomGameEngine(
                 }
             }
             GamePhase.REVEAL -> {
-                // Friendly bots occasionally applaud a human Sage's clever metaphor!
-                if (!botRevealApplauseDone && now - phaseStartedAtMs >= 1_800L) {
+                if (!botRevealApplauseDone && now - phaseStartedAtMs >= 2_400L) {
                     botRevealApplauseDone = true
                     val sage = sageId?.let(::findPlayer)
                     if (sage != null && !sage.isBot) {
@@ -1058,7 +1376,7 @@ class WisdomGameEngine(
                             val chance = bot.botPersona?.applauseChance ?: 0.5
                             if (rng.nextDouble() < chance) {
                                 applaudedPlayerIds.add(bot.id)
-                                applyApplauseToSage(bot)
+                                applyPoetStarToSage()
                                 emitCue(TvCue.APPLAUSE_POP)
                                 changed = true
                             }
@@ -1160,8 +1478,8 @@ class WisdomGameEngine(
                 out.add(
                     PodiumAward(
                         title = "Crowd Favorite",
-                        subtitle = "${p.applauseReceived} parlor bravos earned",
-                        emoji = "👏",
+                        subtitle = "${p.applauseReceived} Poet's Stars earned",
+                        emoji = "⭐",
                         playerId = p.id,
                         playerName = p.name,
                         avatar = p.avatar,
@@ -1211,11 +1529,15 @@ class WisdomGameEngine(
                 prevScore = p.score
             }
             val acted = when (phase) {
-                GamePhase.WRITING -> p.id == sageId && sageTypingChars > 0
+                GamePhase.WRITING -> {
+                    val sc = pendingScrolls[p.id]
+                    if (isSimultaneousWritingNow()) sc?.submittedMetaphor != null else (sc != null && sc.typingChars > 0)
+                }
                 GamePhase.GUESSING -> p.id != sageId && p.id in votes
                 GamePhase.TIE_BREAKER -> p.id in tieBreakerContenderIds && p.id in votes
                 else -> false
             }
+            val doubledNow = (phase == GamePhase.GUESSING || phase == GamePhase.REVEAL) && votes[p.id]?.doubleDown == true
             PlayerView(
                 id = p.id,
                 name = p.name,
@@ -1228,6 +1550,8 @@ class WisdomGameEngine(
                 isBot = p.isBot,
                 connected = p.connected,
                 hasActed = acted,
+                doubleDownAvailable = p.doubleDownAvailable,
+                doubledDownThisTurn = doubledNow,
                 sagePoints = p.sagePoints,
                 guessPoints = p.guessPoints,
                 applauseReceived = p.applauseReceived,
@@ -1250,10 +1574,13 @@ class WisdomGameEngine(
 
     private fun buildPhoneState(you: PlayerView, ranked: List<PlayerView>, now: Long): PhoneStateMessage {
         val lens = PhaseLens.forPhase(phase)
-        val isSage = you.id == sageId
-        val sageRec = sageId?.let(::findPlayer)
-        val showSecrets = lens.showWritingSecretsToSage && isSage
-        val lesson = currentLesson
+        val isSprintWriting = isSimultaneousWritingNow()
+        val myScroll = if (phase == GamePhase.WRITING) pendingScrolls[you.id] else null
+        val isSage = if (isSprintWriting) myScroll != null else (you.id == sageId)
+        val sageRec = if (isSprintWriting) null else sageId?.let(::findPlayer)
+        val showSecrets = lens.showWritingSecretsToSage && myScroll != null && myScroll.submittedMetaphor == null
+        val lesson = if (phase == GamePhase.WRITING) myScroll?.lesson else currentLesson
+        val myVote = votes[you.id]
 
         return PhoneStateMessage(
             roomCode = roomCode,
@@ -1262,19 +1589,29 @@ class WisdomGameEngine(
             players = ranked,
             config = config,
             availableThemes = bank.themes,
-            turnNumber = if (phase == GamePhase.LOBBY) 0 else (turnIndex + 1).coerceAtMost(turnOrder.size.coerceAtLeast(1)),
-            totalTurns = turnOrder.size,
+            turnNumber = if (phase == GamePhase.LOBBY) 0 else (completedShowcases + 1).coerceAtMost(totalTurns.coerceAtLeast(1)),
+            totalTurns = totalTurns,
+            cycleNumber = currentCycle,
+            totalCycles = totalCycles,
+            roundMultiplier = if (phase == GamePhase.LOBBY || phase == GamePhase.PODIUM) 1 else currentRoundMultiplier(),
+            isSimultaneousWriting = isSprintWriting,
+            hasSubmittedSprintMetaphor = isSprintWriting && myScroll?.submittedMetaphor != null,
             isSage = isSage,
-            sageName = if (phase == GamePhase.LOBBY || phase == GamePhase.PODIUM || phase == GamePhase.TIE_BREAKER) null else sageRec?.name,
-            sageAvatar = if (phase == GamePhase.LOBBY || phase == GamePhase.PODIUM || phase == GamePhase.TIE_BREAKER) null else sageRec?.avatar,
-            secretLesson = if (showSecrets) lesson?.lesson else null,
-            secretSparks = if (showSecrets) lesson?.sparks.orEmpty() else emptyList(),
-            forbiddenRoots = if (showSecrets && lesson != null) bank.forbiddenHintsFor(lesson) else emptyList(),
-            rerollsLeft = if (showSecrets) rerollsLeft else 0,
+            sageName = if (phase == GamePhase.LOBBY || phase == GamePhase.PODIUM || phase == GamePhase.TIE_BREAKER || isSprintWriting) null else sageRec?.name,
+            sageAvatar = if (phase == GamePhase.LOBBY || phase == GamePhase.PODIUM || phase == GamePhase.TIE_BREAKER || isSprintWriting) null else sageRec?.avatar,
+            secretLesson = if (showSecrets) myScroll?.lesson?.lesson else null,
+            secretSparks = if (showSecrets) myScroll?.lesson?.sparks.orEmpty() else emptyList(),
+            decoyPreview = if (showSecrets) myScroll?.decoyPreview.orEmpty() else emptyList(),
+            offeredWildcard = if (showSecrets) myScroll?.offeredWildcard else null,
+            activeWildcard = if (lens.showMetaphor) activeWildcard else null,
+            forbiddenRoots = if (showSecrets && myScroll != null) bank.forbiddenHintsFor(myScroll.lesson) else emptyList(),
+            rerollsLeft = if (showSecrets) myScroll?.rerollsLeft ?: 0 else 0,
             metaphorText = if (lens.showMetaphor) metaphorText else null,
-            currentTheme = if (lens.showMetaphor || showSecrets) lesson?.theme else null,
+            currentTheme = if (showSecrets) myScroll?.lesson?.theme else if (lens.showMetaphor) lesson?.theme else null,
             options = projectedOptions(lens),
-            myChoiceId = if (lens.showOptions) votes[you.id]?.optionId else null,
+            myChoiceId = if (lens.showOptions) myVote?.optionId else null,
+            doubleDownAvailable = you.doubleDownAvailable,
+            myDoubleDownActive = lens.showOptions && myVote?.doubleDown == true,
             hasApplauded = phase == GamePhase.REVEAL && you.id in applaudedPlayerIds,
             applauseCount = if (phase == GamePhase.REVEAL) applaudedPlayerIds.size else 0,
             remainingMs = remainingMsAt(now),
@@ -1357,7 +1694,10 @@ class WisdomGameEngine(
         const val TIE_BREAKER_SECONDS = 25
         const val TIE_BREAKER_PAUSE_MS = 1_500L
         const val TIE_BREAKER_BONUS_POINTS = 10
+        const val REACTION_COOLDOWN_MS = 800L
+        const val MAX_RECENT_REACTIONS = 12
 
+        val ALLOWED_REACTIONS = setOf("🔥", "😂", "🤔", "👏", "🤯", "🦉")
         private val CODE_ALPHABET = "ABCDEFGHJKLMNPQRSTUVWXYZ"
 
         fun generateRoomCode(rng: Random = Random.Default): String =

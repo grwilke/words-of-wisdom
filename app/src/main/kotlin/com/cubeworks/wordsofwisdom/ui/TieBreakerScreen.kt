@@ -25,7 +25,9 @@ import com.wordsofwisdom.core.TvSnapshot
 fun TieBreakerScreen(
     state: TvSnapshot,
     musicMuted: Boolean,
+    voiceMuted: Boolean,
     onToggleMute: () -> Unit,
+    onToggleVoice: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val contenders = state.players.filter { it.id in state.tieBreakerContenderIds }
@@ -35,6 +37,9 @@ fun TieBreakerScreen(
         roundLabel = "⚡ SUDDEN DEATH TIE-BREAKER",
         musicMuted = musicMuted,
         onToggleMute = onToggleMute,
+        voiceMuted = voiceMuted,
+        onToggleVoice = onToggleVoice,
+        reactions = state.recentReactions,
         celebratory = true,
         modifier = modifier,
     ) {

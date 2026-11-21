@@ -19,9 +19,9 @@ data class SageScoreResult(
  * Balanced couch-party scoring model for Seekers and Sages across 2..10 players.
  *
  * - Seekers earn +100 base, up to +30 speed bonus, and +20 per prior streak (capped at +60).
- * - Sages earn strictly monotonic points per correct seeker, normalized to 150 + 30 clarity bonus
- *   ("Master Sage") when 100% of seekers (>= 2) decode the metaphor.
- * - Applause adds a small bounded charm bonus (+10 per bravo, max +30).
+ * - Golden Owl Double-Down (1 per game): 2x total Seeker points on hit, -50 on miss (floored at 0).
+ * - Sages earn strictly monotonic points per correct seeker (0..150) + 30 clarity bonus when 100%
+ *   of >= 2 seekers decode it, plus +40 Wildcard World Style Bonus & +25 Poet's Star (max +50).
  */
 object ScoringEngine {
 
@@ -35,6 +35,11 @@ object ScoringEngine {
 
     const val APPLAUSE_POINTS_EACH = 10
     const val MAX_APPLAUSE_BONUS = 30
+
+    const val POET_STAR_POINTS_EACH = 25
+    const val MAX_POET_STAR_BONUS = 50
+    const val WILDCARD_STYLE_BONUS = 40
+    const val DOUBLE_DOWN_PENALTY = -50
 
     fun scoreSeeker(
         correct: Boolean,
@@ -82,4 +87,10 @@ object ScoringEngine {
 
     fun applauseBonus(applauseCount: Int): Int =
         (applauseCount.coerceAtLeast(0) * APPLAUSE_POINTS_EACH).coerceAtMost(MAX_APPLAUSE_BONUS)
+
+    fun poetStarBonus(starCount: Int): Int =
+        (starCount.coerceAtLeast(0) * POET_STAR_POINTS_EACH).coerceAtMost(MAX_POET_STAR_BONUS)
+
+    fun wildcardStyleBonus(accepted: Boolean, correctCount: Int): Int =
+        if (accepted && correctCount > 0) WILDCARD_STYLE_BONUS else 0
 }

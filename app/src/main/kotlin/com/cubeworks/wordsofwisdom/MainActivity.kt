@@ -31,17 +31,22 @@ class MainActivity : ComponentActivity() {
             val state by vm.state.collectAsStateWithLifecycle()
             val join by vm.joinInfo.collectAsStateWithLifecycle()
             val muted by vm.musicMuted.collectAsStateWithLifecycle()
+            val voiceMuted by vm.voiceMuted.collectAsStateWithLifecycle()
             val confirmingEnd by vm.confirmingEnd.collectAsStateWithLifecycle()
 
             WisdomTvApp(
                 state = state,
                 joinInfo = join,
                 musicMuted = muted,
+                voiceMuted = voiceMuted,
                 confirmingEnd = confirmingEnd,
                 onRemoteOk = vm::onRemoteOk,
                 onAddBot = vm::onAddBot,
                 onRemoveBot = vm::onRemoveBot,
+                onToggleMode = vm::onToggleMode,
+                onCyclePack = vm::onCyclePack,
                 onToggleMute = vm::toggleMute,
+                onToggleVoice = vm::toggleVoice,
                 onConfirmEnd = vm::confirmEndGame,
                 onDismissEnd = vm::dismissEndDialog,
                 modifier = Modifier.fillMaxSize(),
@@ -64,6 +69,10 @@ class MainActivity : ComponentActivity() {
             when (event.keyCode) {
                 KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE, KeyEvent.KEYCODE_M -> {
                     vm.toggleMute()
+                    return true
+                }
+                KeyEvent.KEYCODE_V -> {
+                    vm.toggleVoice()
                     return true
                 }
                 KeyEvent.KEYCODE_MENU -> {

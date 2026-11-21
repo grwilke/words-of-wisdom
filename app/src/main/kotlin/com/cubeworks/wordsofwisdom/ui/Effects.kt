@@ -6,17 +6,34 @@ import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.rotate
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.compose.animation.core.Animatable
+import com.wordsofwisdom.core.LiveReaction
+import kotlinx.coroutines.delay
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
@@ -200,6 +217,82 @@ fun ConfettiOverlay(
                     size = Size(p.width, p.height),
                 )
             }
+        }
+    }
+}
+
+/** Floating live couch reactions anchored cleanly along the bottom-right stage edge so text is never occluded. */
+@Composable
+fun FloatingReactionsOverlay(
+    reactions: List<LiveReaction>,
+    modifier: Modifier = Modifier,
+) {
+    val active = remember { mutableStateListOf<LiveReaction>() }
+    val seen = remember { HashSet<Long>() }
+
+    LaunchedEffect(reactions) {
+        for (r in reactions) {
+            if (seen.add(r.seq)) {
+                active.add(r)
+            }
+        }
+    }
+
+    Box(modifier = modifier.fillMaxSize()) {
+        active.forEach { reaction ->
+            FloatingReactionBubble(
+                reaction = reaction,
+                onFinished = { active.remove(reaction) },
+            )
+        }
+    }
+}
+
+@Composable
+private fun FloatingReactionBubble(
+    reaction: LiveReaction,
+    onFinished: () -> Unit,
+) {
+    val progress = remember(reaction.seq) { Animatable(0f) }
+    val laneShift = remember(reaction.seq) { -((reaction.seq * 53L) % 160L).toFloat() }
+
+    LaunchedEffect(reaction.seq) {
+        progress.animateTo(1f, animationSpec = tween(durationMillis = 2_100, easing = LinearEasing))
+        delay(40)
+        onFinished()
+    }
+
+    val p = progress.value
+    val yOffset = -(p * 110f)
+    val xSway = laneShift + sin(p * 6f) * 10f
+    val alpha = when {
+        p < 0.14f -> p / 0.14f
+        p > 0.72f -> ((1f - p) / 0.28f).coerceIn(0f, 1f)
+        else -> 0.94f
+    }
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(end = 44.dp, bottom = 22.dp),
+        contentAlignment = Alignment.BottomEnd,
+    ) {
+        Surface(
+            modifier = Modifier
+                .offset(x = xSway.dp, y = yOffset.dp)
+                .alpha(alpha),
+            shape = RoundedCornerShape(999.dp),
+            color = ParlorColors.VelvetCard.copy(alpha = 0.92f),
+            border = BorderStroke(1.5.dp, ParlorColors.Gold),
+            shadowElevation = 6.dp,
+        ) {
+            Text(
+                text = "${reaction.emoji} ${reaction.senderName}",
+                color = ParlorColors.GoldBright,
+                fontSize = 15.sp,
+                fontWeight = FontWeight.ExtraBold,
+                modifier = Modifier.padding(horizontal = 12.dp, vertical = 5.dp),
+            )
         }
     }
 }

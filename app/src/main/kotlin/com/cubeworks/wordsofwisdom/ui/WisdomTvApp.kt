@@ -30,57 +30,76 @@ fun WisdomTvApp(
     state: TvSnapshot,
     joinInfo: TvJoinInfo?,
     musicMuted: Boolean,
+    voiceMuted: Boolean,
     confirmingEnd: Boolean,
     onRemoteOk: () -> Unit,
     onAddBot: () -> Unit,
     onRemoveBot: () -> Unit,
+    onToggleMode: () -> Unit,
+    onCyclePack: () -> Unit,
     onToggleMute: () -> Unit,
+    onToggleVoice: () -> Unit,
     onConfirmEnd: () -> Unit,
     onDismissEnd: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     WordsOfWisdomTheme {
         Box(modifier = modifier.fillMaxSize()) {
-            // Render the active phase directly from the authoritative snapshot so no exiting
-            // transition frame can ever display stale phase chrome paired with next-phase data.
             when (state.phase) {
                 GamePhase.LOBBY -> LobbyScreen(
                     state = state,
                     joinInfo = joinInfo,
                     musicMuted = musicMuted,
+                    voiceMuted = voiceMuted,
                     onStart = onRemoteOk,
                     onAddBot = onAddBot,
                     onRemoveBot = onRemoveBot,
+                    onToggleMode = onToggleMode,
+                    onCyclePack = onCyclePack,
                     onToggleMute = onToggleMute,
+                    onToggleVoice = onToggleVoice,
                 )
                 GamePhase.WRITING -> WritingScreen(
                     state = state,
                     musicMuted = musicMuted,
+                    voiceMuted = voiceMuted,
                     onToggleMute = onToggleMute,
+                    onToggleVoice = onToggleVoice,
                 )
                 GamePhase.GUESSING -> GuessingScreen(
                     state = state,
                     musicMuted = musicMuted,
+                    voiceMuted = voiceMuted,
                     onToggleMute = onToggleMute,
+                    onToggleVoice = onToggleVoice,
                 )
                 GamePhase.REVEAL -> RevealScreen(
                     state = state,
                     musicMuted = musicMuted,
+                    voiceMuted = voiceMuted,
                     onNext = onRemoteOk,
                     onToggleMute = onToggleMute,
+                    onToggleVoice = onToggleVoice,
                 )
                 GamePhase.TIE_BREAKER -> TieBreakerScreen(
                     state = state,
                     musicMuted = musicMuted,
+                    voiceMuted = voiceMuted,
                     onToggleMute = onToggleMute,
+                    onToggleVoice = onToggleVoice,
                 )
                 GamePhase.PODIUM -> PodiumScreen(
                     state = state,
                     musicMuted = musicMuted,
+                    voiceMuted = voiceMuted,
                     onPlayAgain = onRemoteOk,
                     onToggleMute = onToggleMute,
+                    onToggleVoice = onToggleVoice,
                 )
             }
+
+            // Single root overlay so seen reaction seqs persist across phase transitions without replaying!
+            FloatingReactionsOverlay(reactions = state.recentReactions)
 
             if (confirmingEnd) {
                 Box(

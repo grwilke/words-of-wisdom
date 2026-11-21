@@ -112,6 +112,14 @@ class PartyLanServer(
         scope.launch { step { engine.remoteRemoveBot() } }
     }
 
+    fun remoteToggleMode() {
+        scope.launch { step { engine.remoteToggleMode() } }
+    }
+
+    fun remoteCyclePack() {
+        scope.launch { step { engine.remoteCyclePack() } }
+    }
+
     fun remoteEndGame() {
         scope.launch { step { engine.remoteEndGame() } }
     }

@@ -22,6 +22,8 @@ sealed interface InboundMessage {
     @Serializable
     @SerialName("config")
     data class Config(
+        val mode: GameMode? = null,
+        val pack: PromptPack? = null,
         val length: GameLength? = null,
         val writeSeconds: Int? = null,
         val guessSeconds: Int? = null,
@@ -29,6 +31,7 @@ sealed interface InboundMessage {
         val optionCount: Int? = null,
         val strictMetaphorGuard: Boolean? = null,
         val enableTieBreaker: Boolean? = null,
+        val enableFinalDoublePoints: Boolean? = null,
         val selectedThemes: List<String>? = null,
     ) : InboundMessage
 
@@ -57,15 +60,25 @@ sealed interface InboundMessage {
 
     @Serializable
     @SerialName("submit_metaphor")
-    data class SubmitMetaphor(val text: String = "") : InboundMessage
+    data class SubmitMetaphor(
+        val text: String = "",
+        val wildcardAccepted: Boolean = false,
+    ) : InboundMessage
 
     @Serializable
     @SerialName("vote")
-    data class Vote(val optionId: String = "") : InboundMessage
+    data class Vote(
+        val optionId: String = "",
+        val doubleDown: Boolean = false,
+    ) : InboundMessage
 
     @Serializable
     @SerialName("applause")
     data object Applause : InboundMessage
+
+    @Serializable
+    @SerialName("react")
+    data class React(val emoji: String = "") : InboundMessage
 
     @Serializable
     @SerialName("next")

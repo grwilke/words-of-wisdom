@@ -1,6 +1,7 @@
 package com.cubeworks.wordsofwisdom.ui
 
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.animateIntAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -22,7 +23,11 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -38,41 +43,64 @@ import androidx.compose.ui.unit.sp
 import com.wordsofwisdom.core.ChoiceOption
 import com.wordsofwisdom.core.PlayerView
 import com.wordsofwisdom.core.TvSnapshot
+import kotlinx.coroutines.delay
 
+/**
+ * 3-Beat Theatrical Reveal Screen:
+ *  - Beat 1 (0.0s - 1.8s): Voter avatar badges pop onto options in suspense!
+ *  - Beat 2 (1.8s - 2.5s): True Life Lesson illuminates emerald-gold + confetti burst!
+ *  - Beat 3 (2.5s+): Score counters animate up and +points / Double-Down / Poet's Star pills appear!
+ */
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun RevealScreen(
     state: TvSnapshot,
     musicMuted: Boolean,
+    voiceMuted: Boolean,
     onNext: () -> Unit,
     onToggleMute: () -> Unit,
+    onToggleVoice: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val playersById = state.players.associateBy { it.id }
     val deltasById = state.roundDeltas.associateBy { it.playerId }
     val anyCorrect = state.roundDeltas.any { it.wasCorrect }
 
+    var beat by remember(state.turnNumber, state.correctOptionId) { mutableIntStateOf(1) }
+    LaunchedEffect(state.turnNumber, state.correctOptionId) {
+        beat = 1
+        delay(1_800L)
+        beat = 2
+        delay(650L)
+        beat = 3
+    }
+
+    val revealAnswer = beat >= 2
+    val revealScores = beat >= 3
+
     TvSafeScaffold(
         roomCode = state.roomCode,
         roundLabel = "TURN ${state.turnNumber} OF ${state.totalTurns} · THE GRAND REVEAL",
         musicMuted = musicMuted,
         onToggleMute = onToggleMute,
-        celebratory = anyCorrect,
-        showConfetti = anyCorrect,
+        voiceMuted = voiceMuted,
+        onToggleVoice = onToggleVoice,
+        reactions = state.recentReactions,
+        celebratory = revealAnswer && anyCorrect,
+        showConfetti = revealAnswer && anyCorrect,
         modifier = modifier,
     ) {
         Row(
             modifier = Modifier.fillMaxSize(),
             horizontalArrangement = Arrangement.spacedBy(22.dp),
         ) {
-            // Left: Metaphor + Revealed Option Cards with Voter Avatars
+            // Left: Metaphor Recap + Staggered Option Cards + Footer
             Column(
                 modifier = Modifier
                     .weight(1.55f)
                     .fillMaxHeight(),
                 verticalArrangement = Arrangement.SpaceBetween,
             ) {
-                // Compact Metaphor Recap + Outcome Headline
                 Surface(
                     shape = RoundedCornerShape(18.dp),
                     color = ParlorColors.VelvetCard.copy(alpha = 0.9f),
@@ -84,8 +112,13 @@ fun RevealScreen(
                             horizontalArrangement = Arrangement.SpaceBetween,
                             verticalAlignment = Alignment.CenterVertically,
                         ) {
+                            val headline = if (!revealAnswer) {
+                                "🥁 Drumroll… here's where everyone placed their bets!"
+                            } else {
+                                state.statusBanner ?: "The true life lesson is revealed!"
+                            }
                             Text(
-                                text = state.statusBanner ?: "The true life lesson is revealed!",
+                                text = headline,
                                 color = ParlorColors.GoldBright,
                                 fontSize = 17.sp,
                                 fontWeight = FontWeight.ExtraBold,
@@ -95,12 +128,13 @@ fun RevealScreen(
                             )
                             if (state.applauseCount > 0) {
                                 Spacer(Modifier.width(8.dp))
-                                StatusPill(text = "👏 ${state.applauseCount} Bravo!", accent = ParlorColors.GoldBright)
+                                StatusPill(text = "⭐ ${state.applauseCount} Poet's Star", accent = ParlorColors.GoldBright)
                             }
                         }
                         Spacer(Modifier.height(4.dp))
+                        val wcTag = state.activeWildcard?.let { " [${it.emoji} ${it.title}]" }.orEmpty()
                         Text(
-                            text = "“${state.metaphorText.orEmpty()}” — ${state.sageAvatar?.emoji ?: ""} ${state.sageName.orEmpty()}",
+                            text = "“${state.metaphorText.orEmpty()}” — ${state.sageAvatar?.emoji ?: ""} ${state.sageName.orEmpty()}$wcTag",
                             color = ParlorColors.Cream.copy(alpha = 0.92f),
                             fontSize = 16.sp,
                             lineHeight = 20.sp,
@@ -112,22 +146,22 @@ fun RevealScreen(
                     }
                 }
 
-                // Revealed Options List (sized so all 4 or 5 options fit cleanly without overflow)
+                // Option Rows (Beat 1 shows voters in suspense; Beat 2 illuminates Truth!)
                 Column(
                     modifier = Modifier
                         .weight(1f)
-                        .padding(vertical = 8.dp),
-                    verticalArrangement = Arrangement.spacedBy(7.dp, Alignment.CenterVertically),
+                        .padding(vertical = 6.dp),
+                    verticalArrangement = Arrangement.spacedBy(6.dp, Alignment.CenterVertically),
                 ) {
                     state.options.forEach { opt ->
                         RevealOptionRow(
                             option = opt,
                             voters = opt.voterIds.mapNotNull { playersById[it] },
+                            revealed = revealAnswer,
                         )
                     }
                 }
 
-                // Next Action Footer
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(16.dp),
@@ -139,7 +173,7 @@ fun RevealScreen(
                         gold = true,
                     )
                     Text(
-                        text = "Seekers: tap 👏 Bravo on your phone!",
+                        text = "Seekers: tap ⭐ Poet's Star (+25) on your phone for great metaphors!",
                         color = ParlorColors.MutedLavender,
                         fontSize = 14.sp,
                         modifier = Modifier.weight(1f),
@@ -147,7 +181,7 @@ fun RevealScreen(
                 }
             }
 
-            // Right: Live Round Scoreboard Panel
+            // Right: Live Animated Round Scoreboard Panel
             Surface(
                 modifier = Modifier
                     .weight(0.85f)
@@ -166,7 +200,7 @@ fun RevealScreen(
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Text(
-                            text = "STANDINGS",
+                            text = if (state.roundMultiplier > 1) "STANDINGS · 2×" else "STANDINGS",
                             color = ParlorColors.GoldBright,
                             fontSize = 16.sp,
                             fontWeight = FontWeight.ExtraBold,
@@ -181,10 +215,23 @@ fun RevealScreen(
 
                     state.players.take(7).forEach { p ->
                         val delta = deltasById[p.id]
+                        val targetScore = if (revealScores) p.score else (p.score - (delta?.pointsEarned ?: 0)).coerceAtLeast(0)
+                        val animatedScore by animateIntAsState(
+                            targetValue = targetScore,
+                            animationSpec = tween(650),
+                            label = "score_roll_${p.id}",
+                        )
+                        val roleBadge = when {
+                            p.id == state.sageId && revealScores && (delta?.wildcardBonus ?: 0) > 0 ->
+                                "${delta?.roleLabel ?: "Sage"} · Wildcard +40"
+                            p.id == state.sageId -> delta?.roleLabel ?: "Sage"
+                            revealScores && delta?.usedDoubleDown == true -> delta.roleLabel
+                            else -> null
+                        }
                         PlayerAvatarChip(
-                            player = p,
-                            highlightRole = if (p.id == state.sageId) (delta?.roleLabel ?: "Sage") else null,
-                            deltaPoints = delta?.pointsEarned,
+                            player = p.copy(score = animatedScore),
+                            highlightRole = roleBadge,
+                            deltaPoints = if (revealScores) delta?.pointsEarned else null,
                             modifier = Modifier.fillMaxWidth(),
                         )
                     }
@@ -199,10 +246,12 @@ fun RevealScreen(
 private fun RevealOptionRow(
     option: ChoiceOption,
     voters: List<PlayerView>,
+    revealed: Boolean,
 ) {
-    val isRight = option.isCorrect
-    val scale by animateFloatAsState(if (isRight) 1.015f else 0.985f, tween(350), label = "rev_scale")
-    val alpha by animateFloatAsState(if (isRight) 1f else 0.76f, tween(350), label = "rev_alpha")
+    val isRight = revealed && option.isCorrect
+    val dimmed = revealed && !option.isCorrect
+    val scale by animateFloatAsState(if (isRight) 1.015f else if (dimmed) 0.985f else 1f, tween(350), label = "rev_scale")
+    val alpha by animateFloatAsState(if (dimmed) 0.72f else 1f, tween(350), label = "rev_alpha")
     val accent = if (isRight) ParlorColors.Success else ParlorColors.optionAccent(option.id)
 
     Surface(
@@ -211,13 +260,13 @@ private fun RevealOptionRow(
             .scale(scale)
             .alpha(alpha),
         shape = RoundedCornerShape(18.dp),
-        color = if (isRight) ParlorColors.SuccessBg else ParlorColors.VelvetCard.copy(alpha = 0.72f),
-        border = BorderStroke(if (isRight) 2.5.dp else 1.dp, accent.copy(alpha = if (isRight) 1f else 0.4f)),
+        color = if (isRight) ParlorColors.SuccessBg else ParlorColors.VelvetCard.copy(alpha = 0.78f),
+        border = BorderStroke(if (isRight) 2.5.dp else 1.2.dp, accent.copy(alpha = if (isRight) 1f else 0.5f)),
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 14.dp, vertical = 8.dp),
+                .padding(horizontal = 14.dp, vertical = 6.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(12.dp),
         ) {
@@ -257,17 +306,20 @@ private fun RevealOptionRow(
                 )
             }
 
-            // Voter Avatars Pill Cluster
             if (voters.isNotEmpty()) {
                 FlowRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                     voters.forEach { v ->
+                        val ddMark = if (v.doubledDownThisTurn) "🦉" else ""
                         Surface(
                             shape = RoundedCornerShape(999.dp),
                             color = ParlorColors.DeepNight.copy(alpha = 0.85f),
-                            border = BorderStroke(1.dp, ParlorColors.parseHex(v.avatar.colorHex)),
+                            border = BorderStroke(
+                                if (v.doubledDownThisTurn) 2.dp else 1.dp,
+                                if (v.doubledDownThisTurn) ParlorColors.GoldBright else ParlorColors.parseHex(v.avatar.colorHex),
+                            ),
                         ) {
                             Text(
-                                text = "${v.avatar.emoji} ${v.name}",
+                                text = "$ddMark${v.avatar.emoji} ${v.name}",
                                 color = ParlorColors.Cream,
                                 fontSize = 13.sp,
                                 fontWeight = FontWeight.Bold,

@@ -40,4 +40,20 @@ Each turn casts one player as the **Sage** and all remaining players as **Seeker
   - `0 pts` if nobody guesses correctly
   - `150 pts` in 2-player mode when the single Seeker guesses correctly
   - `round(150 * correctCount / seekerCount)` for ≥ 2 Seekers, plus `+30 pts` **Master Sage Clarity Bonus** when every Seeker decodes the metaphor (`180 pts` total)
-- **Bravo Applause**: `+10 pts` per Seeker Bravo during Reveal, capped at `+30 pts` per round so social praise feels rewarding without distorting competitive standings.
+- **Bravo / Poet's Star**: `+25 pts` per Seeker Poet's Star during Reveal (capped at `+50 pts` per round) to reward hilarious, creative metaphors over dry synonyms.
+- **Wildcard Metaphor World**: Optional thematic challenge (`+40 pts` Style Bonus when accepted and decoded by ≥ 1 Seeker).
+- **Golden Owl 2× Double-Down**: One-shot per-player wager during Guessing (`2×` total Seeker points on hit; `−50 pts` floored at `0` on miss).
+- **🔥 2× Final Cycle**: In multi-cycle games (`Classic` / `Marathon`), the entire final cycle doubles both Seeker and Sage points symmetrically so every player stays alive until the finish.
+
+---
+
+## 4. v1.1.0 Party Playability Upgrades Shipped
+
+1. **Simultaneous "Party Sprint" Writing (Default on TV)**: Replaces sequential typing wait with one shared writing sprint for all players, followed by nonstop rapid-fire showcases (`GUESSING → REVEAL`).
+2. **3-Beat Theatrical Reveal + Offline TV Narrator**: Reveals voters first (`0–1.8s`), illuminates the true lesson with confetti (`1.8s`), then rolls up scores (`2.5s+`); Android TV `TextToSpeech` dramatically narrates metaphors aloud with automatic BGM ducking.
+3. **Sage Decoy Preview**: Pre-builds each scroll's options during `WRITING` and previews 2 competing decoys privately to the Sage so metaphors avoid accidental overlap.
+4. **Golden Owl 2× Bet + 2× Final Cycle**: Adds high-stakes couch drama and fair late-game comebacks.
+5. **Wildcard Metaphor Worlds + Boosted Poet's Star**: Shifts optimal play from safe synonym-swapping to genuinely funny storytelling.
+6. **Modern & Funny Pack (+30 Lessons = 150 Total) + Decoy Audit**: Sharpens overlapping decoys and adds selectable *Modern & Funny* life lessons.
+7. **Live Floating Couch Reactions (`🔥 😂 🤔 👏 🤯 🦉`)**: Keeps phones lively while waiting on writers, locked in, or celebrating on the Podium.
+8. **Mid-Game Late Joiners + Android 17 Chrome QR Bridge**: Routes QR scans through `https://grwilke.github.io/words-of-wisdom/join#<ip>:<port>` so Android 17 Chrome prompts cleanly for Local Network Access.

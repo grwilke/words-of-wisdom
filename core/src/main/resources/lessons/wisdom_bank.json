@@ -1,10 +1,11 @@
 {
-  "version": 1,
-  "count": 120,
+  "version": 2,
+  "count": 150,
   "lessons": [
     {
       "id": "connection_01",
       "theme": "Connection",
+      "pack": "CLASSIC",
       "lesson": "Nobody can be happy alone",
       "decoys": [
         "True peace begins when you enjoy your own quiet company",
@@ -23,6 +24,7 @@
     {
       "id": "connection_02",
       "theme": "Connection",
+      "pack": "CLASSIC",
       "lesson": "True friends show up when times get hard",
       "decoys": [
         "Nobody can be happy alone",
@@ -41,13 +43,14 @@
     {
       "id": "connection_03",
       "theme": "Connection",
+      "pack": "CLASSIC",
       "lesson": "You become like the company you keep",
       "decoys": [
         "Good listeners learn far more than loud talkers ever do",
         "Kindness toward strangers quietly circles back to your doorstep",
         "Even the strongest bridge needs two solid banks to stand",
         "Old friendships survive long silences without losing warmth",
-        "Choosing your circle carefully protects your future self"
+        "Shared laughter heals awkward silences faster than formal speeches"
       ],
       "sparks": [
         "pebbles in ink",
@@ -59,6 +62,7 @@
     {
       "id": "connection_04",
       "theme": "Connection",
+      "pack": "CLASSIC",
       "lesson": "Listening teaches more than talking ever will",
       "decoys": [
         "Speaking the truth gently opens doors that shouting slams shut",
@@ -77,9 +81,10 @@
     {
       "id": "connection_05",
       "theme": "Connection",
+      "pack": "CLASSIC",
       "lesson": "A shared burden feels half as heavy",
       "decoys": [
-        "Asking for help is a sign of strength rather than weakness",
+        "Quiet consistency outperforms sudden bursts of frantic energy",
         "Trying to please everyone leaves nobody truly satisfied",
         "Small daily favors build the sturdiest bridges between neighbors",
         "Gratitude turns an ordinary meal into a royal feast",
@@ -95,6 +100,7 @@
     {
       "id": "connection_06",
       "theme": "Connection",
+      "pack": "CLASSIC",
       "lesson": "Distance reveals who truly cares about you",
       "decoys": [
         "Staying too close to comfort keeps you from seeing the world",
@@ -113,9 +119,10 @@
     {
       "id": "connection_07",
       "theme": "Connection",
+      "pack": "CLASSIC",
       "lesson": "Trying to please everyone leaves you exhausted",
       "decoys": [
-        "Saying no kindly protects the promises you already made",
+        "A warm sense of humor opens doors that solemn lectures lock",
         "Nobody can be happy alone",
         "Comparing your journey to your neighbor steals your joy",
         "Staying authentic attracts the people meant for you",
@@ -131,6 +138,7 @@
     {
       "id": "connection_08",
       "theme": "Connection",
+      "pack": "CLASSIC",
       "lesson": "Words spoken in anger are impossible to take back",
       "decoys": [
         "Forgiving someone sets your own heart free before theirs",
@@ -149,6 +157,7 @@
     {
       "id": "connection_09",
       "theme": "Connection",
+      "pack": "CLASSIC",
       "lesson": "Every stranger is fighting a hidden battle",
       "decoys": [
         "First impressions rarely tell the second chapter of a person",
@@ -167,6 +176,7 @@
     {
       "id": "connection_10",
       "theme": "Connection",
+      "pack": "CLASSIC",
       "lesson": "Family is chosen by love as much as blood",
       "decoys": [
         "Home feels warmest wherever someone leaves the porch light on",
@@ -185,6 +195,7 @@
     {
       "id": "connection_11",
       "theme": "Connection",
+      "pack": "CLASSIC",
       "lesson": "Asking for help is a sign of strength",
       "decoys": [
         "A shared burden feels half as heavy",
@@ -203,6 +214,7 @@
     {
       "id": "connection_12",
       "theme": "Connection",
+      "pack": "CLASSIC",
       "lesson": "Love grows deeper through tiny daily habits",
       "decoys": [
         "Grand gestures fade fast when everyday respect is missing",
@@ -221,6 +233,7 @@
     {
       "id": "patience_01",
       "theme": "Patience",
+      "pack": "CLASSIC",
       "lesson": "Good things take time to grow",
       "decoys": [
         "Rushing through work forces you to build everything twice",
@@ -239,6 +252,7 @@
     {
       "id": "patience_02",
       "theme": "Patience",
+      "pack": "CLASSIC",
       "lesson": "Rushing a job usually means doing it twice",
       "decoys": [
         "Good things take time to grow",
@@ -257,6 +271,7 @@
     {
       "id": "patience_03",
       "theme": "Patience",
+      "pack": "CLASSIC",
       "lesson": "Storms always pass eventually",
       "decoys": [
         "Hard seasons teach skills that sunny afternoons never demand",
@@ -275,6 +290,7 @@
     {
       "id": "patience_04",
       "theme": "Patience",
+      "pack": "CLASSIC",
       "lesson": "Small daily steps beat giant rare leaps",
       "decoys": [
         "Good things take time to grow",
@@ -293,6 +309,7 @@
     {
       "id": "patience_05",
       "theme": "Patience",
+      "pack": "CLASSIC",
       "lesson": "Timing matters as much as effort",
       "decoys": [
         "Waiting for the right moment is not the same as procrastinating",
@@ -311,6 +328,7 @@
     {
       "id": "patience_06",
       "theme": "Patience",
+      "pack": "CLASSIC",
       "lesson": "Worrying today never fixes tomorrow",
       "decoys": [
         "Storms always pass eventually",
@@ -329,6 +347,7 @@
     {
       "id": "patience_07",
       "theme": "Patience",
+      "pack": "CLASSIC",
       "lesson": "Rest is necessary for lasting energy",
       "decoys": [
         "Small daily steps beat giant rare leaps",
@@ -347,6 +366,7 @@
     {
       "id": "patience_08",
       "theme": "Patience",
+      "pack": "CLASSIC",
       "lesson": "Wait until anger cools before deciding",
       "decoys": [
         "Words spoken in anger are impossible to take back",
@@ -365,6 +385,7 @@
     {
       "id": "patience_09",
       "theme": "Patience",
+      "pack": "CLASSIC",
       "lesson": "Shortcuts often end up taking longer",
       "decoys": [
         "Rushing a job usually means doing it twice",
@@ -383,6 +404,7 @@
     {
       "id": "patience_10",
       "theme": "Patience",
+      "pack": "CLASSIC",
       "lesson": "Time reveals what haste tries to hide",
       "decoys": [
         "First impressions rarely capture a person's whole character",
@@ -401,6 +423,7 @@
     {
       "id": "patience_11",
       "theme": "Patience",
+      "pack": "CLASSIC",
       "lesson": "You cannot hurry someone else's healing",
       "decoys": [
         "Storms always pass eventually",
@@ -419,6 +442,7 @@
     {
       "id": "patience_12",
       "theme": "Patience",
+      "pack": "CLASSIC",
       "lesson": "Plant seeds today for shade tomorrow",
       "decoys": [
         "Small daily steps beat giant rare leaps",
@@ -437,6 +461,7 @@
     {
       "id": "courage_01",
       "theme": "Courage",
+      "pack": "CLASSIC",
       "lesson": "Fear shrinks the moment you face it",
       "decoys": [
         "Bravery means walking forward even while your knees knock",
@@ -455,6 +480,7 @@
     {
       "id": "courage_02",
       "theme": "Courage",
+      "pack": "CLASSIC",
       "lesson": "You miss every chance you refuse to take",
       "decoys": [
         "Fear shrinks the moment you face it",
@@ -473,6 +499,7 @@
     {
       "id": "courage_03",
       "theme": "Courage",
+      "pack": "CLASSIC",
       "lesson": "Comfort zones rarely produce new discoveries",
       "decoys": [
         "Change feels frightening right before it starts feeling liberating",
@@ -491,6 +518,7 @@
     {
       "id": "courage_04",
       "theme": "Courage",
+      "pack": "CLASSIC",
       "lesson": "Regret lasts longer than brief embarrassment",
       "decoys": [
         "Fear shrinks the moment you face it",
@@ -509,6 +537,7 @@
     {
       "id": "courage_05",
       "theme": "Courage",
+      "pack": "CLASSIC",
       "lesson": "Standing alone for right takes real grit",
       "decoys": [
         "Following the crowd blindly leads straight off comfortable cliffs",
@@ -527,6 +556,7 @@
     {
       "id": "courage_06",
       "theme": "Courage",
+      "pack": "CLASSIC",
       "lesson": "Starting is the hardest part of any quest",
       "decoys": [
         "Small daily steps beat giant rare leaps",
@@ -545,6 +575,7 @@
     {
       "id": "courage_07",
       "theme": "Courage",
+      "pack": "CLASSIC",
       "lesson": "Bravery means acting while still afraid",
       "decoys": [
         "Fear shrinks the moment you face it",
@@ -563,6 +594,7 @@
     {
       "id": "courage_08",
       "theme": "Courage",
+      "pack": "CLASSIC",
       "lesson": "Failure is a teacher, not a verdict",
       "decoys": [
         "Every master once collected a drawer full of crooked sketches",
@@ -581,6 +613,7 @@
     {
       "id": "courage_09",
       "theme": "Courage",
+      "pack": "CLASSIC",
       "lesson": "Big doors swing on very small hinges",
       "decoys": [
         "One polite introduction can change the arc of a decade",
@@ -599,6 +632,7 @@
     {
       "id": "courage_10",
       "theme": "Courage",
+      "pack": "CLASSIC",
       "lesson": "Saying no protects what truly matters",
       "decoys": [
         "Trying to please everyone leaves you exhausted",
@@ -617,6 +651,7 @@
     {
       "id": "courage_11",
       "theme": "Courage",
+      "pack": "CLASSIC",
       "lesson": "Doubt kills more dreams than failure ever has",
       "decoys": [
         "You miss every chance you refuse to take",
@@ -635,6 +670,7 @@
     {
       "id": "courage_12",
       "theme": "Courage",
+      "pack": "CLASSIC",
       "lesson": "Smooth seas never made a skilled sailor",
       "decoys": [
         "Storms always pass eventually",
@@ -653,6 +689,7 @@
     {
       "id": "humility_01",
       "theme": "Humility",
+      "pack": "CLASSIC",
       "lesson": "Pride comes right before a hard fall",
       "decoys": [
         "Admitting mistakes quickly earns more respect than defending them",
@@ -671,6 +708,7 @@
     {
       "id": "humility_02",
       "theme": "Humility",
+      "pack": "CLASSIC",
       "lesson": "The wisest people know how little they know",
       "decoys": [
         "Curiosity keeps your mind young long after diplomas yellow",
@@ -689,6 +727,7 @@
     {
       "id": "humility_03",
       "theme": "Humility",
+      "pack": "CLASSIC",
       "lesson": "Admitting a mistake earns deeper respect",
       "decoys": [
         "Pride comes right before a hard fall",
@@ -707,6 +746,7 @@
     {
       "id": "humility_04",
       "theme": "Humility",
+      "pack": "CLASSIC",
       "lesson": "Empty vessels make the loudest noise",
       "decoys": [
         "The wisest people know how little they know",
@@ -725,6 +765,7 @@
     {
       "id": "humility_05",
       "theme": "Humility",
+      "pack": "CLASSIC",
       "lesson": "Everyone you meet can teach you something",
       "decoys": [
         "The wisest people know how little they know",
@@ -743,6 +784,7 @@
     {
       "id": "humility_06",
       "theme": "Humility",
+      "pack": "CLASSIC",
       "lesson": "Success tests character more than hardship does",
       "decoys": [
         "Pride comes right before a hard fall",
@@ -761,6 +803,7 @@
     {
       "id": "humility_07",
       "theme": "Humility",
+      "pack": "CLASSIC",
       "lesson": "Changing your mind with new facts is wisdom",
       "decoys": [
         "Admitting a mistake earns deeper respect",
@@ -779,6 +822,7 @@
     {
       "id": "humility_08",
       "theme": "Humility",
+      "pack": "CLASSIC",
       "lesson": "Credit shared widely multiplies a team's spirit",
       "decoys": [
         "True leaders take blame privately and give praise publicly",
@@ -797,6 +841,7 @@
     {
       "id": "humility_09",
       "theme": "Humility",
+      "pack": "CLASSIC",
       "lesson": "Never look down on anyone unless helping them up",
       "decoys": [
         "Kindness to strangers costs nothing and echoes far",
@@ -815,6 +860,7 @@
     {
       "id": "humility_10",
       "theme": "Humility",
+      "pack": "CLASSIC",
       "lesson": "Laughing at yourself keeps ego in check",
       "decoys": [
         "Regret lasts longer than brief embarrassment",
@@ -833,6 +879,7 @@
     {
       "id": "humility_11",
       "theme": "Humility",
+      "pack": "CLASSIC",
       "lesson": "True greatness shows up in tiny chores",
       "decoys": [
         "Empty vessels make the loudest noise",
@@ -851,6 +898,7 @@
     {
       "id": "humility_12",
       "theme": "Humility",
+      "pack": "CLASSIC",
       "lesson": "Even the tallest tree started as a seed",
       "decoys": [
         "Never mock clumsy beginnings before the story unfolds",
@@ -869,6 +917,7 @@
     {
       "id": "truth_01",
       "theme": "Truth",
+      "pack": "CLASSIC",
       "lesson": "Not everything shiny is pure gold",
       "decoys": [
         "Appearances often hide the cracked engine underneath the hood",
@@ -887,13 +936,14 @@
     {
       "id": "truth_02",
       "theme": "Truth",
+      "pack": "CLASSIC",
       "lesson": "Actions speak far louder than promises",
       "decoys": [
         "Empty vessels make the loudest noise",
         "Trust takes years to build and seconds to shatter",
         "Watch what people do when convenience runs out",
         "Honesty without kindness still leaves bruises",
-        "Small consistent deeds outweigh grand yearly speeches"
+        "Keeping a cool head turns tangled disputes into calm bargains"
       ],
       "sparks": [
         "bread vs a menu",
@@ -905,6 +955,7 @@
     {
       "id": "truth_03",
       "theme": "Truth",
+      "pack": "CLASSIC",
       "lesson": "One lie always demands ten more lies",
       "decoys": [
         "Telling the truth spares you from memorizing a complicated script",
@@ -923,6 +974,7 @@
     {
       "id": "truth_04",
       "theme": "Truth",
+      "pack": "CLASSIC",
       "lesson": "Half-truths can mislead as much as lies",
       "decoys": [
         "One lie always demands ten more lies",
@@ -941,6 +993,7 @@
     {
       "id": "truth_05",
       "theme": "Truth",
+      "pack": "CLASSIC",
       "lesson": "We see the world through our own lens",
       "decoys": [
         "Two witnesses on opposite corners remember two different parades",
@@ -959,6 +1012,7 @@
     {
       "id": "truth_06",
       "theme": "Truth",
+      "pack": "CLASSIC",
       "lesson": "Honesty without kindness feels like cruelty",
       "decoys": [
         "Speaking the truth gently helps people actually hear it",
@@ -977,6 +1031,7 @@
     {
       "id": "truth_07",
       "theme": "Truth",
+      "pack": "CLASSIC",
       "lesson": "Listen to both sides before judging",
       "decoys": [
         "Half-truths can mislead as much as lies",
@@ -995,6 +1050,7 @@
     {
       "id": "truth_08",
       "theme": "Truth",
+      "pack": "CLASSIC",
       "lesson": "A rumor travels faster than the truth",
       "decoys": [
         "Words spoken in anger are impossible to take back",
@@ -1013,6 +1069,7 @@
     {
       "id": "truth_09",
       "theme": "Truth",
+      "pack": "CLASSIC",
       "lesson": "You cannot fool yourself for very long",
       "decoys": [
         "Facing uncomfortable realities early saves costly repairs later",
@@ -1031,6 +1088,7 @@
     {
       "id": "truth_10",
       "theme": "Truth",
+      "pack": "CLASSIC",
       "lesson": "Flattery often hides a selfish motive",
       "decoys": [
         "Not everything shiny is pure gold",
@@ -1049,6 +1107,7 @@
     {
       "id": "truth_11",
       "theme": "Truth",
+      "pack": "CLASSIC",
       "lesson": "Character shows when nobody is watching",
       "decoys": [
         "Actions speak far louder than promises",
@@ -1067,6 +1126,7 @@
     {
       "id": "truth_12",
       "theme": "Truth",
+      "pack": "CLASSIC",
       "lesson": "Doubting everything blinds you just like gullibility",
       "decoys": [
         "Trust cautiously, yet leave a window cracked for goodness",
@@ -1085,6 +1145,7 @@
     {
       "id": "growth_01",
       "theme": "Growth",
+      "pack": "CLASSIC",
       "lesson": "Change is the only constant in life",
       "decoys": [
         "Clinging tightly to yesterday bruises your hands against tomorrow",
@@ -1103,6 +1164,7 @@
     {
       "id": "growth_02",
       "theme": "Growth",
+      "pack": "CLASSIC",
       "lesson": "Flexibility outlasts rigid stubbornness",
       "decoys": [
         "Change is the only constant in life",
@@ -1121,10 +1183,11 @@
     {
       "id": "growth_03",
       "theme": "Growth",
+      "pack": "CLASSIC",
       "lesson": "You cannot pour from an empty cup",
       "decoys": [
         "Rest is necessary for lasting energy",
-        "Caring for yourself enables you to care generously for others",
+        "Fresh perspective arrives the moment you step outside for air",
         "Saying no protects what truly matters",
         "Burnout sneaks in disguised as dedication",
         "Pacing your kindness keeps it sustainable for decades"
@@ -1139,6 +1202,7 @@
     {
       "id": "growth_04",
       "theme": "Growth",
+      "pack": "CLASSIC",
       "lesson": "Old habits fade only when replaced",
       "decoys": [
         "Small daily steps beat giant rare leaps",
@@ -1157,6 +1221,7 @@
     {
       "id": "growth_05",
       "theme": "Growth",
+      "pack": "CLASSIC",
       "lesson": "Letting go makes room for better things",
       "decoys": [
         "Clinging to past mistakes prevents you from writing new chapters",
@@ -1175,6 +1240,7 @@
     {
       "id": "growth_06",
       "theme": "Growth",
+      "pack": "CLASSIC",
       "lesson": "Experience is what you earn when plans fail",
       "decoys": [
         "Failure is a teacher, not a verdict",
@@ -1193,6 +1259,7 @@
     {
       "id": "growth_07",
       "theme": "Growth",
+      "pack": "CLASSIC",
       "lesson": "Where attention goes, energy naturally flows",
       "decoys": [
         "Protecting your focus multiplies everything you create",
@@ -1211,6 +1278,7 @@
     {
       "id": "growth_08",
       "theme": "Growth",
+      "pack": "CLASSIC",
       "lesson": "Every expert was once a clumsy beginner",
       "decoys": [
         "Failure is a teacher, not a verdict",
@@ -1229,6 +1297,7 @@
     {
       "id": "growth_09",
       "theme": "Growth",
+      "pack": "CLASSIC",
       "lesson": "Outgrowing old spaces is natural, not cruel",
       "decoys": [
         "Letting go makes room for better things",
@@ -1247,6 +1316,7 @@
     {
       "id": "growth_10",
       "theme": "Growth",
+      "pack": "CLASSIC",
       "lesson": "Curiosity keeps the mind forever young",
       "decoys": [
         "The wisest people know how little they know",
@@ -1265,6 +1335,7 @@
     {
       "id": "growth_11",
       "theme": "Growth",
+      "pack": "CLASSIC",
       "lesson": "You cannot heal in the place that hurt you",
       "decoys": [
         "Changing your surroundings can reset your whole outlook",
@@ -1283,6 +1354,7 @@
     {
       "id": "growth_12",
       "theme": "Growth",
+      "pack": "CLASSIC",
       "lesson": "Progress matters more than perfection",
       "decoys": [
         "Starting is the hardest part of any quest",
@@ -1301,6 +1373,7 @@
     {
       "id": "gratitude_01",
       "theme": "Gratitude",
+      "pack": "CLASSIC",
       "lesson": "Comparison is the thief of joy",
       "decoys": [
         "Enough feels richer than chasing an endless finish line",
@@ -1319,6 +1392,7 @@
     {
       "id": "gratitude_02",
       "theme": "Gratitude",
+      "pack": "CLASSIC",
       "lesson": "Wealth means needing less, not hoarding more",
       "decoys": [
         "Money buys convenience, never genuine peace of mind",
@@ -1337,6 +1411,7 @@
     {
       "id": "gratitude_03",
       "theme": "Gratitude",
+      "pack": "CLASSIC",
       "lesson": "You rarely miss water until the well runs dry",
       "decoys": [
         "Taking everyday blessings for granted dulls their magic",
@@ -1355,6 +1430,7 @@
     {
       "id": "gratitude_04",
       "theme": "Gratitude",
+      "pack": "CLASSIC",
       "lesson": "The grass looks greener because you ignore its weeds",
       "decoys": [
         "Comparison is the thief of joy",
@@ -1373,6 +1449,7 @@
     {
       "id": "gratitude_05",
       "theme": "Gratitude",
+      "pack": "CLASSIC",
       "lesson": "Enjoy small joys before they become memories",
       "decoys": [
         "Worrying today never fixes tomorrow",
@@ -1391,6 +1468,7 @@
     {
       "id": "gratitude_06",
       "theme": "Gratitude",
+      "pack": "CLASSIC",
       "lesson": "Greed ruins even a generous harvest",
       "decoys": [
         "Wealth means needing less, not hoarding more",
@@ -1409,6 +1487,7 @@
     {
       "id": "gratitude_07",
       "theme": "Gratitude",
+      "pack": "CLASSIC",
       "lesson": "Gratitude turns an ordinary meal into a feast",
       "decoys": [
         "Enjoy small joys before they become memories",
@@ -1427,6 +1506,7 @@
     {
       "id": "gratitude_08",
       "theme": "Gratitude",
+      "pack": "CLASSIC",
       "lesson": "Health is a crown only the sick notice",
       "decoys": [
         "You rarely miss water until the well runs dry",
@@ -1445,6 +1525,7 @@
     {
       "id": "gratitude_09",
       "theme": "Gratitude",
+      "pack": "CLASSIC",
       "lesson": "Possessions eventually end up owning you",
       "decoys": [
         "Wealth means needing less, not hoarding more",
@@ -1463,6 +1544,7 @@
     {
       "id": "gratitude_10",
       "theme": "Gratitude",
+      "pack": "CLASSIC",
       "lesson": "Enough is a decision, not a number",
       "decoys": [
         "Wealth means needing less, not hoarding more",
@@ -1481,6 +1563,7 @@
     {
       "id": "gratitude_11",
       "theme": "Gratitude",
+      "pack": "CLASSIC",
       "lesson": "Memories outlast anything you can wrap",
       "decoys": [
         "Possessions eventually end up owning you",
@@ -1499,6 +1582,7 @@
     {
       "id": "gratitude_12",
       "theme": "Gratitude",
+      "pack": "CLASSIC",
       "lesson": "Water your own lawn before admiring your neighbor's",
       "decoys": [
         "The grass looks greener because you ignore its weeds",
@@ -1517,6 +1601,7 @@
     {
       "id": "trust_01",
       "theme": "Trust",
+      "pack": "CLASSIC",
       "lesson": "Trust takes years to earn and seconds to break",
       "decoys": [
         "Actions speak far louder than promises",
@@ -1535,6 +1620,7 @@
     {
       "id": "trust_02",
       "theme": "Trust",
+      "pack": "CLASSIC",
       "lesson": "Once burned, you approach fire more carefully",
       "decoys": [
         "Experience is what you earn when plans fail",
@@ -1553,6 +1639,7 @@
     {
       "id": "trust_03",
       "theme": "Trust",
+      "pack": "CLASSIC",
       "lesson": "Beware anyone who gossips to you about friends",
       "decoys": [
         "A rumor travels faster than the truth",
@@ -1571,6 +1658,7 @@
     {
       "id": "trust_04",
       "theme": "Trust",
+      "pack": "CLASSIC",
       "lesson": "Keep your promises, especially the small ones",
       "decoys": [
         "Trust takes years to earn and seconds to break",
@@ -1589,6 +1677,7 @@
     {
       "id": "trust_05",
       "theme": "Trust",
+      "pack": "CLASSIC",
       "lesson": "Forgiving someone does not mean forgetting the lesson",
       "decoys": [
         "Once burned, you approach fire more carefully",
@@ -1607,6 +1696,7 @@
     {
       "id": "trust_06",
       "theme": "Trust",
+      "pack": "CLASSIC",
       "lesson": "Clear agreements keep good friendships strong",
       "decoys": [
         "Unspoken expectations quietly breed avoidable resentment",
@@ -1625,6 +1715,7 @@
     {
       "id": "trust_07",
       "theme": "Trust",
+      "pack": "CLASSIC",
       "lesson": "Watch how someone treats people they do not need",
       "decoys": [
         "Character shows when nobody is watching",
@@ -1643,6 +1734,7 @@
     {
       "id": "trust_08",
       "theme": "Trust",
+      "pack": "CLASSIC",
       "lesson": "Secrets shared with three rarely stay secret",
       "decoys": [
         "A rumor travels faster than the truth",
@@ -1661,6 +1753,7 @@
     {
       "id": "trust_09",
       "theme": "Trust",
+      "pack": "CLASSIC",
       "lesson": "Loyalty shows when someone defends your absence",
       "decoys": [
         "Beware anyone who gossips to you about friends",
@@ -1679,6 +1772,7 @@
     {
       "id": "trust_10",
       "theme": "Trust",
+      "pack": "CLASSIC",
       "lesson": "Trust your gut when something feels off",
       "decoys": [
         "Not everything shiny is pure gold",
@@ -1697,6 +1791,7 @@
     {
       "id": "trust_11",
       "theme": "Trust",
+      "pack": "CLASSIC",
       "lesson": "Don't burn bridges you might someday cross",
       "decoys": [
         "Words spoken in anger are impossible to take back",
@@ -1715,6 +1810,7 @@
     {
       "id": "trust_12",
       "theme": "Trust",
+      "pack": "CLASSIC",
       "lesson": "Give trust gradually rather than all at once",
       "decoys": [
         "Trust takes years to earn and seconds to break",
@@ -1733,6 +1829,7 @@
     {
       "id": "craft_01",
       "theme": "Craft",
+      "pack": "CLASSIC",
       "lesson": "Measure twice so you only cut once",
       "decoys": [
         "Rushing a job usually means doing it twice",
@@ -1751,6 +1848,7 @@
     {
       "id": "craft_02",
       "theme": "Craft",
+      "pack": "CLASSIC",
       "lesson": "Chasing two rabbits leaves you catching neither",
       "decoys": [
         "Where attention goes, energy naturally flows",
@@ -1769,6 +1867,7 @@
     {
       "id": "craft_03",
       "theme": "Craft",
+      "pack": "CLASSIC",
       "lesson": "Blaming your tools never fixes your craft",
       "decoys": [
         "Skill turns humble supplies into magic",
@@ -1787,6 +1886,7 @@
     {
       "id": "craft_04",
       "theme": "Craft",
+      "pack": "CLASSIC",
       "lesson": "Simplicity is the highest form of skill",
       "decoys": [
         "Adding extra bells rarely hides a shaky melody",
@@ -1805,6 +1905,7 @@
     {
       "id": "craft_05",
       "theme": "Craft",
+      "pack": "CLASSIC",
       "lesson": "Practice quietly makes hard things look easy",
       "decoys": [
         "Small daily steps beat giant rare leaps",
@@ -1823,6 +1924,7 @@
     {
       "id": "craft_06",
       "theme": "Craft",
+      "pack": "CLASSIC",
       "lesson": "A good foundation holds up every storm",
       "decoys": [
         "Shortcuts often end up taking longer",
@@ -1841,6 +1943,7 @@
     {
       "id": "craft_07",
       "theme": "Craft",
+      "pack": "CLASSIC",
       "lesson": "Quality stays remembered long after price fades",
       "decoys": [
         "Shortcuts often end up taking longer",
@@ -1859,6 +1962,7 @@
     {
       "id": "craft_08",
       "theme": "Craft",
+      "pack": "CLASSIC",
       "lesson": "Fresh eyes spot mistakes tired minds miss",
       "decoys": [
         "Rest is necessary for lasting energy",
@@ -1877,6 +1981,7 @@
     {
       "id": "craft_09",
       "theme": "Craft",
+      "pack": "CLASSIC",
       "lesson": "Teach something to truly understand it",
       "decoys": [
         "Simplicity is the highest form of skill",
@@ -1895,6 +2000,7 @@
     {
       "id": "craft_10",
       "theme": "Craft",
+      "pack": "CLASSIC",
       "lesson": "Consistency beats occasional bursts of brilliance",
       "decoys": [
         "Small daily steps beat giant rare leaps",
@@ -1913,6 +2019,7 @@
     {
       "id": "craft_11",
       "theme": "Craft",
+      "pack": "CLASSIC",
       "lesson": "Fix small leaks before they sink the ship",
       "decoys": [
         "Ignoring uncomfortable realities early invites bigger repairs later",
@@ -1931,6 +2038,7 @@
     {
       "id": "craft_12",
       "theme": "Craft",
+      "pack": "CLASSIC",
       "lesson": "Good questions are worth more than quick answers",
       "decoys": [
         "Curiosity keeps the mind forever young",
@@ -1949,6 +2057,7 @@
     {
       "id": "kindness_01",
       "theme": "Kindness",
+      "pack": "CLASSIC",
       "lesson": "Small acts of kindness travel further than you think",
       "decoys": [
         "Kindness costs nothing yet stays remembered for decades",
@@ -1967,6 +2076,7 @@
     {
       "id": "kindness_02",
       "theme": "Kindness",
+      "pack": "CLASSIC",
       "lesson": "Holding a grudge hurts you most of all",
       "decoys": [
         "Forgiving someone sets your own heart free before theirs",
@@ -1985,6 +2095,7 @@
     {
       "id": "kindness_03",
       "theme": "Kindness",
+      "pack": "CLASSIC",
       "lesson": "Lighting another candle never dims your own",
       "decoys": [
         "Credit shared widely multiplies a team's spirit",
@@ -2003,6 +2114,7 @@
     {
       "id": "kindness_04",
       "theme": "Kindness",
+      "pack": "CLASSIC",
       "lesson": "Kindness is never wasted, even unreturned",
       "decoys": [
         "Small acts of kindness travel further than you think",
@@ -2021,6 +2133,7 @@
     {
       "id": "kindness_05",
       "theme": "Kindness",
+      "pack": "CLASSIC",
       "lesson": "Gentle words calm fierce storms",
       "decoys": [
         "Words spoken in anger are impossible to take back",
@@ -2039,6 +2152,7 @@
     {
       "id": "kindness_06",
       "theme": "Kindness",
+      "pack": "CLASSIC",
       "lesson": "What you give out eventually returns to you",
       "decoys": [
         "Small acts of kindness travel further than you think",
@@ -2057,6 +2171,7 @@
     {
       "id": "kindness_07",
       "theme": "Kindness",
+      "pack": "CLASSIC",
       "lesson": "Helping others also heals your own heart",
       "decoys": [
         "Nobody can be happy alone",
@@ -2075,6 +2190,7 @@
     {
       "id": "kindness_08",
       "theme": "Kindness",
+      "pack": "CLASSIC",
       "lesson": "Give without keeping a hidden scorecard",
       "decoys": [
         "Kindness is never wasted, even unreturned",
@@ -2093,6 +2209,7 @@
     {
       "id": "kindness_09",
       "theme": "Kindness",
+      "pack": "CLASSIC",
       "lesson": "Patience is one of the quietest forms of love",
       "decoys": [
         "Love grows deeper through tiny daily habits",
@@ -2111,6 +2228,7 @@
     {
       "id": "kindness_10",
       "theme": "Kindness",
+      "pack": "CLASSIC",
       "lesson": "Celebrate other people's victories genuinely",
       "decoys": [
         "Lighting another candle never dims your own",
@@ -2129,6 +2247,7 @@
     {
       "id": "kindness_11",
       "theme": "Kindness",
+      "pack": "CLASSIC",
       "lesson": "A warm welcome turns strangers into friends",
       "decoys": [
         "Nobody can be happy alone",
@@ -2147,6 +2266,7 @@
     {
       "id": "kindness_12",
       "theme": "Kindness",
+      "pack": "CLASSIC",
       "lesson": "Leave every place slightly better than you found it",
       "decoys": [
         "Plant seeds today for shade tomorrow",
@@ -2161,6 +2281,576 @@
         "planting a trail marker"
       ],
       "botMetaphor": "Tucking one stray seashell and two soda caps into your pocket keeps the whole cove shining for tomorrow's campers"
+    },
+    {
+      "id": "modern_connection_01",
+      "theme": "Connection",
+      "pack": "MODERN",
+      "lesson": "Never trust a coworker who says quick question",
+      "decoys": [
+        "Replying all on a massive email thread invites chaos into your week",
+        "Meetings scheduled on Friday afternoon drain the sun out of the sky",
+        "Leaving a group chat quietly requires ninja-level diplomacy",
+        "Nobody finishes a five-minute hallway chat in five minutes",
+        "Free donuts in the breakroom unite bitter office rivals instantly"
+      ],
+      "sparks": [
+        "a raccoon at a picnic",
+        "an innocent doorbell",
+        "a bottomless suitcase"
+      ],
+      "botMetaphor": "A raccoon promising to borrow one tiny grape leaves with your entire picnic hamper"
+    },
+    {
+      "id": "modern_connection_02",
+      "theme": "Connection",
+      "pack": "MODERN",
+      "lesson": "Never split a dinner bill with someone ordering lobster",
+      "decoys": [
+        "Borrowing a friend's charger without returning it tests ancient loyalties",
+        "The friend who says they are five minutes away has not put on shoes yet",
+        "Picking a restaurant with six hungry people takes longer than cooking",
+        "A good road-trip copilot controls the snacks and the playlist wisely",
+        "Nobody remembers who paid last Tuesday until dessert arrives"
+      ],
+      "sparks": [
+        "a redwood vs daisies",
+        "splitting a treasure chest",
+        "a whale at a buffet"
+      ],
+      "botMetaphor": "Sharing one watering can fairly fails when your neighbor planted a thirsty redwood"
+    },
+    {
+      "id": "modern_connection_03",
+      "theme": "Connection",
+      "pack": "MODERN",
+      "lesson": "The friend saying five minutes away just left the shower",
+      "decoys": [
+        "Never split a dinner bill with someone ordering lobster",
+        "Texting okay with a period makes everyone suspect an invisible feud",
+        "Canceling plans at the last minute brings secret relief to both sofas",
+        "Always confirm the address before driving across town for dinner",
+        "Borrowing a jacket from a taller sibling guarantees floppy sleeves"
+      ],
+      "sparks": [
+        "a sleepy rooster",
+        "a slow train schedule",
+        "a turtle yelling almost there"
+      ],
+      "botMetaphor": "When the town clock swears noon is moments away, the sun is still lacing its boots"
+    },
+    {
+      "id": "modern_patience_01",
+      "theme": "Patience",
+      "pack": "MODERN",
+      "lesson": "A watched loading bar always freezes near the end",
+      "decoys": [
+        "Restarting the Wi-Fi router fixes half of modern civilization",
+        "The elevator arrives fastest the second you step toward the stairs",
+        "Waiting for a package makes every passing delivery truck sound like yours",
+        "Clicking the frozen button twelve times only wakes up twelve copies later",
+        "Cooking pasta takes forever until you glance away and it boils over"
+      ],
+      "sparks": [
+        "staring at a snail",
+        "a shy toaster",
+        "watching paint dry"
+      ],
+      "botMetaphor": "Staring intensely at a shy garden snail convinces it to nap inside its porcelain porch"
+    },
+    {
+      "id": "modern_patience_02",
+      "theme": "Patience",
+      "pack": "MODERN",
+      "lesson": "Avocados ripen during the ten minutes you blink",
+      "decoys": [
+        "A watched loading bar always freezes near the end",
+        "Leftovers hidden behind the milk carton quietly invent new civilizations",
+        "Toasting pine nuts goes from pale snow to charcoal in half a heartbeat",
+        "Bananas bought green on Monday start plotting banana bread by Thursday",
+        "Never microwave soup uncovered unless you enjoy scrubbing ceilings"
+      ],
+      "sparks": [
+        "a sneaky dragon egg",
+        "a fleeting rainbow",
+        "a ticking soufflé"
+      ],
+      "botMetaphor": "A rock-hard emerald dragon egg waits three weeks only to turn into mush while you tie your shoes"
+    },
+    {
+      "id": "modern_patience_03",
+      "theme": "Patience",
+      "pack": "MODERN",
+      "lesson": "The bus arrives the moment you decide to walk",
+      "decoys": [
+        "A watched loading bar always freezes near the end",
+        "Switching into the faster checkout lane instantly summons a price check",
+        "Every red traffic light waits specifically for people running late",
+        "Washing your car is the most reliable rain dance ever invented",
+        "Forgetting your umbrella guarantees a surprise tropical monsoon"
+      ],
+      "sparks": [
+        "a sneaky ferry",
+        "an umbrella on a sunny day",
+        "a shy elevator"
+      ],
+      "botMetaphor": "The stubborn ferry only blows its cheerful horn once your boots are wet crossing the bridge"
+    },
+    {
+      "id": "modern_courage_01",
+      "theme": "Courage",
+      "pack": "MODERN",
+      "lesson": "Sending a risky text feels like defusing a bomb",
+      "decoys": [
+        "Calling customer service on the telephone requires heroic deep breaths",
+        "Telling the barber you dislike the haircut takes nerves of pure titanium",
+        "Checking your bank balance after vacation demands theatrical bravery",
+        "Opening a mysterious container in the back of the fridge tests every instinct",
+        "Walking past a barking lawn goose requires calm eye contact"
+      ],
+      "sparks": [
+        "a message in a bottle",
+        "stepping onto thin ice",
+        "jumping off a high dive"
+      ],
+      "botMetaphor": "Tossing a glass bottle into stormy waves makes your pulse gallop faster than a startled pony"
+    },
+    {
+      "id": "modern_courage_02",
+      "theme": "Courage",
+      "pack": "MODERN",
+      "lesson": "Telling the barber you dislike the haircut takes titanium nerves",
+      "decoys": [
+        "Sending a risky text feels like defusing a bomb",
+        "Saying I forgot your name after three meetings takes honest grit",
+        "Refusing a third plate of casserole at grandma's table is nearly impossible",
+        "Walking back inside after waving goodbye at the driveway feels surreal",
+        "Asking someone to repeat themselves a fourth time tests all courage"
+      ],
+      "sparks": [
+        "a knight and a sculptor",
+        "returning soup politely",
+        "speaking up at an auction"
+      ],
+      "botMetaphor": "Whispering to a proud sculptor that the marble bangs look lopsided demands a knight's shield"
+    },
+    {
+      "id": "modern_courage_03",
+      "theme": "Courage",
+      "pack": "MODERN",
+      "lesson": "Checking your bank balance after vacation takes real bravery",
+      "decoys": [
+        "Sending a risky text feels like defusing a bomb",
+        "Never go grocery shopping while completely starving",
+        "Impulse buying at midnight produces baffling cardboard boxes by Thursday",
+        "Canceling a forgotten free trial before billing day is an extreme sport",
+        "Reading your own old diary entries builds instant humility"
+      ],
+      "sparks": [
+        "an empty cookie jar",
+        "an unopened envelope",
+        "stepping onto a scale"
+      ],
+      "botMetaphor": "Peeking inside the cookie jar after a festive weekend feels like inspecting a dragon's cave"
+    },
+    {
+      "id": "modern_humility_01",
+      "theme": "Humility",
+      "pack": "MODERN",
+      "lesson": "Reading your own old messages builds instant humility",
+      "decoys": [
+        "Tripping on a completely flat sidewalk reminds your ego who owns gravity",
+        "Waving enthusiastically at a stranger who waved at someone behind you stings",
+        "Forgetting why you walked into the kitchen happens to the sharpest minds",
+        "Hearing your own recorded voice humbles even opera singers",
+        "Searching frantically for glasses already perched on your forehead cures pride"
+      ],
+      "sparks": [
+        "a third-grade crayon drawing",
+        "an old yearbook photo",
+        "a squeaky karaoke tape"
+      ],
+      "botMetaphor": "Unearthing a crayon portrait you proudly drew in third grade keeps your halo nicely level"
+    },
+    {
+      "id": "modern_humility_02",
+      "theme": "Humility",
+      "pack": "MODERN",
+      "lesson": "Waving back at someone waving behind you humbles anyone",
+      "decoys": [
+        "Reading your own old messages builds instant humility",
+        "Saying you too when the waiter says enjoy your meal lives forever",
+        "Pushing a door labeled pull while three people watch sharpens character",
+        "Accidentally liking a five-year-old vacation photo requires immediate retreat",
+        "Laughing confidently at a joke you misheard teaches quiet caution"
+      ],
+      "sparks": [
+        "bowing at the wrong curtain call",
+        "catching a stray salute",
+        "a confused parade float"
+      ],
+      "botMetaphor": "Bowing gracefully for an ovation aimed at the violinist standing over your shoulder melts all swagger"
+    },
+    {
+      "id": "modern_humility_03",
+      "theme": "Humility",
+      "pack": "MODERN",
+      "lesson": "Looking for glasses perched on your own forehead cures arrogance",
+      "decoys": [
+        "Reading your own old messages builds instant humility",
+        "Using your phone flashlight to hunt for your phone builds character",
+        "Walking confidently into the wrong aisle happens to every navigator",
+        "Waving back at someone waving behind you humbles anyone",
+        "Spelling a simple word wrong twice makes you doubt the whole alphabet"
+      ],
+      "sparks": [
+        "a missing royal crown",
+        "a flashlight hunting itself",
+        "a hound sniffing its tail"
+      ],
+      "botMetaphor": "Hunting across seven kingdoms for a royal crown currently warming your own ears keeps royalty grounded"
+    },
+    {
+      "id": "modern_truth_01",
+      "theme": "Truth",
+      "pack": "MODERN",
+      "lesson": "Nobody reads the terms of service before clicking agree",
+      "decoys": [
+        "Online product photos always hide how tiny the actual lamp is",
+        "A recipe claiming ten-minute prep secretly requires chopping for an hour",
+        "Saying I will remember that without writing it down is pure fiction",
+        "Packing five extra books for a two-day trip fools nobody",
+        "Everyone turns down the car radio to see street signs better"
+      ],
+      "sparks": [
+        "signing a blindfolded scroll",
+        "skipping a giant contract",
+        "jumping past the fine print"
+      ],
+      "botMetaphor": "Every eager traveler signs a thousand-page parchment treaty blindfolded just to cross the wooden bridge"
+    },
+    {
+      "id": "modern_truth_02",
+      "theme": "Truth",
+      "pack": "MODERN",
+      "lesson": "A recipe claiming ten-minute prep is pure fiction",
+      "decoys": [
+        "Nobody reads the terms of service before clicking agree",
+        "Assembling flat-pack furniture always leaves one mysterious silver screw",
+        "The person who says just eyeball the seasoning ruins unsuspecting dinners",
+        "Telling yourself just one more episode at midnight never ends at one",
+        "A restaurant with forty pages of dishes rarely masters every kitchen"
+      ],
+      "sparks": [
+        "a lying mountain trail sign",
+        "a crooked stopwatch",
+        "a magician's hourglass"
+      ],
+      "botMetaphor": "Any travel brochure swearing the mountain summit sits five easy paces from parking sells fairy tales"
+    },
+    {
+      "id": "modern_truth_03",
+      "theme": "Truth",
+      "pack": "MODERN",
+      "lesson": "Saying I will remember without writing it down is a trap",
+      "decoys": [
+        "Nobody reads the terms of service before clicking agree",
+        "Hiding your spare key in an extra clever spot hides it from yourself too",
+        "A password invented during a coffee rush vanishes by next Tuesday",
+        "Leaving one sticky note on the fridge outperforms a thousand promises",
+        "Screenshots saved for later quietly join a museum of forgotten ideas"
+      ],
+      "sparks": [
+        "writing on an ice cube",
+        "whispering to a goldfish",
+        "catching fog in a net"
+      ],
+      "botMetaphor": "Carving your grocery list onto a melting ice cube guarantees you return home without milk"
+    },
+    {
+      "id": "modern_growth_01",
+      "theme": "Growth",
+      "pack": "MODERN",
+      "lesson": "Revenge bedtime scrolling steals tomorrow's energy",
+      "decoys": [
+        "Drinking espresso at five in the evening negotiates poorly with midnight",
+        "Setting six snooze alarms trains your brain to ignore trumpets",
+        "Buying fancy gym shoes feels productive long before jogging begins",
+        "Cleaning your entire desk magically feels urgent whenever hard work waits",
+        "Stretching for five minutes saves a week of mysterious back squeaks"
+      ],
+      "sparks": [
+        "borrowing from tomorrow",
+        "a midnight owl raiding dawn",
+        "burning both ends of a taper"
+      ],
+      "botMetaphor": "Borrowing shiny silver coins from midnight forces the exhausted rooster to pay double at sunrise"
+    },
+    {
+      "id": "modern_growth_02",
+      "theme": "Growth",
+      "pack": "MODERN",
+      "lesson": "Buying fancy gear does not replace actually practicing",
+      "decoys": [
+        "Revenge bedtime scrolling steals tomorrow's energy",
+        "Downloading seven productivity apps rarely finishes the laundry pile",
+        "Reading a cookbook cover to cover never preheats the oven",
+        "Starting messy beats rearranging your colorful sticky notes for three hours",
+        "Bookmarking tutorials feels like studying until you close the laptop"
+      ],
+      "sparks": [
+        "a fancy chef hat",
+        "unused guitar picks",
+        "dusty dumbbells"
+      ],
+      "botMetaphor": "Polishing a shiny velvet chef hat never teaches the omelet how to flip cleanly in the skillet"
+    },
+    {
+      "id": "modern_growth_03",
+      "theme": "Growth",
+      "pack": "MODERN",
+      "lesson": "Cleaning your desk suddenly feels urgent when hard work looms",
+      "decoys": [
+        "Buying fancy gear does not replace actually practicing",
+        "Revenge bedtime scrolling steals tomorrow's energy",
+        "Writing a neat to-do list just to check off 'make a list' is sweet illusion",
+        "Taking a tiny first bite shrinks the scariest homework dragon",
+        "Closing forty browser tabs clears your mind faster than coffee"
+      ],
+      "sparks": [
+        "alphabetizing pebbles",
+        "polishing spoons before taxes",
+        "reorganizing a pantry"
+      ],
+      "botMetaphor": "A nervous beaver starts alphabetizing river pebbles the exact minute the big dam needs timber"
+    },
+    {
+      "id": "modern_gratitude_01",
+      "theme": "Gratitude",
+      "pack": "MODERN",
+      "lesson": "Never go grocery shopping while completely starving",
+      "decoys": [
+        "Buying snacks for a road trip means eating them ten miles from home",
+        "Free samples at the warehouse club turn errands into a tiny banquet",
+        "Fresh warm bread straight from the oven beats every luxury gadget",
+        "Checking your bank balance after vacation takes real bravery",
+        "Finding a crisp twenty-dollar bill in last winter's coat feels like royalty"
+      ],
+      "sparks": [
+        "a bear in a bakery",
+        "a pirate at a buffet",
+        "an empty cart with wings"
+      ],
+      "botMetaphor": "Sending a hungry grizzly through a pastry village before breakfast drains every copper coin"
+    },
+    {
+      "id": "modern_gratitude_02",
+      "theme": "Gratitude",
+      "pack": "MODERN",
+      "lesson": "Finding forgotten cash in a winter coat feels like royalty",
+      "decoys": [
+        "Never go grocery shopping while completely starving",
+        "Fresh sheets straight from a warm dryer rival five-star resorts",
+        "Hitting every green light on the drive home feels like hidden magic",
+        "A surprise canceled meeting hands back an hour of pure sunshine",
+        "Cold water at three in the morning tastes finer than vintage nectar"
+      ],
+      "sparks": [
+        "a golden acorn in a scarf",
+        "a surprise treasure pocket",
+        "rain turning to coins"
+      ],
+      "botMetaphor": "Discovering an unexpected golden acorn tucked inside last autumn's scarf delights the whole forest"
+    },
+    {
+      "id": "modern_gratitude_03",
+      "theme": "Gratitude",
+      "pack": "MODERN",
+      "lesson": "A surprise canceled meeting feels like pure sunshine",
+      "decoys": [
+        "Finding forgotten cash in a winter coat feels like royalty",
+        "Never trust a coworker who says quick question",
+        "Leaving work while the sky is still bright boosts the whole spirit",
+        "Sleeping in on a rainy Saturday without an alarm is priceless luxury",
+        "Drinking hot cocoa after shoveling snow multiplies every sip"
+      ],
+      "sparks": [
+        "an afternoon hammock",
+        "an unexpected snow day",
+        "an open meadow"
+      ],
+      "botMetaphor": "Watching a sudden rainstorm wash away an awkward lawn chore gifts you an afternoon hammock"
+    },
+    {
+      "id": "modern_trust_01",
+      "theme": "Trust",
+      "pack": "MODERN",
+      "lesson": "Never lend a favorite book you expect to see again",
+      "decoys": [
+        "Always save your work twice before a sudden thunderstorm flickers the lamp",
+        "Never let a hungry dog guard a low coffee table full of tacos",
+        "Clicking reply-all without double-checking invites awkward legends",
+        "Backing up photos early avoids heartbreaking computer funerals",
+        "Writing your name inside a shared lunch container barely slows office bandits"
+      ],
+      "sparks": [
+        "releasing a songbird",
+        "lending an umbrella",
+        "a boomerang that forgets home"
+      ],
+      "botMetaphor": "Handing a beloved songbird to a wandering sailor means wishing it lovely skies on new islands"
+    },
+    {
+      "id": "modern_trust_02",
+      "theme": "Trust",
+      "pack": "MODERN",
+      "lesson": "Never leave a dog alone beside low tacos",
+      "decoys": [
+        "Never lend a favorite book you expect to see again",
+        "Leaving fresh cookies cooling within reach tests everyone's willpower",
+        "A quiet toddler in the next hallway is never simply reading",
+        "Never trust a free pen that looks too smooth at the front desk",
+        "Putting a sticky note saying do not eat only makes cupcakes glow brighter"
+      ],
+      "sparks": [
+        "a raccoon guarding marshmallows",
+        "a fox guarding a picnic",
+        "a cat near yarn"
+      ],
+      "botMetaphor": "Appointing a cheerful raccoon as treasurer of the marshmallow vault invites creative accounting"
+    },
+    {
+      "id": "modern_trust_03",
+      "theme": "Trust",
+      "pack": "MODERN",
+      "lesson": "Always save your work before the storm flickers the lights",
+      "decoys": [
+        "Never lend a favorite book you expect to see again",
+        "Testing your microphone before a big speech spares awkward pantomime",
+        "Double-checking an attachment before hitting send saves a second apology",
+        "Charging your phone to full before an airport sprint brings deep calm",
+        "A suspiciously easy software update five minutes before a demo is a trap"
+      ],
+      "sparks": [
+        "latching a barn in thunder",
+        "anchoring a boat early",
+        "backing up a treasure map"
+      ],
+      "botMetaphor": "Locking the barn latch before thunder rolls saves you from chasing three hours of stray sheep"
+    },
+    {
+      "id": "modern_craft_01",
+      "theme": "Craft",
+      "pack": "MODERN",
+      "lesson": "Turning it off and back on fixes half of technology",
+      "decoys": [
+        "Assembling flat-pack furniture always leaves one mysterious spare bolt",
+        "Reading the instructions after two failed attempts saves the third hour",
+        "Labeling your tangle of power cables feels silly until moving day",
+        "Always measure the doorway before buying a giant velvet couch",
+        "Fixing one squeaky kitchen drawer magically reminds you of four more"
+      ],
+      "sparks": [
+        "a grumpy mule napping",
+        "shaking an Etch A Sketch",
+        "restarting a stubborn clock"
+      ],
+      "botMetaphor": "Letting a grumpy mule take one short nap beside the clover cures almost every stubborn hoof"
+    },
+    {
+      "id": "modern_craft_02",
+      "theme": "Craft",
+      "pack": "MODERN",
+      "lesson": "Assembling flat-pack furniture always leaves a mystery screw",
+      "decoys": [
+        "Turning it off and back on fixes half of technology",
+        "A recipe claiming ten-minute prep is pure fiction",
+        "Skipping page one of the manual guarantees building the bookshelf backward",
+        "Putting the last kitchen bolt in finger-tight first prevents crooked legs",
+        "Duct tape solves problems that engineers refuse to discuss publicly"
+      ],
+      "sparks": [
+        "an extra brass ship peg",
+        "leftover clockwork gears",
+        "a puzzle with a bonus piece"
+      ],
+      "botMetaphor": "Finishing a complex pirate ship kit only to find one extra brass peg makes every sailor squint"
+    },
+    {
+      "id": "modern_craft_03",
+      "theme": "Craft",
+      "pack": "MODERN",
+      "lesson": "Always measure the doorway before buying a giant sofa",
+      "decoys": [
+        "Assembling flat-pack furniture always leaves a mystery screw",
+        "Packing light for a flight beats wrestling a stubborn overhead bin",
+        "Labeling moving boxes clearly saves you from hunting coffee cups for a week",
+        "Testing paint swatches in daylight prevents accidental neon living rooms",
+        "Keeping one tiny screwdriver handy rescues half of household disasters"
+      ],
+      "sparks": [
+        "a giraffe at a porch door",
+        "a ship in a narrow bottle",
+        "an elephant on stairs"
+      ],
+      "botMetaphor": "Inviting a proud giraffe to tea works far smoother after checking the height of your porch arch"
+    },
+    {
+      "id": "modern_kindness_01",
+      "theme": "Kindness",
+      "pack": "MODERN",
+      "lesson": "Bringing warm snacks makes you welcome in any room",
+      "decoys": [
+        "Returning your shopping cart in the rain earns quiet cosmic applause",
+        "Letting a hurried driver merge kindly costs three seconds and brightens two commutes",
+        "Refilling the office coffee pot after pouring the last cup makes you a legend",
+        "Remembering a friend's favorite tea order feels like a warm blanket",
+        "Holding the elevator door open turns grumpy Mondays gentler"
+      ],
+      "sparks": [
+        "cinnamon buns at a castle",
+        "a basket of peaches",
+        "a warm thermos on a hike"
+      ],
+      "botMetaphor": "Arriving at a chilly castle carrying freshly baked cinnamon buns lowers every drawbridge instantly"
+    },
+    {
+      "id": "modern_kindness_02",
+      "theme": "Kindness",
+      "pack": "MODERN",
+      "lesson": "Refilling the coffee pot after the last cup makes you a legend",
+      "decoys": [
+        "Bringing warm snacks makes you welcome in any room",
+        "Leaving a sticky note of thanks brightens a neighbor's whole evening",
+        "Washing the pan right after breakfast gifts your future self pure peace",
+        "Sharing your spare umbrella turns a rainy sidewalk into a tiny festival",
+        "Returning a borrowed car with a full tank seals lifelong friendship"
+      ],
+      "sparks": [
+        "refilling an oasis pitcher",
+        "stacking firewood for the next camper",
+        "oiling a shared bike"
+      ],
+      "botMetaphor": "Planting a fresh pitcher beside the desert oasis earns silent songs from every weary camel behind you"
+    },
+    {
+      "id": "modern_kindness_03",
+      "theme": "Kindness",
+      "pack": "MODERN",
+      "lesson": "Holding the elevator door open brightens a hurried morning",
+      "decoys": [
+        "Bringing warm snacks makes you welcome in any room",
+        "Refilling the coffee pot after the last cup makes you a legend",
+        "Complimenting a stranger's cool jacket costs zero coins and echoes all afternoon",
+        "Leaving a big tip during a thunderstorm spreads invisible warmth",
+        "Returning a lost umbrella earns five stars from the universe"
+      ],
+      "sparks": [
+        "pausing a harbor ferry",
+        "keeping a lantern lit",
+        "saving the last seat"
+      ],
+      "botMetaphor": "Pausing the departing harbor ferry for three extra seconds turns a frantic sprint into a grateful grin"
     }
   ]
 }

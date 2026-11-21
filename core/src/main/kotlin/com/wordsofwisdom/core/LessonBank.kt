@@ -7,7 +7,7 @@ import java.io.BufferedInputStream
 import kotlin.random.Random
 
 /**
- * Pre-indexed immutable library of curated life lessons and confusable decoys.
+ * Pre-indexed immutable library of curated life lessons (Classic + Modern Funny) and confusable decoys.
  * Loaded once via streaming UTF-8 decode and shared across games with zero redundant parsing.
  */
 class LessonBank(rawLessons: List<WisdomLesson>) {
@@ -27,7 +27,7 @@ class LessonBank(rawLessons: List<WisdomLesson>) {
         for (i in lessonsArray.indices) {
             val l = lessonsArray[i]
             idToIndex[l.id] = i
-            grouped.getOrPut(l.theme) { ArrayList(16) }.add(i)
+            grouped.getOrPut(l.theme) { ArrayList(20) }.add(i)
         }
         themes = grouped.keys.toList()
         themeIndexMap = HashMap((themes.size / 0.75f).toInt() + 1)
@@ -45,64 +45,30 @@ class LessonBank(rawLessons: List<WisdomLesson>) {
         idToIndex[lesson.id]?.let { precomputedForbiddenHints[it] }
             ?: MetaphorValidator.forbiddenHintWords(lesson.lesson)
 
+    private fun matchesPack(lesson: WisdomLesson, pack: PromptPack): Boolean = when (pack) {
+        PromptPack.ALL -> true
+        PromptPack.CLASSIC -> lesson.pack.equals("CLASSIC", ignoreCase = true)
+        PromptPack.MODERN -> lesson.pack.equals("MODERN", ignoreCase = true)
+    }
+
     fun drawLesson(
         selectedThemes: List<String>,
         usedIds: Set<String>,
         rng: Random,
+        pack: PromptPack = PromptPack.ALL,
     ): WisdomLesson {
         require(lessonsArray.isNotEmpty()) { "LessonBank cannot be empty" }
 
-        val candidates: List<IntArray> = if (selectedThemes.isEmpty()) {
-            emptyList()
-        } else {
-            selectedThemes.mapNotNull { themeIndexMap[it]?.let { idx -> themeBuckets[idx] } }
+        val themeSet = if (selectedThemes.isEmpty()) null else selectedThemes.toSet()
+        val eligible = lessonsArray.filter { l ->
+            matchesPack(l, pack) && (themeSet == null || l.theme in themeSet)
+        }.ifEmpty {
+            lessonsArray.filter { matchesPack(it, pack) }.ifEmpty { lessons }
         }
 
-        if (candidates.isEmpty()) {
-            return pickFromRange(lessonsArray.indices, usedIds, rng)
-        }
-
-        var freshCount = 0
-        var totalCount = 0
-        for (bucket in candidates) {
-            totalCount += bucket.size
-            for (idx in bucket) {
-                if (lessonsArray[idx].id !in usedIds) freshCount++
-            }
-        }
-        if (totalCount == 0) return pickFromRange(lessonsArray.indices, usedIds, rng)
-
-        val useFresh = freshCount > 0
-        var target = rng.nextInt(if (useFresh) freshCount else totalCount)
-        for (bucket in candidates) {
-            for (idx in bucket) {
-                val lesson = lessonsArray[idx]
-                if (!useFresh || lesson.id !in usedIds) {
-                    if (target == 0) return lesson
-                    target--
-                }
-            }
-        }
-        return lessonsArray[0]
-    }
-
-    private fun pickFromRange(range: IntRange, usedIds: Set<String>, rng: Random): WisdomLesson {
-        var freshCount = 0
-        for (i in range) {
-            if (lessonsArray[i].id !in usedIds) freshCount++
-        }
-        if (freshCount == 0) {
-            return lessonsArray[rng.nextInt(lessonsArray.size)]
-        }
-        var target = rng.nextInt(freshCount)
-        for (i in range) {
-            val l = lessonsArray[i]
-            if (l.id !in usedIds) {
-                if (target == 0) return l
-                target--
-            }
-        }
-        return lessonsArray[0]
+        val fresh = eligible.filter { it.id !in usedIds }
+        val pool = if (fresh.isNotEmpty()) fresh else eligible
+        return pool[rng.nextInt(pool.size)]
     }
 
     fun buildOptions(
@@ -126,7 +92,6 @@ class LessonBank(rawLessons: List<WisdomLesson>) {
             }
         }
 
-        // Graceful fallback if a custom lesson ever lacked enough unique decoys
         var fallbackTries = 0
         while (texts.size < optionCount && fallbackTries < lessonsArray.size * 2) {
             fallbackTries++

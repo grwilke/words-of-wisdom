@@ -4,14 +4,16 @@ A theatrical **Google TV / Android TV** party game where players join on their p
 
 ---
 
-## Highlights
+## Highlights (v1.1.0)
 
-- **TV-First Couch Experience**: Deep Midnight Parlor & Golden Fable Jetpack Compose UI with animated fireflies, confetti celebrations, circular countdown rings, 5% overscan safe zones, and full TV remote (D-pad / OK / Back / Mute) support.
-- **Zero-Install Mobile Web Controller**: Embedded Ktor CIO HTTP + WebSocket LAN server (`port 8777`) runs directly inside the TV app — scan the QR code or open the local URL on any iPhone or Android browser on the same Wi-Fi.
-- **120 Curated Life Lessons across 10 Themes**: *Connection, Patience, Courage, Humility, Truth, Growth, Gratitude, Trust, Craft,* and *Kindness* — each paired with 5 hand-crafted confusable decoys, 3 imagery sparks, and a validated bot metaphor.
-- **Smart Anti-Spoiler Metaphor Guard**: Blocks literal word/stem reuse (`happy`/`happiness`, `alone`/`loneliness`) with live inline feedback on the Sage's phone before submission.
-- **Custom Synthesized Party Soundtrack & SFX**: 3 seamless looping lounge/party tracks (`bgm_lobby`, `bgm_play`, `bgm_podium`) plus 9 zero-latency `SoundPool` effects with 1-click mute.
-- **Practice AI Bots & Sudden-Death Tie-Breaker**: Add witty AI bots from the lobby for solo/2-player play, and settle tied 1st-place finishes with a live **Golden Duel** sudden-death round!
+- **⚡ Party Sprint (Simultaneous Writing)**: Zero couch dead air! Everyone receives a secret life lesson at once for one shared writing sprint, then plays back-to-back rapid-fire guessing & reveals (toggleable with *Classic Turns* on TV remote or Host phone).
+- **🎭 3-Beat Theatrical Reveal & Offline TV Narrator**: Builds real game-show suspense (voters pop in first → true lesson illuminates with confetti → animated score rollup) while offline Android TV `TextToSpeech` reads each metaphor aloud dramatically with automatic music ducking.
+- **⚠️ Sage Decoy Preview**: Shows the Sage 2 competing board decoys while writing so metaphors become clever tactical puzzles instead of blind guesswork.
+- **🦉 Golden Owl 2× Double-Down Bet & 🔥 2× Final Round**: Every Seeker gets 1 high-stakes Double-Down token per game (`2×` on hit, `−50` on miss), plus a fair `2×` Final Cycle comeback multiplier in multi-cycle games.
+- **🏴‍☠️ Wildcard Metaphor Worlds (+40) & ⭐ Poet's Star (+25)**: Optional turn challenges (*Kitchen, Pirates, Space, Animals, Fairytale, Weather, Circus, Detective*) reward bold, funny metaphors over boring synonyms.
+- **150 Curated Life Lessons (120 Classic + 30 Modern & Funny)**: Switch between *All Packs*, *Classic Wisdom*, or *Modern & Funny* everyday comedy across 10 themes, each paired with 5 sharpened confusable decoys.
+- **Live Floating Couch Reactions (`🔥 😂 🤔 👏 🤯 🦉`)**: Waiting players and early finishers toss floating emoji reactions straight onto the TV screen.
+- **Zero-Install Mobile Web Controller & Android 17 QR Bridge**: Embedded Ktor CIO HTTP + WebSocket LAN server (`port 8777`) with HTTPS GitHub Pages join bridge (`https://grwilke.github.io/words-of-wisdom/join`) and mid-game late joiner support.
 
 ---
 

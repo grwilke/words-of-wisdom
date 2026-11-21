@@ -441,3 +441,85 @@ textarea { resize: vertical; min-height: 92px; }
   color: var(--gold-hi); font-weight: 700; font-size: 14px; z-index: 30;
 }
 .toast[hidden] { display: none; }
+
+/* v1.1.0 Additions: Decoy Watch, Wildcard World, Golden Owl 2x Bet & Live Reactions */
+.decoy-watch-box {
+  margin: 10px 0 8px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  background: rgba(245, 166, 35, 0.13);
+  border: 1px solid rgba(245, 166, 35, 0.42);
+}
+.decoy-watch-title {
+  font-size: 11px; font-weight: 800; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--gold-hi); margin-bottom: 5px;
+}
+.decoy-watch-list {
+  margin: 0; padding-left: 18px;
+  font-size: 13px; color: var(--cream); line-height: 1.38;
+}
+.decoy-watch-list li { margin: 2px 0; }
+
+.wildcard-card {
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  width: 100%; text-align: left;
+  margin: 8px 0 10px; padding: 10px 12px;
+  border-radius: 14px; cursor: pointer;
+  background: rgba(155, 93, 229, 0.16);
+  border: 1.5px solid rgba(155, 93, 229, 0.45);
+  color: var(--cream); font-family: inherit;
+  transition: border-color 0.15s, background 0.15s;
+}
+.wildcard-card.accepted {
+  background: rgba(245, 183, 49, 0.22);
+  border-color: var(--gold);
+}
+.wildcard-left { display: flex; align-items: center; gap: 10px; }
+.wildcard-emoji { font-size: 24px; }
+.wildcard-title { font-size: 13px; font-weight: 800; color: var(--gold-hi); }
+.wildcard-prompt { font-size: 12px; color: var(--muted); line-height: 1.25; }
+.wildcard-badge {
+  flex: 0 0 auto; padding: 4px 10px; border-radius: 999px;
+  font-size: 11px; font-weight: 900;
+  background: rgba(255, 255, 255, 0.12); color: var(--muted);
+}
+.wildcard-card.accepted .wildcard-badge { background: var(--gold); color: var(--ink); }
+
+.bonus-pills-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+.bonus-pill {
+  padding: 4px 10px; border-radius: 999px; font-size: 11px; font-weight: 800;
+  background: rgba(245, 183, 49, 0.2); border: 1px solid var(--gold); color: var(--gold-hi);
+}
+.bonus-pill.fire { background: rgba(232, 72, 85, 0.25); border-color: #ff6b6b; color: #ffd4d8; }
+
+.double-down-btn {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  width: 100%; margin-bottom: 12px; padding: 11px 14px;
+  border-radius: 14px; cursor: pointer;
+  background: rgba(245, 183, 49, 0.14);
+  border: 1.5px dashed var(--gold);
+  color: var(--gold-hi); font: 800 14px/1.2 inherit;
+  transition: transform 0.12s, background 0.15s;
+}
+.double-down-btn.armed {
+  background: linear-gradient(135deg, #ffd86b, #f59e0b);
+  border-style: solid; color: var(--ink);
+  box-shadow: 0 0 18px rgba(245, 183, 49, 0.5);
+  transform: scale(1.01);
+}
+
+.react-dock {
+  margin-top: 14px; padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  text-align: center;
+}
+.react-label { display: block; font-size: 12px; color: var(--muted); margin-bottom: 8px; }
+.react-bar { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; }
+.react-btn {
+  width: 44px; height: 44px; border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.08);
+  font-size: 21px; cursor: pointer;
+  transition: transform 0.1s, background 0.15s;
+}
+.react-btn:active { transform: scale(1.22); background: rgba(245, 183, 49, 0.28); }

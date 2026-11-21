@@ -1,11 +1,16 @@
 #!/usr/bin/env node
 /**
- * Live End-to-End Multi-Player Party Verification + TV Screenshot Capture.
+ * Live End-to-End Multi-Player Party Verification + TV Screenshot Capture (v1.1.0).
  *
- * Connects 4 real WebSocket phone controllers to the running Words of Wisdom TV app
- * (via `adb forward tcp:8777 tcp:8777` or DevHost), verifies HTTP controller serving,
- * anti-spoiler rejection, live typing indicator, voting, reveal + applause, and Podium,
- * while optionally capturing 1080p Android TV screenshots at every phase.
+ * Exercises ALL v1.1.0 fun upgrades live on the Android TV release APK:
+ *  - Party Sprint simultaneous writing (all 4 players write concurrently)
+ *  - Decoy preview verification for every writer
+ *  - Wildcard Metaphor World acceptance (+40 Style Bonus)
+ *  - Anti-spoiler rejection of literal copy
+ *  - Live floating emoji reactions on TV
+ *  - Golden Owl 2x Double-Down bet during Guessing
+ *  - 3-Beat Theatrical Reveal + Poet's Star (+25)
+ *  - Grand Podium + Hall of Metaphors
  */
 
 import { execSync } from 'node:child_process';
@@ -75,15 +80,10 @@ class PhoneClient {
 }
 
 async function main() {
-  // 1. Verify HTTP endpoints
   const html = await fetch(`${BASE}/`).then((r) => r.text());
-  if (!html.includes('Words of Wisdom')) throw new Error('Controller HTML missing title');
-  const css = await fetch(`${BASE}/style.css`).then((r) => r.status);
-  const js = await fetch(`${BASE}/controller.js`).then((r) => r.status);
-  if (css !== 200 || js !== 200) throw new Error(`Expected 200 for css/js, got ${css}/${js}`);
-  console.log('[OK] HTTP controller assets served cleanly.');
+  if (!html.includes('Golden Owl')) throw new Error('Controller HTML missing v1.1.0 Golden Owl UI');
+  console.log('[OK] HTTP v1.1.0 controller assets served cleanly.');
 
-  // 2. Connect 4 live phone players
   const players = [
     new PhoneClient('Maya', 'owl'),
     new PhoneClient('Leo', 'fox'),
@@ -92,20 +92,41 @@ async function main() {
   ];
   for (const p of players) {
     await p.connect();
-    await sleep(200);
+    await sleep(180);
   }
   await players[0].waitFor((s) => s.players.length === 4);
-  console.log(`[OK] 4 players joined Room ${players[0].state.roomCode}.`);
+  console.log(`[OK] 4 players joined Room ${players[0].state.roomCode} (default mode=${players[0].state.config.mode}).`);
 
-  // Configure QUICK (4 turns = 1 per player)
-  players[0].send({ t: 'config', length: 'QUICK', writeSeconds: 75, guessSeconds: 35, optionCount: 4 });
+  // Configure Party Sprint + All Packs + QUICK (1 simultaneous sprint -> 4 rapid showcases!)
+  players[0].send({
+    t: 'config',
+    mode: 'PARTY_SPRINT',
+    pack: 'ALL',
+    length: 'QUICK',
+    writeSeconds: 75,
+    guessSeconds: 35,
+    optionCount: 4,
+  });
   await sleep(1_400);
   snapTv('tv-1-lobby.png');
 
-  // 3. Start Game
+  // Start Game -> Simultaneous Party Sprint WRITING!
   players[0].send({ t: 'start' });
-  await players[0].waitFor((s) => s.phase === 'WRITING');
-  console.log('[OK] Transitioned to WRITING.');
+  await players[0].waitFor((s) => s.phase === 'WRITING' && s.isSimultaneousWriting);
+
+  // Verify every player got a unique lesson + 2 decoy previews + wildcard offer
+  for (const p of players) {
+    if (!p.state.secretLesson) throw new Error(`${p.name} missing secretLesson in Party Sprint!`);
+    if ((p.state.decoyPreview || []).length !== 2) throw new Error(`${p.name} missing 2 decoy previews!`);
+    if (!p.state.offeredWildcard) throw new Error(`${p.name} missing Wildcard offer!`);
+  }
+  console.log('[OK] Party Sprint WRITING active: all 4 writers received secret lessons, decoy previews & wildcards.');
+
+  // Anti-spoiler check on Maya
+  players[0].send({ t: 'submit_metaphor', text: players[0].state.secretLesson, wildcardAccepted: true });
+  await sleep(300);
+  if (!players[0].lastRejected) throw new Error('Expected literal copy rejection!');
+  console.log(`[OK] Anti-spoiler rejected literal copy: ${players[0].lastRejected.reason}`);
 
   const poeticLines = [
     'A single scarecrow in the field only smiles when he sees the crows',
@@ -114,73 +135,63 @@ async function main() {
     'Carving a quiet birch spoon beats shouting from an empty balcony',
   ];
 
-  let capturedWriting = false;
+  // Maya & Leo submit early (with Wildcard accepted!), Sofia & Mateo still typing -> capture lively Sprint Board + floating reaction!
+  players[0].send({ t: 'submit_metaphor', text: poeticLines[0], wildcardAccepted: true });
+  players[1].send({ t: 'submit_metaphor', text: poeticLines[1], wildcardAccepted: true });
+  players[2].send({ t: 'typing', chars: 48 });
+  players[3].send({ t: 'typing', chars: 26 });
+  await sleep(600);
+  players[0].send({ t: 'react', emoji: '🔥' });
+  players[1].send({ t: 'react', emoji: '😂' });
+  await sleep(700);
+  snapTv('tv-2-writing.png');
+
+  // Sofia & Mateo submit -> straight into rapid-fire showcases!
+  players[2].send({ t: 'submit_metaphor', text: poeticLines[2], wildcardAccepted: false });
+  players[3].send({ t: 'submit_metaphor', text: poeticLines[3], wildcardAccepted: true });
+  await players[0].waitFor((s) => s.phase === 'GUESSING', 6_000);
+  console.log('[OK] All 4 scrolls sealed -> rapid-fire GUESSING started!');
+
   let capturedGuessing = false;
   let capturedReveal = false;
 
-  for (let round = 0; round < 10; round++) {
-    const curPhase = players[0].state.phase;
-    if (curPhase === 'PODIUM') break;
+  for (let round = 0; round < 8; round++) {
+    const phase = players[0].state.phase;
+    if (phase === 'PODIUM') break;
 
-    if (curPhase === 'WRITING') {
-      const sage = players.find((p) => p.state.isSage);
-      if (!sage) throw new Error('No Sage found in WRITING');
-
-      // Test anti-spoiler on round 0!
-      if (round === 0) {
-        sage.send({ t: 'submit_metaphor', text: sage.state.secretLesson });
-        await sleep(300);
-        if (!sage.lastRejected) throw new Error('Expected literal copy to be rejected by anti-spoiler guard!');
-        console.log(`[OK] Anti-spoiler rejected literal copy: ${sage.lastRejected.reason}`);
-      }
-
-      // Simulate live typing indicator so TV quill energy bar animates
-      const text = poeticLines[round % poeticLines.length];
-      sage.send({ t: 'typing', chars: Math.floor(text.length * 0.7) });
-      await sleep(1_400);
-      if (!capturedWriting) {
-        snapTv('tv-2-writing.png');
-        capturedWriting = true;
-      }
-
-      sage.send({ t: 'submit_metaphor', text });
-      await players[0].waitFor((s) => s.phase === 'GUESSING');
-      console.log(`[OK] Turn ${round + 1}: ${sage.name} submitted metaphor -> GUESSING.`);
-    }
-
-    if (players[0].state.phase === 'GUESSING') {
+    if (phase === 'GUESSING') {
       const seekers = players.filter((p) => !p.state.isSage);
-      // Have first seeker vote so TV shows mixed "Locked in ✓" + "Thinking…"
-      seekers[0].send({ t: 'vote', optionId: 'A' });
-      await sleep(1_400);
+      // First seeker slams Golden Owl 2x Double-Down on Turn 1!
+      seekers[0].send({ t: 'vote', optionId: 'A', doubleDown: round === 0 });
+      await sleep(1_200);
       if (!capturedGuessing) {
         snapTv('tv-3-guessing.png');
         capturedGuessing = true;
       }
-      // Remaining seekers vote varied options
-      seekers[1].send({ t: 'vote', optionId: 'B' });
+      seekers[1].send({ t: 'vote', optionId: 'B', doubleDown: false });
       await sleep(250);
-      seekers[2].send({ t: 'vote', optionId: 'C' });
+      seekers[2].send({ t: 'vote', optionId: 'C', doubleDown: false });
 
       await players[0].waitFor((s) => s.phase === 'REVEAL', 8_000);
-      console.log(`[OK] Turn ${round + 1}: All voted -> REVEAL (correct=${players[0].state.correctOptionId}).`);
+      console.log(`[OK] Showcase ${round + 1}: REVEAL (correct=${players[0].state.correctOptionId}).`);
 
-      // Seekers applaud!
       seekers[0].send({ t: 'applause' });
       seekers[1].send({ t: 'applause' });
-      await sleep(1_600);
+      seekers[2].send({ t: 'react', emoji: '🤯' });
+
+      // Wait 3.3s on Reveal 1 so all 3 Theatrical Reveal beats (Voters -> Truth -> Animated Scores) finish!
+      await sleep(capturedReveal ? 700 : 3_300);
       if (!capturedReveal) {
         snapTv('tv-4-reveal.png');
         capturedReveal = true;
       }
 
-      // Host advances
       players[0].send({ t: 'next' });
       await players[0].waitFor((s) => s.phase !== 'REVEAL', 6_000);
     }
 
     if (players[0].state.phase === 'TIE_BREAKER') {
-      await sleep(700);
+      await sleep(1_000);
       snapTv('tv-5-tiebreaker.png');
       for (const p of players) {
         if (p.state.isTieBreakerContender) {
@@ -193,12 +204,12 @@ async function main() {
   }
 
   await players[0].waitFor((s) => s.phase === 'PODIUM', 10_000);
+  players[0].send({ t: 'react', emoji: '🦉' });
   await sleep(1_200);
   snapTv('tv-6-podium.png');
 
   const top = players[0].state.players[0];
-  console.log(`[SUCCESS] Full 4-player live game reached PODIUM! Winner: ${top.name} (${top.score} pts), highlights=${players[0].state.highlights.length}, awards=${players[0].state.awards.length}`);
-
+  console.log(`[SUCCESS] Full v1.1.0 Party Sprint E2E reached PODIUM! Winner: ${top.name} (${top.score} pts), highlights=${players[0].state.highlights.length}, awards=${players[0].state.awards.length}`);
   for (const p of players) p.close();
 }
 

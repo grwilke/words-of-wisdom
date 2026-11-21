@@ -58,6 +58,23 @@
         <div class="panel-title">👑 Host Controls</div>
 
         <div class="setting-row">
+          <span>Play Mode</span>
+          <div class="seg-group" data-setting="mode">
+            <button type="button" class="seg" data-val="PARTY_SPRINT">⚡ Sprint</button>
+            <button type="button" class="seg" data-val="CLASSIC_TURNS">🪶 Turns</button>
+          </div>
+        </div>
+
+        <div class="setting-row">
+          <span>Wisdom Pack</span>
+          <div class="seg-group" data-setting="pack">
+            <button type="button" class="seg" data-val="ALL">Mix</button>
+            <button type="button" class="seg" data-val="CLASSIC">Classic</button>
+            <button type="button" class="seg" data-val="MODERN">Funny</button>
+          </div>
+        </div>
+
+        <div class="setting-row">
           <span>Game Length</span>
           <div class="seg-group" data-setting="length">
             <button type="button" class="seg" data-val="QUICK">Quick</button>
@@ -101,7 +118,7 @@
     <!-- WRITING VIEW (SAGE) -->
     <section class="card view" id="view-sage-write" hidden>
       <div class="row-between">
-        <span class="phase-chip gold">🪶 YOUR TURN AS SAGE</span>
+        <span class="phase-chip gold" id="sage-write-kicker">🪶 YOUR TURN AS SAGE</span>
         <span class="timer-pill" id="write-timer">75s</span>
       </div>
 
@@ -110,7 +127,23 @@
         <div class="scroll-lesson" id="secret-lesson">Nobody can be happy alone</div>
       </div>
 
-      <p class="muted compact">Rewrite this lesson as a clever English metaphor. Other players will try to match it back!</p>
+      <!-- Watch Out: Competing Decoys Preview -->
+      <div class="decoy-watch-box" id="decoy-watch-box" hidden>
+        <div class="decoy-watch-title">⚠️ Watch Out — Sneaky Decoys on the Board</div>
+        <ul class="decoy-watch-list" id="decoy-watch-list"></ul>
+      </div>
+
+      <!-- Optional Wildcard Metaphor World Challenge (+40 pts!) -->
+      <button type="button" class="wildcard-card" id="wildcard-card" hidden>
+        <div class="wildcard-left">
+          <span class="wildcard-emoji" id="wildcard-emoji">🏴‍☠️</span>
+          <div>
+            <div class="wildcard-title" id="wildcard-title">Wildcard World (+40 Style Bonus)</div>
+            <div class="wildcard-prompt" id="wildcard-prompt"></div>
+          </div>
+        </div>
+        <span class="wildcard-badge" id="wildcard-badge">OFF</span>
+      </button>
 
       <div class="forbidden-bar" id="forbidden-bar" hidden>
         <span class="forbidden-lbl">Avoid literal words:</span>
@@ -136,17 +169,21 @@
       </div>
     </section>
 
-    <!-- WRITING VIEW (WAITING SEEKER) -->
+    <!-- WRITING VIEW (WAITING SEEKER / EARLY FINISHER IN PARTY SPRINT) -->
     <section class="card view" id="view-wait-write" hidden>
       <div class="row-between">
-        <span class="phase-chip">ROUND <span id="wait-turn">1/6</span></span>
+        <span class="phase-chip" id="wait-chip">ROUND <span id="wait-turn">1/6</span></span>
         <span class="timer-pill" id="wait-timer">75s</span>
       </div>
       <div class="wait-stage">
-        <div class="quill-orb">🪶</div>
+        <div class="quill-orb" id="wait-orb">🪶</div>
         <h2 id="wait-sage-title">Maya is crafting a metaphor…</h2>
         <p class="muted" id="wait-sub">Get ready! Watch the TV and prepare to decode the hidden life lesson.</p>
         <div class="typing-dots" aria-hidden="true"><span></span><span></span><span></span></div>
+      </div>
+      <div class="react-dock">
+        <span class="react-label">Toss a live reaction onto the TV:</span>
+        <div class="react-bar" data-react-bar></div>
       </div>
     </section>
 
@@ -157,8 +194,16 @@
         <span class="timer-pill" id="guess-timer">35s</span>
       </div>
 
+      <div class="bonus-pills-row" id="guess-bonuses" hidden></div>
+
       <blockquote class="metaphor-quote" id="guess-metaphor">“…”</blockquote>
       <div class="quote-author" id="guess-author">— Sage</div>
+
+      <!-- Golden Owl 2x Double-Down Bet Button -->
+      <button type="button" class="double-down-btn" id="btn-double-down" hidden>
+        <span>🦉</span>
+        <span id="double-down-label">Golden Owl 2× Bet (1 left · −50 if wrong)</span>
+      </button>
 
       <div id="guess-sage-notice" class="sage-watch-box" hidden>
         <div class="big-emoji">👀</div>
@@ -173,6 +218,11 @@
       </div>
 
       <div class="options-list" id="options-list"></div>
+
+      <div class="react-dock" id="guess-react-dock" hidden>
+        <span class="react-label">React live on the TV:</span>
+        <div class="react-bar" data-react-bar></div>
+      </div>
     </section>
 
     <!-- REVEAL VIEW -->
@@ -189,8 +239,13 @@
         <div class="truth-text" id="reveal-truth"></div>
       </div>
 
-      <button type="button" class="btn btn-applause" id="btn-applause" hidden>👏 Bravo, Great Metaphor! (+10)</button>
-      <p class="applause-sent" id="applause-sent" hidden>👏 Applause sent to the Sage!</p>
+      <button type="button" class="btn btn-applause" id="btn-applause" hidden>⭐ Give Poet's Star (+25 PTS to Sage!)</button>
+      <p class="applause-sent" id="applause-sent" hidden>⭐ Poet's Star awarded to the Sage!</p>
+
+      <div class="react-dock">
+        <span class="react-label">React live on the TV:</span>
+        <div class="react-bar" data-react-bar></div>
+      </div>
 
       <div class="host-footer" id="reveal-host-footer" hidden>
         <button type="button" class="btn btn-gold btn-lg" id="btn-next">Next Round →</button>
@@ -203,6 +258,10 @@
       <div class="phase-chip gold">🏆 GRAND FINALE</div>
       <h2 id="podium-headline">Check the TV for the Winner!</h2>
       <div class="final-standings" id="final-standings"></div>
+      <div class="react-dock">
+        <span class="react-label">Celebrate on the TV:</span>
+        <div class="react-bar" data-react-bar></div>
+      </div>
       <div class="host-footer" id="podium-host-footer" hidden>
         <button type="button" class="btn btn-gold btn-lg" id="btn-play-again">Play Again 🎉</button>
       </div>

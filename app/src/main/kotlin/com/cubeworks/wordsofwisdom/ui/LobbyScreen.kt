@@ -38,6 +38,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.cubeworks.wordsofwisdom.R
 import com.cubeworks.wordsofwisdom.TvJoinInfo
+import com.wordsofwisdom.core.GameMode
 import com.wordsofwisdom.core.TvSnapshot
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -46,10 +47,14 @@ fun LobbyScreen(
     state: TvSnapshot,
     joinInfo: TvJoinInfo?,
     musicMuted: Boolean,
+    voiceMuted: Boolean,
     onStart: () -> Unit,
     onAddBot: () -> Unit,
     onRemoveBot: () -> Unit,
+    onToggleMode: () -> Unit,
+    onCyclePack: () -> Unit,
     onToggleMute: () -> Unit,
+    onToggleVoice: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val floatAnim = rememberInfiniteTransition(label = "owl_float")
@@ -65,6 +70,9 @@ fun LobbyScreen(
         roundLabel = "PARLOR LOBBY",
         musicMuted = musicMuted,
         onToggleMute = onToggleMute,
+        voiceMuted = voiceMuted,
+        onToggleVoice = onToggleVoice,
+        reactions = state.recentReactions,
         modifier = modifier,
     ) {
         Row(
@@ -146,7 +154,7 @@ fun LobbyScreen(
                                 letterSpacing = 1.2.sp,
                             )
                             Text(
-                                text = "${state.config.length.label} · ${state.config.optionCount} Options · ${state.config.writeSeconds}s Write",
+                                text = "${state.config.mode.label} · ${state.config.pack.label} · ${state.config.length.label}",
                                 color = ParlorColors.MutedLavender,
                                 fontSize = 13.sp,
                                 fontWeight = FontWeight.SemiBold,
@@ -181,35 +189,35 @@ fun LobbyScreen(
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween,
+                    horizontalArrangement = Arrangement.spacedBy(10.dp),
                 ) {
-                    Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                    TvActionPill(
+                        label = if (state.canStart) "▶ Start (OK)" else "Need 2+ Players",
+                        onClick = onStart,
+                        gold = true,
+                        enabled = state.canStart,
+                    )
+                    TvActionPill(
+                        label = if (state.config.mode == GameMode.PARTY_SPRINT) "⚡ Sprint" else "🪶 Turns",
+                        onClick = onToggleMode,
+                        gold = false,
+                    )
+                    TvActionPill(
+                        label = "📚 ${state.config.pack.label}",
+                        onClick = onCyclePack,
+                        gold = false,
+                    )
+                    TvActionPill(
+                        label = "+ Bot",
+                        onClick = onAddBot,
+                        gold = false,
+                        enabled = state.players.size < 10,
+                    )
+                    if (state.players.any { it.isBot }) {
                         TvActionPill(
-                            label = if (state.canStart) "▶ Start Game (OK)" else "Waiting for 2+ Players…",
-                            onClick = onStart,
-                            gold = true,
-                            enabled = state.canStart,
-                        )
-                        TvActionPill(
-                            label = "+ Add AI Bot",
-                            onClick = onAddBot,
+                            label = "− Bot",
+                            onClick = onRemoveBot,
                             gold = false,
-                            enabled = state.players.size < 10,
-                        )
-                        if (state.players.any { it.isBot }) {
-                            TvActionPill(
-                                label = "− Bot",
-                                onClick = onRemoveBot,
-                                gold = false,
-                            )
-                        }
-                    }
-                    state.startHint?.let { hint ->
-                        Text(
-                            text = hint,
-                            color = ParlorColors.GoldBright,
-                            fontSize = 14.sp,
-                            fontWeight = FontWeight.SemiBold,
                         )
                     }
                 }

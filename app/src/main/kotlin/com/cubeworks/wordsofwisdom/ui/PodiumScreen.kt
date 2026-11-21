@@ -45,8 +45,10 @@ import kotlinx.coroutines.delay
 fun PodiumScreen(
     state: TvSnapshot,
     musicMuted: Boolean,
+    voiceMuted: Boolean,
     onPlayAgain: () -> Unit,
     onToggleMute: () -> Unit,
+    onToggleVoice: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val top3 = state.players.take(3)
@@ -66,6 +68,9 @@ fun PodiumScreen(
         roundLabel = "🏆 GRAND PARLOR FINALE",
         musicMuted = musicMuted,
         onToggleMute = onToggleMute,
+        voiceMuted = voiceMuted,
+        onToggleVoice = onToggleVoice,
+        reactions = state.recentReactions,
         celebratory = true,
         showConfetti = true,
         modifier = modifier,

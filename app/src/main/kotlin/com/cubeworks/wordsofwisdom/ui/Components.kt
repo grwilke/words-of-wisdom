@@ -53,8 +53,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.cubeworks.wordsofwisdom.QrMatrix
 import com.cubeworks.wordsofwisdom.TvJoinInfo
+import com.wordsofwisdom.core.LiveReaction
 import com.wordsofwisdom.core.PlayerAvatar
 import com.wordsofwisdom.core.PlayerView
+import com.wordsofwisdom.core.WildcardWorld
 import kotlin.math.ceil
 
 /** Root TV scaffold respecting 5% overscan safe margins and rendering a clean header strip. */
@@ -64,6 +66,9 @@ fun TvSafeScaffold(
     roundLabel: String?,
     musicMuted: Boolean,
     onToggleMute: () -> Unit,
+    voiceMuted: Boolean = false,
+    onToggleVoice: () -> Unit = {},
+    reactions: List<LiveReaction> = emptyList(),
     celebratory: Boolean = false,
     showConfetti: Boolean = false,
     modifier: Modifier = Modifier,
@@ -97,10 +102,15 @@ fun TvSafeScaffold(
                     }
                 }
 
-                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                     StatusPill(text = "ROOM $roomCode", accent = ParlorColors.MutedLavender)
                     TvActionPill(
-                        label = if (musicMuted) "🔇 Muted" else "🎵 Music On",
+                        label = if (voiceMuted) "🔇 Voice" else "🗣️ Voice",
+                        onClick = onToggleVoice,
+                        gold = false,
+                    )
+                    TvActionPill(
+                        label = if (musicMuted) "🔇 Music" else "🎵 Music",
                         onClick = onToggleMute,
                         gold = false,
                     )
@@ -351,6 +361,7 @@ fun PlayerAvatarChip(
         else -> ParlorColors.VelvetCard.copy(alpha = 0.88f)
     }
     val border = when {
+        showVotedCheck && player.doubledDownThisTurn -> BorderStroke(2.5.dp, ParlorColors.GoldBright)
         highlightRole != null -> BorderStroke(2.dp, ParlorColors.Gold)
         showVotedCheck && player.hasActed -> BorderStroke(2.dp, ParlorColors.Success)
         else -> BorderStroke(1.dp, accent.copy(alpha = 0.45f))
@@ -359,7 +370,7 @@ fun PlayerAvatarChip(
     Surface(
         modifier = modifier,
         shape = RoundedCornerShape(14.dp),
-        color = bg,
+        color = if (showVotedCheck && player.doubledDownThisTurn) ParlorColors.Gold.copy(alpha = 0.22f) else bg,
         border = border,
     ) {
         Row(
@@ -393,28 +404,35 @@ fun PlayerAvatarChip(
                 }
                 val sub = when {
                     highlightRole != null -> highlightRole
+                    showVotedCheck && player.doubledDownThisTurn -> "🦉 2× ALL IN!"
                     showVotedCheck && player.hasActed -> "Locked in ✓"
                     showVotedCheck -> "Thinking…"
                     player.streak >= 2 -> "${player.score} pts · 🔥${player.streak}"
                     else -> "${player.score} pts"
                 }
+                val subColor = when {
+                    showVotedCheck && player.doubledDownThisTurn -> ParlorColors.GoldBright
+                    showVotedCheck && player.hasActed -> ParlorColors.Success
+                    else -> ParlorColors.MutedLavender
+                }
                 Text(
                     text = sub,
-                    color = if (showVotedCheck && player.hasActed) ParlorColors.Success else ParlorColors.MutedLavender,
+                    color = subColor,
                     fontSize = 12.sp,
                     fontWeight = FontWeight.SemiBold,
                     maxLines = 1,
                 )
             }
 
-            if (deltaPoints != null && deltaPoints > 0) {
+            if (deltaPoints != null && deltaPoints != 0) {
+                val positive = deltaPoints > 0
                 Surface(
                     shape = RoundedCornerShape(999.dp),
-                    color = ParlorColors.Success,
+                    color = if (positive) ParlorColors.Success else ParlorColors.Danger,
                 ) {
                     Text(
-                        text = "+$deltaPoints",
-                        color = ParlorColors.InkDark,
+                        text = if (positive) "+$deltaPoints" else "$deltaPoints",
+                        color = if (positive) ParlorColors.InkDark else Color.White,
                         fontSize = 13.sp,
                         fontWeight = FontWeight.ExtraBold,
                         modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp),
@@ -432,6 +450,8 @@ fun IlluminatedScrollCard(
     authorName: String,
     authorAvatar: PlayerAvatar?,
     themeLabel: String?,
+    activeWildcard: WildcardWorld? = null,
+    roundMultiplier: Int = 1,
     kickerOverride: String? = null,
     modifier: Modifier = Modifier,
 ) {
@@ -449,16 +469,43 @@ fun IlluminatedScrollCard(
                         colors = listOf(ParlorColors.ParchmentLight, ParlorColors.ParchmentWarm),
                     ),
                 )
-                .padding(horizontal = 26.dp, vertical = 14.dp),
+                .padding(horizontal = 24.dp, vertical = 14.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Text(
-                text = kickerOverride ?: "✨ ${authorAvatar?.emoji ?: "🪶"} ${authorName.uppercase()}'S METAPHOR${themeLabel?.let { "  ·  ${it.uppercase()}" } ?: ""} ✨",
-                color = Color(0xFF7D5000),
-                fontSize = 13.sp,
-                fontWeight = FontWeight.ExtraBold,
-                letterSpacing = 1.4.sp,
-            )
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(10.dp),
+            ) {
+                Text(
+                    text = kickerOverride ?: "✨ ${authorAvatar?.emoji ?: "🪶"} ${authorName.uppercase()}'S METAPHOR${themeLabel?.let { " · ${it.uppercase()}" } ?: ""} ✨",
+                    color = Color(0xFF7D5000),
+                    fontSize = 13.sp,
+                    fontWeight = FontWeight.ExtraBold,
+                    letterSpacing = 1.3.sp,
+                )
+                if (roundMultiplier > 1) {
+                    Surface(shape = RoundedCornerShape(999.dp), color = ParlorColors.Danger) {
+                        Text(
+                            text = "🔥 ${roundMultiplier}× PTS",
+                            color = Color.White,
+                            fontSize = 11.sp,
+                            fontWeight = FontWeight.Black,
+                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp),
+                        )
+                    }
+                }
+                if (activeWildcard != null) {
+                    Surface(shape = RoundedCornerShape(999.dp), color = Color(0xFF4C1D95)) {
+                        Text(
+                            text = "${activeWildcard.emoji} ${activeWildcard.title.uppercase()}",
+                            color = ParlorColors.GoldBright,
+                            fontSize = 11.sp,
+                            fontWeight = FontWeight.ExtraBold,
+                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp),
+                        )
+                    }
+                }
+            }
             Spacer(Modifier.height(6.dp))
             Text(
                 text = "“$metaphor”",

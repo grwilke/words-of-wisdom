@@ -34,7 +34,9 @@ import com.wordsofwisdom.core.TvSnapshot
 fun GuessingScreen(
     state: TvSnapshot,
     musicMuted: Boolean,
+    voiceMuted: Boolean,
     onToggleMute: () -> Unit,
+    onToggleVoice: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     TvSafeScaffold(
@@ -42,6 +44,10 @@ fun GuessingScreen(
         roundLabel = "TURN ${state.turnNumber} OF ${state.totalTurns} · DECODE THE WISDOM",
         musicMuted = musicMuted,
         onToggleMute = onToggleMute,
+        voiceMuted = voiceMuted,
+        onToggleVoice = onToggleVoice,
+        reactions = state.recentReactions,
+        celebratory = state.roundMultiplier > 1,
         modifier = modifier,
     ) {
         Column(
@@ -59,6 +65,8 @@ fun GuessingScreen(
                     authorName = state.sageName ?: "Sage",
                     authorAvatar = state.sageAvatar,
                     themeLabel = state.currentTheme,
+                    activeWildcard = state.activeWildcard,
+                    roundMultiplier = state.roundMultiplier,
                     modifier = Modifier.weight(1f),
                 )
                 CountdownRing(

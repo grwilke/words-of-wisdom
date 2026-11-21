@@ -13,7 +13,22 @@ enum class GamePhase {
     PODIUM,
 }
 
-/** Game length preset controlling how many turns each player takes as the Sage. */
+/** Turn pacing mode: simultaneous party writing sprint vs. relaxed turn-by-turn. */
+@Serializable
+enum class GameMode(val label: String) {
+    PARTY_SPRINT("Party Sprint"),
+    CLASSIC_TURNS("Classic Turns"),
+}
+
+/** Prompt library pack selector. */
+@Serializable
+enum class PromptPack(val label: String) {
+    ALL("All Packs"),
+    CLASSIC("Classic Wisdom"),
+    MODERN("Modern & Funny"),
+}
+
+/** Game length preset controlling how many cycles each player writes as Sage. */
 @Serializable
 enum class GameLength(val label: String) {
     QUICK("Quick"),
@@ -21,9 +36,42 @@ enum class GameLength(val label: String) {
     MARATHON("Marathon"),
 }
 
+/** Optional playful thematic constraint offered to Sages for a +40 Style Bonus. */
+@Serializable
+data class WildcardWorld(
+    val id: String,
+    val emoji: String,
+    val title: String,
+    val prompt: String,
+)
+
+object WildcardCatalog {
+    val ALL: List<WildcardWorld> = listOf(
+        WildcardWorld("kitchen", "🍳", "Kitchen & Cooking", "Frame it using food, recipes, or a chaotic kitchen"),
+        WildcardWorld("pirates", "🏴‍☠️", "Pirates & High Seas", "Frame it with captains, parrots, treasure, or stormy decks"),
+        WildcardWorld("space", "🚀", "Outer Space", "Frame it with astronauts, moons, comets, or alien diners"),
+        WildcardWorld("animals", "🐾", "Wild Animals", "Frame it with squirrels, penguins, foxes, or grumpy owls"),
+        WildcardWorld("fairytale", "🏰", "Fairytale Castle", "Frame it with dragons, wizards, potions, or castles"),
+        WildcardWorld("weather", "⛈️", "Weather & Nature", "Frame it with storms, rivers, seasons, or forests"),
+        WildcardWorld("circus", "🎭", "Circus & Theater", "Frame it with tightropes, spotlights, or clumsy jugglers"),
+        WildcardWorld("detective", "🕵️", "Mystery Detective", "Frame it with clues, magnifying glasses, or foggy alleys"),
+    )
+}
+
+/** Live emoji reaction tossed from a phone onto the living room TV. */
+@Serializable
+data class LiveReaction(
+    val seq: Long,
+    val playerId: String,
+    val senderName: String,
+    val emoji: String,
+)
+
 /** Lobby-configurable ruleset tuned for couch playability. */
 @Serializable
 data class GameConfig(
+    val mode: GameMode = GameMode.CLASSIC_TURNS,
+    val pack: PromptPack = PromptPack.ALL,
     val length: GameLength = GameLength.CLASSIC,
     val writeSeconds: Int = 75,
     val guessSeconds: Int = 35,
@@ -31,6 +79,7 @@ data class GameConfig(
     val optionCount: Int = 4, // 4 or 5
     val strictMetaphorGuard: Boolean = true,
     val enableTieBreaker: Boolean = true,
+    val enableFinalDoublePoints: Boolean = true,
     val selectedThemes: List<String> = emptyList(), // empty = all themes
 ) {
     companion object {
@@ -73,6 +122,7 @@ object AvatarCatalog {
 data class WisdomLesson(
     val id: String,
     val theme: String,
+    val pack: String = "CLASSIC",
     val lesson: String,
     val decoys: List<String>,
     val sparks: List<String>,
@@ -81,9 +131,20 @@ data class WisdomLesson(
 
 @Serializable
 data class WisdomBankFile(
-    val version: Int = 1,
+    val version: Int = 2,
     val count: Int = 0,
     val lessons: List<WisdomLesson>,
+)
+
+/** Per-player live writing progress card shown on TV during simultaneous Party Sprint writing. */
+@Serializable
+data class SprintWriterStatus(
+    val playerId: String,
+    val name: String,
+    val avatar: PlayerAvatar,
+    val typingChars: Int,
+    val submitted: Boolean,
+    val wildcardTitle: String? = null,
 )
 
 /** Public player state rendered on TV and phones. */
@@ -100,6 +161,8 @@ data class PlayerView(
     val isBot: Boolean,
     val connected: Boolean,
     val hasActed: Boolean = false,
+    val doubleDownAvailable: Boolean = true,
+    val doubledDownThisTurn: Boolean = false,
     val sagePoints: Int = 0,
     val guessPoints: Int = 0,
     val applauseReceived: Int = 0,
@@ -126,6 +189,9 @@ data class RoundScoreDelta(
     val streakBonus: Int = 0,
     val clarityBonus: Int = 0,
     val applauseBonus: Int = 0,
+    val wildcardBonus: Int = 0,
+    val usedDoubleDown: Boolean = false,
+    val multiplier: Int = 1,
     val wasCorrect: Boolean = false,
     val roleLabel: String = "",
 )
@@ -139,6 +205,7 @@ data class MetaphorHighlight(
     val metaphor: String,
     val originalLesson: String,
     val theme: String,
+    val wildcardTitle: String? = null,
     val correctGuessers: Int,
     val totalSeekers: Int,
     val applauseCount: Int,
@@ -162,11 +229,13 @@ enum class TvCue {
     ROUND_STARTED,
     METAPHOR_SUBMITTED,
     VOTE_LOCKED,
+    DOUBLE_DOWN_LOCKED,
     COUNTDOWN_TICK,
     REVEAL_DRAMATIC,
     CORRECT_BURST,
     EVERYONE_MISSED,
     APPLAUSE_POP,
+    REACTION_POP,
     TIE_BREAKER_START,
     PODIUM_FANFARE,
 }
@@ -181,10 +250,16 @@ data class TvSnapshot(
     val players: List<PlayerView>,
     val turnNumber: Int,
     val totalTurns: Int,
+    val cycleNumber: Int = 1,
+    val totalCycles: Int = 1,
+    val roundMultiplier: Int = 1,
+    val isSimultaneousWriting: Boolean = false,
+    val sprintWriters: List<SprintWriterStatus> = emptyList(),
     val sageId: String?,
     val sageName: String?,
     val sageAvatar: PlayerAvatar?,
     val currentTheme: String?,
+    val activeWildcard: WildcardWorld? = null,
     val metaphorText: String?,
     val sageTypingChars: Int,
     val options: List<ChoiceOption>,
@@ -194,6 +269,7 @@ data class TvSnapshot(
     val originalLesson: String?,
     val roundDeltas: List<RoundScoreDelta>,
     val applauseCount: Int,
+    val recentReactions: List<LiveReaction> = emptyList(),
     val statusBanner: String?,
     val tieBreakerContenderIds: List<String>,
     val tieBreakerWinnerId: String?,
@@ -225,17 +301,27 @@ data class PhoneStateMessage(
     val availableThemes: List<String>,
     val turnNumber: Int,
     val totalTurns: Int,
+    val cycleNumber: Int = 1,
+    val totalCycles: Int = 1,
+    val roundMultiplier: Int = 1,
+    val isSimultaneousWriting: Boolean = false,
+    val hasSubmittedSprintMetaphor: Boolean = false,
     val isSage: Boolean,
     val sageName: String?,
     val sageAvatar: PlayerAvatar?,
-    val secretLesson: String?,      // ONLY populated for the Sage during WRITING!
-    val secretSparks: List<String>, // ONLY populated for the Sage during WRITING!
-    val forbiddenRoots: List<String>, // ONLY populated for the Sage during WRITING for live UI hints!
+    val secretLesson: String?,          // ONLY populated for an active writer during WRITING!
+    val secretSparks: List<String>,     // ONLY populated for an active writer during WRITING!
+    val decoyPreview: List<String> = emptyList(), // 2 competing decoys shown ONLY to the Sage while writing!
+    val offeredWildcard: WildcardWorld? = null,   // Optional +40 Style Bonus world offered during WRITING!
+    val activeWildcard: WildcardWorld? = null,    // Accepted wildcard displayed on Guessing/Reveal!
+    val forbiddenRoots: List<String>,   // ONLY populated for an active writer during WRITING!
     val rerollsLeft: Int,
     val metaphorText: String?,
     val currentTheme: String?,
     val options: List<ChoiceOption>,
     val myChoiceId: String?,
+    val doubleDownAvailable: Boolean = true,
+    val myDoubleDownActive: Boolean = false,
     val hasApplauded: Boolean,
     val applauseCount: Int,
     val remainingMs: Long,
