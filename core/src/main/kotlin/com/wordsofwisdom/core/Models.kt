@@ -67,6 +67,18 @@ data class LiveReaction(
     val emoji: String,
 )
 
+/** Silly proverb written by a waiting player and blindly rated by everyone else during Reveal. */
+@Serializable
+data class SillyProverbView(
+    val id: String,
+    val text: String,
+    val authorName: String? = null,
+    val authorAvatar: PlayerAvatar? = null,
+    val isMine: Boolean = false,
+    val votes: Int = 0,
+    val votedByMe: Boolean = false,
+)
+
 /** Lobby-configurable ruleset tuned for couch playability. */
 @Serializable
 data class GameConfig(
@@ -270,6 +282,7 @@ data class TvSnapshot(
     val roundDeltas: List<RoundScoreDelta>,
     val applauseCount: Int,
     val recentReactions: List<LiveReaction> = emptyList(),
+    val sillyProverbs: List<SillyProverbView> = emptyList(),
     val statusBanner: String?,
     val tieBreakerContenderIds: List<String>,
     val tieBreakerWinnerId: String?,
@@ -335,6 +348,9 @@ data class PhoneStateMessage(
     val isTieBreakerContender: Boolean,
     val awards: List<PodiumAward>,
     val highlights: List<MetaphorHighlight>,
+    val sillyProverbPrompt: String? = null,
+    val mySillyProverb: String? = null,
+    val sillyProverbs: List<SillyProverbView> = emptyList(),
 )
 
 /** Outgoing WebSocket message directed at a specific connection id. */

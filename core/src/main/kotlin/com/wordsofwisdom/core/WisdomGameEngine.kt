@@ -69,6 +69,13 @@ class WisdomGameEngine(
         val doubleDown: Boolean,
     )
 
+    private data class InternalSillyProverb(
+        val id: String,
+        val authorId: String,
+        var text: String,
+        val voterIds: MutableSet<String> = mutableSetOf(),
+    )
+
     private data class PhaseLens(
         val showWritingSecretsToSage: Boolean,
         val showMetaphor: Boolean,
@@ -115,6 +122,8 @@ class WisdomGameEngine(
     // Unified Writing / Sprint state (1 entry in CLASSIC_TURNS, N entries in PARTY_SPRINT)
     private val pendingScrolls = LinkedHashMap<String, PendingScroll>()
     private val showcaseQueue = ArrayDeque<SubmittedShowcase>()
+    private val sillyProverbs = mutableListOf<InternalSillyProverb>()
+    private var currentSillyPrompt: String = SILLY_PROVERB_PROMPTS.first()
 
     // Active showcase / turn state
     private var sageId: String? = null
@@ -191,6 +200,8 @@ class WisdomGameEngine(
             is InboundMessage.Vote -> handleVote(connId, msg, now)
             is InboundMessage.Applause -> handleApplause(connId, now)
             is InboundMessage.React -> handleReact(connId, msg, now)
+            is InboundMessage.SubmitSillyProverb -> handleSubmitSillyProverb(connId, msg, now)
+            is InboundMessage.VoteSillyProverb -> handleVoteSillyProverb(connId, msg, now)
             is InboundMessage.Next -> handleNext(connId, now)
             is InboundMessage.EndGame -> handleEndGame(connId, now)
             is InboundMessage.PlayAgain -> handlePlayAgain(connId, now)
@@ -382,6 +393,7 @@ class WisdomGameEngine(
             roundDeltas = if (lens.showDeltas) roundDeltas else emptyList(),
             applauseCount = if (phase == GamePhase.REVEAL) applaudedPlayerIds.size else 0,
             recentReactions = recentReactions.toList(),
+            sillyProverbs = if (phase == GamePhase.REVEAL) projectSillyProverbs(viewerId = null) else emptyList(),
             statusBanner = statusBanner,
             tieBreakerContenderIds = if (phase == GamePhase.TIE_BREAKER) tieBreakerContenderIds else emptyList(),
             tieBreakerWinnerId = tieBreakerWinnerId,
@@ -675,6 +687,66 @@ class WisdomGameEngine(
         return emptyList() // TV-only floating reaction; zero phone broadcast churn
     }
 
+    private fun handleSubmitSillyProverb(connId: String, msg: InboundMessage.SubmitSillyProverb, now: Long): List<OutgoingMessage> {
+        val player = playerForConn(connId) ?: return emptyList()
+        if (phase != GamePhase.WRITING) return emptyList()
+        val myScroll = pendingScrolls[player.id]
+        val isWaiting = if (isSimultaneousWritingNow()) myScroll?.submittedMetaphor != null else (player.id != sageId)
+        if (!isWaiting) return emptyList()
+
+        val cleaned = msg.text.filter { !it.isISOControl() }.trim().take(120)
+        if (cleaned.length < 4) return emptyList()
+
+        val existing = sillyProverbs.firstOrNull { it.authorId == player.id }
+        if (existing != null) {
+            existing.text = cleaned
+        } else {
+            sillyProverbs.add(
+                InternalSillyProverb(
+                    id = "sp_${sillyProverbs.size + 1}_${player.id}",
+                    authorId = player.id,
+                    text = cleaned,
+                ),
+            )
+        }
+        emitCue(TvCue.REACTION_POP)
+        return broadcastAll(now)
+    }
+
+    private fun handleVoteSillyProverb(connId: String, msg: InboundMessage.VoteSillyProverb, now: Long): List<OutgoingMessage> {
+        val player = playerForConn(connId) ?: return emptyList()
+        if (phase != GamePhase.REVEAL) return emptyList()
+        if (sillyProverbs.any { player.id in it.voterIds }) return emptyList()
+        val target = sillyProverbs.firstOrNull { it.id == msg.proverbId } ?: return emptyList()
+        if (target.authorId == player.id) return emptyList()
+
+        target.voterIds.add(player.id)
+        findPlayer(target.authorId)?.let { author ->
+            author.score += SILLY_PROVERB_VOTE_POINTS
+        }
+        emitCue(TvCue.APPLAUSE_POP)
+        return broadcastAll(now)
+    }
+
+    private fun projectSillyProverbs(viewerId: String?): List<SillyProverbView> {
+        if (sillyProverbs.isEmpty()) return emptyList()
+        val viewerVoted = viewerId != null && sillyProverbs.any { viewerId in it.voterIds }
+        val totalVotes = sillyProverbs.sumOf { it.voterIds.size }
+        val revealAuthors = if (viewerId == null) totalVotes > 0 else viewerVoted
+        return sillyProverbs.map { sp ->
+            val author = if (revealAuthors) findPlayer(sp.authorId) else null
+            SillyProverbView(
+                id = sp.id,
+                text = sp.text,
+                authorName = author?.name,
+                authorAvatar = author?.avatar,
+                isMine = sp.authorId == viewerId,
+                votes = sp.voterIds.size,
+                votedByMe = viewerId != null && viewerId in sp.voterIds,
+            )
+        }.sortedByDescending { it.votes }
+    }
+
     private fun handleNext(connId: String, now: Long): List<OutgoingMessage> {
         val player = playerForConn(connId) ?: return emptyList()
         if (player.id != hostPlayerId || phase != GamePhase.REVEAL) return emptyList()
@@ -760,6 +832,8 @@ class WisdomGameEngine(
         phase = GamePhase.WRITING
         pendingScrolls.clear()
         showcaseQueue.clear()
+        sillyProverbs.clear()
+        currentSillyPrompt = SILLY_PROVERB_PROMPTS[rng.nextInt(SILLY_PROVERB_PROMPTS.size)]
         sageId = null
         currentLesson = null
         activeWildcard = null
@@ -851,6 +925,8 @@ class WisdomGameEngine(
 
         phase = GamePhase.WRITING
         sageId = sage.id
+        sillyProverbs.clear()
+        currentSillyPrompt = SILLY_PROVERB_PROMPTS[rng.nextInt(SILLY_PROVERB_PROMPTS.size)]
         currentLesson = scroll.lesson
         activeWildcard = null
         metaphorText = null
@@ -1652,6 +1728,9 @@ class WisdomGameEngine(
             isTieBreakerContender = phase == GamePhase.TIE_BREAKER && you.id in tieBreakerContenderIds,
             awards = if (lens.showPodium) awards else emptyList(),
             highlights = if (lens.showPodium) highlights.toList() else emptyList(),
+            sillyProverbPrompt = if (phase == GamePhase.WRITING) currentSillyPrompt else null,
+            mySillyProverb = if (phase == GamePhase.WRITING) sillyProverbs.firstOrNull { it.authorId == you.id }?.text else null,
+            sillyProverbs = if (phase == GamePhase.REVEAL) projectSillyProverbs(viewerId = you.id) else emptyList(),
         )
     }
 
@@ -1723,8 +1802,17 @@ class WisdomGameEngine(
         const val TIE_BREAKER_BONUS_POINTS = 10
         const val REACTION_COOLDOWN_MS = 800L
         const val MAX_RECENT_REACTIONS = 12
+        const val SILLY_PROVERB_VOTE_POINTS = 25
 
         val ALLOWED_REACTIONS = setOf("🔥", "😂", "🤔", "👏", "🤯", "🦉")
+        val SILLY_PROVERB_PROMPTS = listOf(
+            "Never trust a ___ that ___",
+            "Always bring an extra ___ before ___",
+            "If your ___ starts singing, ___",
+            "Wise owls never ___ without ___",
+            "Never argue with a ___ holding ___",
+            "The fastest way to ruin ___ is ___",
+        )
         private val CODE_ALPHABET = "ABCDEFGHJKLMNPQRSTUVWXYZ"
 
         fun generateRoomCode(rng: Random = Random.Default): String =

@@ -393,10 +393,65 @@ textarea { resize: vertical; min-height: 92px; }
   background: rgba(232, 72, 85, 0.24);
   border-color: var(--opt-a);
 }
-.silly-oracle {
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  padding-top: 9px;
+.silly-prompt-hint {
+  margin: 0 0 8px;
+  font-size: 12px;
+  color: var(--muted);
+}
+#silly-input {
+  width: 100%;
+  box-sizing: border-box;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--cream);
+  padding: 9px 11px;
+  font: 500 14px/1.3 inherit;
+  margin-bottom: 8px;
+}
+.silly-btn-row {
+  display: grid;
+  grid-template-columns: 1fr 1.6fr;
+  gap: 8px;
+}
+.silly-sent-box {
   text-align: center;
+  padding: 4px 0 2px;
+}
+.silly-sent-badge {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 800;
+  color: #7ef2be;
+  margin-bottom: 4px;
+}
+.silly-vote-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.silly-vote-card {
+  width: 100%;
+  text-align: left;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--cream);
+  padding: 10px 12px;
+  font: 600 14px/1.35 inherit;
+  cursor: pointer;
+}
+.silly-vote-card.mine { opacity: 0.72; cursor: default; }
+.silly-vote-card.picked {
+  border-color: var(--gold);
+  background: rgba(245, 183, 49, 0.2);
+}
+.silly-vote-meta {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 5px;
+  font-size: 12px;
+  color: var(--gold-hi);
 }
 .silly-quote {
   margin: 0 0 8px;

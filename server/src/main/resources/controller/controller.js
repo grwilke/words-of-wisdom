@@ -247,6 +247,9 @@ if (typeof document !== 'undefined') {
         $('sparks-list').hidden = true;
         wildcardAccepted = false;
       }
+      if (s.phase === 'WRITING' && $('silly-input')) {
+        $('silly-input').value = '';
+      }
     }
 
     if (s.phase === 'LOBBY') {
@@ -311,8 +314,13 @@ if (typeof document !== 'undefined') {
           $('wait-chip').textContent = `ROUND ${s.turnNumber}/${s.totalTurns}`;
           $('wait-orb').textContent = '🪶';
           $('wait-sage-title').textContent = `${s.sageAvatar?.emoji || '🪶'} ${s.sageName || 'Sage'} is crafting a metaphor…`;
-          $('wait-sub').textContent = 'Get ready! Watch the TV and prepare to decode the hidden life lesson.';
+          $('wait-sub').textContent = 'Write a silly proverb or play Owl Tapper while you wait!';
         }
+        $('silly-prompt-hint').textContent = `Prompt: ${s.sillyProverbPrompt || 'Write a ridiculous proverb!'}`;
+        const hasSentSilly = !!s.mySillyProverb;
+        $('silly-form').hidden = hasSentSilly;
+        $('silly-sent-box').hidden = !hasSentSilly;
+        if (hasSentSilly) $('my-silly-preview').textContent = `“${s.mySillyProverb}”`;
       }
       updateTimers();
       return;
@@ -408,6 +416,34 @@ if (typeof document !== 'undefined') {
       const canApplaud = !s.isSage && !s.hasApplauded;
       $('btn-applause').hidden = !canApplaud;
       $('applause-sent').hidden = !(!s.isSage && s.hasApplauded);
+
+      const spList = s.sillyProverbs || [];
+      const spBox = $('reveal-silly-box');
+      if (spList.length > 0) {
+        spBox.hidden = false;
+        const alreadyVoted = spList.some((p) => p.votedByMe);
+        const canVoteAny = !alreadyVoted && spList.some((p) => !p.isMine);
+        $('reveal-silly-status').textContent = alreadyVoted
+          ? 'Authors revealed!'
+          : (canVoteAny ? 'Pick the funniest (blind!)' : 'Waiting for others to rate');
+        $('reveal-silly-list').innerHTML = spList.map((p) => {
+          const disabled = alreadyVoted || p.isMine;
+          const cls = `silly-vote-card ${p.votedByMe ? 'picked' : ''} ${p.isMine ? 'mine' : ''}`;
+          const meta = p.authorName
+            ? `<div class="silly-vote-meta"><span>${p.authorAvatar?.emoji || '🤪'} ${escapeHtml(p.authorName)}</span><span>${p.votes} vote${p.votes === 1 ? '' : 's'}</span></div>`
+            : (p.isMine ? '<div class="silly-vote-meta"><span>Your proverb (hidden from you)</span><span></span></div>' : '');
+          return `<button type="button" class="${cls}" data-sp-id="${escapeHtml(p.id)}" ${disabled ? 'disabled' : ''}>“${escapeHtml(p.text)}”${meta}</button>`;
+        }).join('');
+        $('reveal-silly-list').querySelectorAll('[data-sp-id]').forEach((btn) => {
+          btn.addEventListener('click', () => {
+            vibrate(20);
+            send({ t: 'vote_silly_proverb', proverbId: btn.dataset.spId });
+          });
+        });
+      } else {
+        spBox.hidden = true;
+      }
+
       $('reveal-host-footer').hidden = !s.you.isHost;
       return;
     }
@@ -627,9 +663,19 @@ if (typeof document !== 'undefined') {
     }
   }
 
-  $('btn-silly-quote')?.addEventListener('click', () => {
+  $('btn-silly-idea')?.addEventListener('click', () => {
     const q = SILLY_PROVERBS[Math.floor(Math.random() * SILLY_PROVERBS.length)];
-    $('silly-quote').textContent = `“${q}”`;
+    $('silly-input').value = q;
     vibrate(12);
+  });
+
+  $('btn-submit-silly')?.addEventListener('click', () => {
+    const text = ($('silly-input')?.value || '').trim();
+    if (text.length < 4) {
+      showToast('Write at least 4 characters for your silly proverb!');
+      return;
+    }
+    vibrate(18);
+    send({ t: 'submit_silly_proverb', text });
   });
 }

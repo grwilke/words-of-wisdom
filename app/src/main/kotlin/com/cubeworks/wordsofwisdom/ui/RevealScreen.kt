@@ -164,6 +164,26 @@ fun RevealScreen(
                             revealed = revealAnswer,
                         )
                     }
+                    val topSilly = state.sillyProverbs.firstOrNull()
+                    if (topSilly != null && revealScores) {
+                        Surface(
+                            modifier = Modifier.fillMaxWidth(),
+                            shape = RoundedCornerShape(14.dp),
+                            color = Color(0x28F5B731),
+                            border = BorderStroke(1.dp, ParlorColors.Gold.copy(alpha = 0.6f)),
+                        ) {
+                            val authorTag = topSilly.authorName?.let { " — ${topSilly.authorAvatar?.emoji ?: "🤪"} $it (${topSilly.votes} votes)" } ?: " (vote on phones!)"
+                            Text(
+                                text = "🤪 Silly Proverb: “${topSilly.text}”$authorTag",
+                                color = ParlorColors.GoldBright,
+                                fontSize = 13.sp,
+                                fontWeight = FontWeight.Bold,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
+                                modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
+                            )
+                        }
+                    }
                 }
 
                 Row(

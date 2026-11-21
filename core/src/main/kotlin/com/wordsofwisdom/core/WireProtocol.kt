@@ -81,6 +81,14 @@ sealed interface InboundMessage {
     data class React(val emoji: String = "") : InboundMessage
 
     @Serializable
+    @SerialName("submit_silly_proverb")
+    data class SubmitSillyProverb(val text: String = "") : InboundMessage
+
+    @Serializable
+    @SerialName("vote_silly_proverb")
+    data class VoteSillyProverb(val proverbId: String = "") : InboundMessage
+
+    @Serializable
     @SerialName("next")
     data object Next : InboundMessage
 

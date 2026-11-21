@@ -182,17 +182,32 @@
         <div class="typing-dots" aria-hidden="true"><span></span><span></span><span></span></div>
       </div>
 
-      <!-- WHILE-YOU-WAIT MINI-GAME & SILLY PROVERB TOY -->
+      <!-- WHILE-YOU-WAIT SILLY PROVERB SIDE-QUEST + MINI-GAME -->
+      <div class="wait-arcade" id="wait-silly-box">
+        <div class="row-between arcade-head">
+          <span class="arcade-title">🤪 Write a Silly Proverb (Blind Rating!)</span>
+          <span class="arcade-scores">+25 PTS / vote</span>
+        </div>
+        <p class="silly-prompt-hint" id="silly-prompt-hint">Prompt: Never trust a ___ that ___</p>
+        <div id="silly-form">
+          <input type="text" id="silly-input" maxlength="120" placeholder="Type something ridiculous…" />
+          <div class="silly-btn-row">
+            <button type="button" class="btn btn-ghost btn-sm" id="btn-silly-idea">🎲 Idea</button>
+            <button type="button" class="btn btn-gold btn-sm" id="btn-submit-silly">Send 🤪</button>
+          </div>
+        </div>
+        <div class="silly-sent-box" id="silly-sent-box" hidden>
+          <span class="silly-sent-badge">✅ Queued for blind rating!</span>
+          <p class="silly-quote" id="my-silly-preview"></p>
+        </div>
+      </div>
+
       <div class="wait-arcade" id="wait-arcade">
         <div class="row-between arcade-head">
           <span class="arcade-title">🦉 Catch the Golden Owls!</span>
           <span class="arcade-scores">Score <b id="arcade-score">0</b> · Best <b id="arcade-best">0</b></span>
         </div>
         <div class="arcade-grid" id="arcade-grid" role="group" aria-label="Owl Tapper mini-game"></div>
-        <div class="silly-oracle">
-          <p class="silly-quote" id="silly-quote">“Never trust a raccoon holding a tiny spoon.”</p>
-          <button type="button" class="btn btn-ghost btn-sm" id="btn-silly-quote">🎲 New Silly Proverb</button>
-        </div>
       </div>
 
       <div class="react-dock">
@@ -255,6 +270,14 @@
 
       <button type="button" class="btn btn-applause" id="btn-applause" hidden>⭐ Give Poet's Star (+25 PTS to Sage!)</button>
       <p class="applause-sent" id="applause-sent" hidden>⭐ Poet's Star awarded to the Sage!</p>
+
+      <div class="wait-arcade" id="reveal-silly-box" hidden>
+        <div class="row-between arcade-head">
+          <span class="arcade-title">🤪 Blind Silly Proverb Vote (+25 pts!)</span>
+          <span class="arcade-scores" id="reveal-silly-status">Tap your favorite!</span>
+        </div>
+        <div class="silly-vote-list" id="reveal-silly-list"></div>
+      </div>
 
       <div class="react-dock">
         <span class="react-label">React live on the TV:</span>
