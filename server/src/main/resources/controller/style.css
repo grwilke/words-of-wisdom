@@ -393,6 +393,31 @@ textarea { resize: vertical; min-height: 92px; }
   background: rgba(232, 72, 85, 0.24);
   border-color: var(--opt-a);
 }
+.starter-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+.starter-chip, .emoji-chip {
+  border: 1px solid rgba(245, 183, 49, 0.35);
+  background: rgba(245, 183, 49, 0.12);
+  color: var(--cream);
+  border-radius: 999px;
+  padding: 5px 10px;
+  font: 600 12px/1.2 inherit;
+  cursor: pointer;
+}
+.emoji-helper-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-bottom: 8px;
+}
+.emoji-helper-lbl { font-size: 11px; color: var(--muted); font-weight: 700; }
+.emoji-chip { padding: 4px 8px; font-size: 15px; }
+
 .silly-prompt-hint {
   margin: 0 0 8px;
   font-size: 12px;

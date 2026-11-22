@@ -121,16 +121,21 @@ object MetaphorValidator {
         strictGuard: Boolean = true,
     ): MetaphorValidationResult {
         val trimmed = metaphor.trim()
-        if (trimmed.length < MIN_LENGTH) {
-            return MetaphorValidationResult(
-                valid = false,
-                reason = "Write a fuller metaphor (at least $MIN_LENGTH characters).",
-            )
-        }
         if (trimmed.length > MAX_LENGTH) {
             return MetaphorValidationResult(
                 valid = false,
                 reason = "Keep your metaphor under $MAX_LENGTH characters so everyone on the couch can read it.",
+            )
+        }
+
+        if (countEmojis(trimmed) >= 3) {
+            return MetaphorValidationResult(valid = true)
+        }
+
+        if (trimmed.length < MIN_LENGTH) {
+            return MetaphorValidationResult(
+                valid = false,
+                reason = "Write a fuller metaphor (at least $MIN_LENGTH characters).",
             )
         }
 
@@ -172,6 +177,20 @@ object MetaphorValidator {
         }
 
         return MetaphorValidationResult(valid = true)
+    }
+
+    private fun countEmojis(text: String): Int {
+        var count = 0
+        var i = 0
+        while (i < text.length) {
+            val cp = text.codePointAt(i)
+            val charCount = Character.charCount(cp)
+            if (cp in 0x1F300..0x1FAFF || cp in 0x2600..0x27BF) {
+                count++
+            }
+            i += charCount
+        }
+        return count
     }
 
     private fun isGibberish(trimmed: String, words: List<String>): Boolean {

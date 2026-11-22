@@ -31,7 +31,9 @@ class PartyViewModel(application: Application) : AndroidViewModel(application) {
         bank = LessonBank.loadDefault(),
         initialConfig = GameConfig(
             mode = GameMode.PARTY_SPRINT,
-            pack = PromptPack.ALL,
+            pack = PromptPack.MODERN,
+            optionCount = 3,
+            strictMetaphorGuard = false,
         ),
     )
     private val server = PartyLanServer(engine)

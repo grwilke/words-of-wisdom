@@ -35,9 +35,13 @@ export function stemWord(word) {
 /** Client-side live metaphor check matching core MetaphorValidator for instant typing feedback. */
 export function evaluateDraft(text, forbiddenRoots = [], strictGuard = true) {
   const trimmed = (text || '').trim();
+  const emojiMatches = trimmed.match(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]/gu) || [];
+  if (emojiMatches.length >= 3 && trimmed.length <= 180) {
+    return { ok: true, message: 'Emoji metaphor! Ready to cast ✨', hits: [] };
+  }
   const words = trimmed.match(/[A-Za-z']+/g) || [];
   if (trimmed.length < 12 || words.length < 3) {
-    return { ok: false, message: 'Write at least 3 words (12+ characters)', hits: [] };
+    return { ok: false, message: 'Write at least 3 words (or 3+ emojis!)', hits: [] };
   }
   if (trimmed.length > 180) {
     return { ok: false, message: 'Keep it under 180 characters for TV readability', hits: [] };
@@ -568,6 +572,42 @@ if (typeof document !== 'undefined') {
   $('spark-toggle').addEventListener('click', () => {
     const list = $('sparks-list');
     list.hidden = !list.hidden;
+  });
+
+  const PANIC_DRAFTS = [
+    'A dramatic penguin wearing tiny sunglasses still slips on the ice',
+    'A sleepy wizard who drops his wand blames the gravity on Tuesday',
+    'Two raccoons sharing one stale donut never argue about the frosting',
+    'A clumsy pirate steering with a baguette still finds the snack island',
+    'Even a loud rooster checks the weather before yelling at the sun',
+  ];
+
+  document.querySelectorAll('.starter-chip').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const inp = $('metaphor-input');
+      inp.value = btn.dataset.template || '';
+      inp.focus();
+      updateDraftFeedback();
+      vibrate(12);
+    });
+  });
+
+  document.querySelectorAll('.emoji-chip').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const inp = $('metaphor-input');
+      inp.value = (inp.value ? `${inp.value} ` : '') + btn.textContent;
+      updateDraftFeedback();
+      send({ t: 'typing', chars: inp.value.trim().length, text: inp.value });
+      vibrate(10);
+    });
+  });
+
+  $('btn-panic-draft')?.addEventListener('click', () => {
+    const inp = $('metaphor-input');
+    inp.value = PANIC_DRAFTS[Math.floor(Math.random() * PANIC_DRAFTS.length)];
+    updateDraftFeedback();
+    send({ t: 'typing', chars: inp.value.trim().length, text: inp.value });
+    vibrate(18);
   });
 
   $('btn-submit-metaphor').addEventListener('click', () => {

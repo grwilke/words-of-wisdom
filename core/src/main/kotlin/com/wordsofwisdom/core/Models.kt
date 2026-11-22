@@ -47,14 +47,14 @@ data class WildcardWorld(
 
 object WildcardCatalog {
     val ALL: List<WildcardWorld> = listOf(
-        WildcardWorld("kitchen", "🍳", "Kitchen & Cooking", "Frame it using food, recipes, or a chaotic kitchen"),
-        WildcardWorld("pirates", "🏴‍☠️", "Pirates & High Seas", "Frame it with captains, parrots, treasure, or stormy decks"),
-        WildcardWorld("space", "🚀", "Outer Space", "Frame it with astronauts, moons, comets, or alien diners"),
-        WildcardWorld("animals", "🐾", "Wild Animals", "Frame it with squirrels, penguins, foxes, or grumpy owls"),
-        WildcardWorld("fairytale", "🏰", "Fairytale Castle", "Frame it with dragons, wizards, potions, or castles"),
-        WildcardWorld("weather", "⛈️", "Weather & Nature", "Frame it with storms, rivers, seasons, or forests"),
-        WildcardWorld("circus", "🎭", "Circus & Theater", "Frame it with tightropes, spotlights, or clumsy jugglers"),
-        WildcardWorld("detective", "🕵️", "Mystery Detective", "Frame it with clues, magnifying glasses, or foggy alleys"),
+        WildcardWorld("dog", "🐶", "Guilty Dog", "Explain it like a dog caught chewing the sofa"),
+        WildcardWorld("chef", "🍳", "Terrible Chef", "Frame it using burnt toast, chaos, or a doomed kitchen"),
+        WildcardWorld("pirates", "🏴‍☠️", "Tiny Pirate", "Frame it with grumpy captains, parrots, or leaky boats"),
+        WildcardWorld("raccoon", "🦝", "Trash Panda", "Frame it with midnight snacks, raccoons, or shiny trash"),
+        WildcardWorld("wizard", "🧙", "Sleepy Wizard", "Frame it with wrong potions, dragons, or naptime spells"),
+        WildcardWorld("space", "🚀", "Alien Tourist", "Frame it with confused aliens, moons, or bad parking"),
+        WildcardWorld("toddler", "🎭", "Dramatic Toddler", "Make a tiny inconvenience sound like an epic tragedy"),
+        WildcardWorld("grandma", "🧶", "Sassy Grandma", "Frame it with knitting, cookies, or brutal honesty"),
     )
 }
 
@@ -97,7 +97,7 @@ data class GameConfig(
     companion object {
         val VALID_WRITE_SECONDS = setOf(45, 60, 75, 90, 120)
         val VALID_GUESS_SECONDS = setOf(20, 30, 35, 45, 60)
-        val VALID_OPTION_COUNTS = setOf(4, 5)
+        val VALID_OPTION_COUNTS = setOf(3, 4, 5)
     }
 }
 

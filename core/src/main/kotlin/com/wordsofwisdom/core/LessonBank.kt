@@ -83,15 +83,17 @@ class LessonBank(rawLessons: List<WisdomLesson>) {
         val seen = HashSet<String>(optionCount * 2)
         seen.add(lesson.lesson.lowercase())
 
+        val closeSlots = (optionCount - 1 - if (optionCount >= 3 && lessonsArray.size > 1) 1 else 0).coerceAtLeast(1)
         val shuffledDecoys = lesson.decoys.shuffled(rng)
         for (decoy in shuffledDecoys) {
-            if (texts.size >= optionCount) break
+            if (texts.size >= 1 + closeSlots) break
             val norm = decoy.trim()
             if (norm.isNotEmpty() && seen.add(norm.lowercase())) {
                 texts.add(norm to false)
             }
         }
 
+        // Mix in at least 1 contrast decoy from a different lesson so options feel punchy & distinct
         var fallbackTries = 0
         while (texts.size < optionCount && fallbackTries < lessonsArray.size * 2) {
             fallbackTries++
